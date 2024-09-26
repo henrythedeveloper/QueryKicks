@@ -1,0 +1,415 @@
+/* Global Styles */
+
+/* colors 
+#1a1b1b
+#1f232e
+#5f737b
+#a2b3b2
+#e6e6e6
+*/
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+img.bg {
+    min-height: 100%;
+    min-width: 1024px;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -2;
+}
+
+/* Main Content Styles */
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 100%;
+    margin-top: -.18em;
+}
+
+
+/* Product Styles */
+.product-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.product {
+    width: 10em;
+    height: 16em;
+    padding: 1em;
+    background-color: #e6e6e6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+    box-shadow: -.31em 0 0 0 #5f737b,
+                .31em 0 0 0 #5f737b,
+                0 -.31em 0 0 #5f737b,
+                0 .31em 0 0 #5f737b;
+}
+
+.product img {
+    width: 100%;
+    height: 8em;
+    object-fit: cover;
+}
+
+.product img:hover {
+    filter: drop-shadow(0 0 0.75rem rgb(162, 179, 178));
+    animation: rotateY-anim 2s linear infinite;
+}
+
+.product h3, .product p, .product button {
+    margin: 0.5em 0;
+    text-align: center;
+}
+
+.product button {
+    padding: 0.5em;
+    font-size: 0.8em;
+    background-color: #a2b3b2;
+    color: #e6e6e6;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product button:hover {
+    background-color: #a2b3b2;
+}
+
+.cart-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.cart-wrapper h2, .cart-wrapper button, .cart-wrapper img, .cart-wrapper p {
+    margin: 0;
+}
+
+.cart-wrapper button {
+    padding: 0.5em;
+    font-size: 0.8em;
+    background-color: #5f737b;
+    color: #e6e6e6;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart-wrapper button:hover {
+    background-color: #a2b3b2;
+}
+
+.cart-wrapper img {
+    width: 5em;
+    height: 5em;
+    object-fit: cover;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    padding: .5em;
+    background-color: #e6e6e6;
+    box-shadow: -.31em 0 0 0 #5f737b,
+                .31em 0 0 0 #5f737b,
+                0 -.31em 0 0 #5f737b,
+                0 .31em 0 0 #5f737b;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.238);
+}
+
+.modal-content {
+    background-color: #e6e6e6;
+    margin: 5% 5% 15% 55%;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    height: 60%;
+    box-shadow: -.31em 0 0 0 rgb(34, 33, 33),
+                .31em 0 0 0 rgb(34, 33, 33),
+                0 -.31em 0 0 rgb(34, 33, 33),
+                0 .31em 0 0 rgb(34, 33, 33);
+    filter: drop-shadow(0 0 0.75rem #5f737b);
+}
+
+
+.close {
+    color: #e6e6e6;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #1a1b1b;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Header Styles */
+.header-section {
+    margin-top: 9em;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: flex-start;
+    width: 100%;
+    height: 10em;
+}
+
+.header-item {
+    margin-top: 3em;
+    margin-left: 35%;
+    background-color: #e6e6e6;
+    width: 50%;
+    position: fixed;
+}
+
+/* Container Styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+img.clerk {
+    margin: 0 -8em 0 10em;
+    width: 20%;
+    z-index: -1;
+    filter: drop-shadow(0 -6mm 4mm #e6e6e6);
+    position: fixed;
+}
+
+/* Navigation Styles */
+.navbar {
+    padding: .5em;
+    margin: -.5vh;
+    width: 10%;
+    max-width: 10%;
+}
+
+  /* Style the buttons inside the navbar */
+.navbar button {
+    width: 16vh;
+    background:#e6e6e6;
+    margin: 1em 0 1em 2em;
+    padding: .6vh;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.5vh;
+    display: flex;
+    justify-content: flex-start;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    box-shadow: -.31em 0 0 0 #5f737b,
+                .31em 0 0 0 #5f737b,
+                0 -.31em 0 0 #5f737b,
+                0 .31em 0 0 #5f737b;
+} /* Ensure the button is the reference for the absolute positioning */
+
+
+.navbar button:hover {
+    color: #a2b3b2;
+}
+
+.navbar button::before {
+    content: "";
+    position: absolute;
+    left: -2em;/* Adjust position to suit your layout */
+    top: 50%;
+    margin-top: -.8em;
+    width: 80%;
+    height: 80%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0;
+    background-image: url('./static/assets/arrow3.svg'); /* Use external SVG URL */
+}
+
+
+.navbar button:hover::before {
+    opacity: 1;
+}
+
+.navbar button.active::before {
+    opacity: 1;
+    transform: translateY(-50%);
+    animation: rotateX-anim 2s linear infinite;
+
+}
+/* Hide all tab content by default */
+.tab-content {
+    font-size: 1.5vh;
+    background-color: #ffffffb1;
+    display: none;
+    max-width: 90%;
+    width: 90%;
+    height: 50%;
+    max-height: 45vh;
+    padding: 1em;
+    margin: 1vh 1vh 0 4vh;
+    overflow-y: auto;
+    box-shadow: -.32em 0 0 0 #5f737b,
+    .32em 0 0 0 #5f737b,
+    0 -.32em 0 0 #5f737b,
+    0 .32em 0 0 #5f737b;
+}
+
+
+.tab-link {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    width: 50%;
+    padding: .5em;
+    cursor: pointer;
+}
+
+  /* Show the first tab by default (JavaScript will handle this) */
+
+/* Footer Styles */
+footer {
+    background-color: #1a1b1b;
+    color: #e6e6e6;
+    padding: 5px;
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 3em;
+    width: 100%;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1024px) {
+    img.bg {
+        left: 50%;
+        margin-left: -512px;
+        background-size: cover;
+    }
+
+    .product-wrapper {
+        width: 80%;
+        height: auto;
+    }
+
+    .product {
+        width: 45%;
+        margin: 1%;
+    }
+
+    .modal-content {
+        width: 80%;
+        margin: 10% auto;
+    }
+
+    .header-item {
+        width: 80%;
+        margin-left: 10%;
+    }
+
+    img.clerk {
+        width: 40%;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .product {
+        width: 100%;
+        margin: 1% 0;
+    }
+
+    .header-item {
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    img.clerk {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .header-item {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    img.clerk {
+        width: 60%;
+    }
+    .navbar {
+        max-width: 50%;
+    }
+    .product {
+        width: 50%;
+    }
+
+}
+
+
+
+/* Animations */
+@keyframes rotateY-anim {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+@keyframes rotateX-anim {
+    0% {
+        
+        transform: rotateX(0deg);
+    }
+    100% {
+        transform: rotateX(360deg);
+    }
+    
+}

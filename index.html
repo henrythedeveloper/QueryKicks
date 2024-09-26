@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>8-Bit E-Commerce Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Font for Pixelated Text -->
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+</head>
+<body>
+    <img src="./static/background/background-2-1.webp" class="bg" alt="Background Image">
+    <div class="container">
+        <!-- Header section includes clerk and header items -->
+        <header class="header-section">
+            <img src="./static/store clerk/store-clerk-3-mosaiced.webp" alt="Store Clerk" class="clerk">
+            <div class="header-item">
+                <p>Clerk is talking</p>
+            </div>
+        </header>
+        
+        <!-- Main section for Menu and Products -->
+        <main>
+            <div class="navbar">
+                <button class="tab-link" onclick="openTab(event, 'shoes')">Shoes</button>
+                <button class="tab-link" onclick="openTab(event, 'cart')">Cart</button>
+                <button class="tab-link" onclick="openTab(event, 'checkout')">Checkout</button>
+                <button class="tab-link" onclick="openTab(event, 'contact')">Contact</button>
+                <button class="tab-link" onclick="openTab(event, 'about')">About</button>
+                <button class="tab-link" onclick="openTab(event, 'faq')">FAQ</button>
+            </div>
+
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Some text in the Modal..</p>
+            </div>
+
+            </div> 
+            <div id="shoes" class="tab-content">
+                <h1>Products</h1><br>
+                <div class="product-wrapper">
+                    <div class="product">
+                        <img src="./static/shoes/shoe/bulbasaur.webp" alt="Shoe 1">
+                        <h3>Shoe Style 1</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/charizard-shiny.webp" alt="Shoe 2">
+                        <h3>Shoe Style 2</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/charizard.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/eevee.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/flygon.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/gardevoir.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div> <!-- Add missing closing div -->
+                    <div class="product">
+                        <img src="./static/shoes/shoe/lucario.webp" alt="Shoe 1">
+                        <h3>Shoe Style 1</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/metagross.webp" alt="Shoe 2">
+                        <h3>Shoe Style 2</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/pikachu.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/eevee.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/flygon.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product">
+                        <img src="./static/shoes/shoe/umbreon.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <div id="cart" class="tab-content">
+                <h1>Cart</h1>
+                <div class="cart-wrapper">
+                    <div class="cart-item">
+                        <img src="./static/shoes/shoe/bulbasaur.webp" alt="Shoe 1">
+                        <h3>Shoe Style 1</h3>
+                        <p>$100</p>
+                        <button>Remove</button>
+                    </div>
+                    <div class="cart-item">
+                        <img src="./static/shoes/shoe/charizard-shiny.webp" alt="Shoe 2">
+                        <h3>Shoe Style 2</h3>
+                        <p>$100</p>
+                        <button>Remove</button>
+                    </div>
+                    <div class="cart-item">
+                        <img src="./static/shoes/shoe/charizard.webp" alt="Shoe 3">
+                        <h3>Shoe Style 3</h3>
+                        <p>$100</p>
+                        <button>Remove</button>
+                    </div>
+                </div>
+            </div>
+            <div id="checkout" class="tab-content">
+                <h1>Checkout</h1>
+                <form>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name"><br>
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email"><br>
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address"><br>
+                    <button>Submit</button>
+                </form>
+            </div>
+            <div id="contact" class="tab-content">
+                <h1>Contact</h1>
+                <p>For any questions or concerns, please contact us at:</p>
+                <p>Phone: 123-456-7890</p>
+                <p>Email:
+            </div>
+            <div id="about" class="tab-content">
+                <h1>About</h1>
+                <p>Welcome to our 8-Bit E-Commerce Store! We sell a variety of products including shoes, shirts, and hats. Our products are inspired by classic video games and are perfect for any gamer. We hope you enjoy your shopping experience with us!
+            </div>
+            <div id="faq" class="tab-content">
+                <h1>FAQ</h1>
+                <p>Q: How long will it take to receive my order?</p>
+                <p>A: Orders typically take 3-5 business days to process and ship. Once shipped, orders will arrive within 7-10 business days.</p>
+                <p>Q: What is your return policy?</p>
+                <p>A: We accept returns within 30 days of purchase. Items must be in new condition with tags attached. Please contact us for more information.</p>
+                <p>Q: Do you offer international shipping?</p>
+                <p>A: Yes, we offer international shipping to select countries. Please contact us for more information.</p>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Query Kicks</p>
+        </footer>
+    </div>
+    <script src="scripts.js"></script> 
+</body>
+</html>
