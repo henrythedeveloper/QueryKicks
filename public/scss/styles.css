@@ -42,6 +42,11 @@ body {
     width: 100%;
     max-width: none;
   }
+  .clerk {
+    width: 100%;
+    left: -50%;
+    top: 10%;
+  }
 }
 @keyframes rotateY-anim {
   0% {
@@ -181,6 +186,9 @@ footer {
 .clerk {
   margin: 0 -8em 0 10em;
   width: 20%;
+  max-width: 20%;
+  left: 10%;
+  top: 10%;
   position: fixed;
   z-index: -1;
   filter: drop-shadow(0 -6mm 4mm #e6e6e6);
@@ -188,7 +196,7 @@ footer {
 
 .tab-content {
   flex: 1;
-  background-color: rgba(39, 202, 17, 0.6941176471);
+  background-color: rgba(162, 179, 178, 0.5);
   display: none;
   max-width: 85%;
   width: 85%;
@@ -203,7 +211,6 @@ footer {
 
 .tab-content.active {
   display: block;
-  background: green;
 }
 
 .tab-button {
@@ -252,6 +259,45 @@ footer {
   animation: rotateX-anim 2s linear infinite;
 }
 
+.logout-button {
+  position: relative;
+  background: #a2b3b2;
+  color: #1f232e;
+  margin: 0.5em 0;
+  padding: 0.5em 1em;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  text-align: left;
+  box-shadow: -0.3em 0 0 0 #5f737b, 0.3em 0 0 0 #5f737b, 0 -0.3em 0 0 #5f737b, 0 0.3em 0 0 #5f737b;
+  border-radius: 4px;
+}
+
+.logout-button:hover {
+  background-color: #5f737b;
+  color: #e6e6e6;
+}
+
+.logout-button::before {
+  content: "";
+  position: absolute;
+  left: -2em;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1em;
+  height: 1em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/querykicks/assets/arrow3.svg");
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.logout-button:hover::before {
+  opacity: 1;
+}
+
 @keyframes rotateX-anim {
   0% {
     transform: rotateX(0deg);
@@ -260,19 +306,6 @@ footer {
     transform: rotateX(360deg);
   }
 }
-.tab-content {
-  font-size: 1.5vh;
-  background-color: rgba(230, 230, 230, 0.7);
-  display: none;
-  max-width: 90%;
-  width: 90%;
-  height: 50%;
-  padding: 1em;
-  margin: 1vh 1vh 0 4vh;
-  overflow-y: auto;
-  box-shadow: -0.32em 0 0 0 #5f737b, 0.32em 0 0 0 #5f737b, 0 -0.32em 0 0 #5f737b, 0 0.32em 0 0 #5f737b;
-}
-
 .login-background {
   display: flex;
   justify-content: center;
@@ -286,11 +319,14 @@ footer {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url("/querykicks/assets/background/login-bg.gif") center/cover no-repeat;
+  width: 100%;
+  background: url("/QueryKicks/assets/background/login-bg.gif") center/cover no-repeat;
 }
 
 .auth-container {
-  background-color: rgba(230, 230, 230, 0.9);
+  position: fixed;
+  top: 4%;
+  background-color: rgba(95, 115, 123, 0.5);
   padding: 2em;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(95, 115, 123, 0.6);

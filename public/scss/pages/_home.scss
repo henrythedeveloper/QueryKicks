@@ -1,19 +1,3 @@
-.tab-content {
-    font-size: 1.5vh;
-    background-color: rgba(230, 230, 230, 0.7);
-    display: none;
-    max-width: 90%;
-    width: 90%;
-    height: 50%;
-    padding: 1em;
-    margin: 1vh 1vh 0 4vh;
-    overflow-y: auto;
-    box-shadow: -.32em 0 0 0 $color-medium,
-                .32em 0 0 0 $color-medium,
-                0 -.32em 0 0 $color-medium,
-                0 .32em 0 0 $color-medium;
-}
-
 .login-background {
     display: flex;
     justify-content: center;

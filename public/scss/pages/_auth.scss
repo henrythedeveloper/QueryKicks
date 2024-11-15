@@ -1,4 +1,4 @@
-@import '../base/variables';
+
 
 // Background container
 .auth-background {
@@ -6,12 +6,15 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('/querykicks/assets/background/login-bg.gif') center/cover no-repeat;
+    width: 100%;
+    background: url('/QueryKicks/assets/background/login-bg.gif') center/cover no-repeat;
 }
 
 // Auth form container
 .auth-container {
-    background-color: rgba($color-lighter, 0.9);
+    position: fixed;
+    top: 4%;
+    background-color: rgba($color-medium, 0.5);
     padding: 2em;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba($color-medium, 0.6);

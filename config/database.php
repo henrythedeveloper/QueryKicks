@@ -1,4 +1,4 @@
-// database.php
+<?php
 class Database {
     public static function connect() {
         $host = $_ENV['DB_HOST'] ?? 'localhost';

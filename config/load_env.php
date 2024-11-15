@@ -1,4 +1,4 @@
-// load_env.php
+<?php
 function loadEnv($filePath) {
     if (!file_exists($filePath)) {
         throw new Exception('.env file not found');

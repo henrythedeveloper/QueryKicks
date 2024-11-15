@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="/querykicks/public/css/styles.css">
+    <link rel="stylesheet" href="/querykicks/public/scss/styles.css">
 </head>
 <body>
     <div class="auth-background">

@@ -2,7 +2,7 @@
 
 .tab-content {
     flex: 1;
-    background-color: #27ca11b1;
+    background-color: rgba($color-light, 0.5);
     display: none;
     max-width: 85%;
     width: 85%;
@@ -20,7 +20,6 @@
 
 .tab-content.active {
     display: block;
-    background: green;
 }
 
 .tab-button {
@@ -69,6 +68,49 @@
     opacity: 1;
     transform: translateY(-50%);
     animation: rotateX-anim 2s linear infinite;
+}
+
+// Logout button
+.logout-button {
+    position: relative;
+    background: $color-light;
+    color: $color-darker;
+    margin: 0.5em 0;
+    padding: 0.5em 1em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    text-align: left;
+    box-shadow: -0.3em 0 0 0 $color-medium,
+                0.3em 0 0 0 $color-medium,
+                0 -0.3em 0 0 $color-medium,
+                0 0.3em 0 0 $color-medium;
+    border-radius: 4px;
+}
+
+.logout-button:hover {
+    background-color: $color-medium;
+    color: $color-lighter;
+}
+
+.logout-button::before {
+    content: "";
+    position: absolute;
+    left: -2em;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1em;
+    height: 1em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('/querykicks/assets/arrow3.svg'); // Replace with a logout icon if desired
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.logout-button:hover::before {
+    opacity: 1;
 }
 
 // Rotate animation for active state

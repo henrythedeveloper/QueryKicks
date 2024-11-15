@@ -3,6 +3,9 @@
 .clerk {
     margin: 0 -8em 0 10em;  // Adjust as needed for positioning
     width: 20%;  // Adjust based on desired size of the image
+    max-width: 20%;
+    left: 10%;  // Adjust based on desired position
+    top: 10%;
     position: fixed;
     z-index: -1;  // Keep it behind other elements
     filter: drop-shadow(0 -6mm 4mm #e6e6e6);  // Adds a soft shadow for depth

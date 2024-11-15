@@ -11,4 +11,9 @@
         width: 100%; // Full width for smaller screens
         max-width: none;
     }
+    .clerk {
+        width: 100%;  // Adjust based on desired size of the image
+        left: -50%;  // Adjust based on desired position
+        top: 10%;
+    }
 }

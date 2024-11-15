@@ -17,6 +17,7 @@
                 <button class="tab-button" onclick="openTab(event, 'contact')">Contact</button>
                 <button class="tab-button" onclick="openTab(event, 'about')">About</button>
                 <button class="tab-button" onclick="openTab(event, 'faq')">FAQ</button>
+                <button class="logout-button" onclick="logout(event, 'logout')">Leave</button>
             </div>
 
             <!-- The Modal -->
