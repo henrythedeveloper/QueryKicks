@@ -1,0 +1,40 @@
+.product {
+    width: 10em;
+    height: 16em;
+    padding: 1em;
+    background-color: $color-lighter;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+    box-shadow: -.31em 0 0 0 $color-medium,
+                .31em 0 0 0 $color-medium,
+                0 -.31em 0 0 $color-medium,
+                0 .31em 0 0 $color-medium;
+}
+
+.product img {
+    width: 100%;
+    height: 8em;
+    object-fit: cover;
+}
+
+.product img:hover {
+    filter: drop-shadow(0 0 0.75rem rgb(162, 179, 178));
+    animation: rotateY-anim 2s linear infinite;
+}
+
+.product button {
+    padding: 0.5em;
+    font-size: 0.8em;
+    background-color: $color-light;
+    color: $color-lighter;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product button:hover {
+    background-color: $color-light;
+}

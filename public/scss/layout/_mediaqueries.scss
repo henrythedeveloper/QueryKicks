@@ -1,0 +1,14 @@
+// Media queries to adjust layout for smaller screens
+@media screen and (max-width: 768px) {
+    .main-content {
+        flex-direction: column; // Stack navbar and tab-content vertically on smaller screens
+    }
+    .navbar {
+        width: 100%; // Full width for smaller screens
+        max-width: none;
+    }
+    .tab-content {
+        width: 100%; // Full width for smaller screens
+        max-width: none;
+    }
+}

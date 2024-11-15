@@ -1,0 +1,374 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Press Start 2P", cursive;
+  color: #1f232e;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.product-wrapper, .cart-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+@media screen and (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  .navbar {
+    width: 100%;
+    max-width: none;
+  }
+  .tab-content {
+    width: 100%;
+    max-width: none;
+  }
+}
+@keyframes rotateY-anim {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+@keyframes rotateX-anim {
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(360deg);
+  }
+}
+.main-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 2em;
+  padding: 1em;
+}
+
+.navbar {
+  width: 15%;
+  max-width: 200px;
+  padding: 0.5em;
+  position: relative;
+  max-width: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: rgba(31, 35, 46, 0.8);
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-section {
+  margin-top: 9em;
+  display: flex;
+  justify-content: start;
+  width: 100%;
+  height: 10em;
+}
+
+.header-item {
+  margin-top: 3em;
+  margin-left: 35%;
+  background-color: #e6e6e6;
+  width: 50%;
+  position: fixed;
+}
+
+footer {
+  background-color: #1a1b1b;
+  color: #e6e6e6;
+  padding: 5px;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 3em;
+  width: 100%;
+}
+
+.product {
+  width: 10em;
+  height: 16em;
+  padding: 1em;
+  background-color: #e6e6e6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2em;
+  box-shadow: -0.31em 0 0 0 #5f737b, 0.31em 0 0 0 #5f737b, 0 -0.31em 0 0 #5f737b, 0 0.31em 0 0 #5f737b;
+}
+
+.product img {
+  width: 100%;
+  height: 8em;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.product img:hover {
+  filter: drop-shadow(0 0 0.75rem rgb(162, 179, 178));
+  animation: rotateY-anim 2s linear infinite;
+}
+
+.product button {
+  padding: 0.5em;
+  font-size: 0.8em;
+  background-color: #a2b3b2;
+  color: #e6e6e6;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product button:hover {
+  background-color: #a2b3b2;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.238);
+}
+
+.modal-content {
+  background-color: #e6e6e6;
+  margin: 5% 5% 15% 55%;
+  padding: 20px;
+  width: 40%;
+  height: 60%;
+  box-shadow: -0.31em 0 0 0 #1f232e, 0.31em 0 0 0 #1f232e, 0 -0.31em 0 0 #1f232e, 0 0.31em 0 0 #1f232e;
+  filter: drop-shadow(0 0 0.75rem #5f737b);
+}
+
+.close {
+  color: #e6e6e6;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #1a1b1b;
+}
+
+.clerk {
+  margin: 0 -8em 0 10em;
+  width: 20%;
+  position: fixed;
+  z-index: -1;
+  filter: drop-shadow(0 -6mm 4mm #e6e6e6);
+}
+
+.tab-content {
+  flex: 1;
+  background-color: rgba(39, 202, 17, 0.6941176471);
+  display: none;
+  max-width: 85%;
+  width: 85%;
+  height: auto;
+  max-height: 45vh;
+  padding: 1em;
+  margin: 0;
+  overflow-y: auto;
+  box-shadow: -0.32em 0 0 0 #5f737b, 0.32em 0 0 0 #5f737b, 0 -0.32em 0 0 #5f737b, 0 0.32em 0 0 #5f737b;
+  border-radius: 5px;
+}
+
+.tab-content.active {
+  display: block;
+  background: green;
+}
+
+.tab-button {
+  position: relative;
+  background: #a2b3b2;
+  color: #1f232e;
+  margin: 0.5em 0;
+  padding: 0.5em 1em;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  text-align: left;
+  box-shadow: -0.3em 0 0 0 #5f737b, 0.3em 0 0 0 #5f737b, 0 -0.3em 0 0 #5f737b, 0 0.3em 0 0 #5f737b;
+  border-radius: 4px;
+}
+
+.tab-button.active,
+.tab-button:hover {
+  background-color: #5f737b;
+  color: #e6e6e6;
+}
+
+.tab-button::before {
+  content: "";
+  position: absolute;
+  left: -2em;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1em;
+  height: 1em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/querykicks/assets/arrow3.svg");
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tab-button:hover::before {
+  opacity: 1;
+}
+
+.tab-button.active::before {
+  opacity: 1;
+  transform: translateY(-50%);
+  animation: rotateX-anim 2s linear infinite;
+}
+
+@keyframes rotateX-anim {
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(360deg);
+  }
+}
+.tab-content {
+  font-size: 1.5vh;
+  background-color: rgba(230, 230, 230, 0.7);
+  display: none;
+  max-width: 90%;
+  width: 90%;
+  height: 50%;
+  padding: 1em;
+  margin: 1vh 1vh 0 4vh;
+  overflow-y: auto;
+  box-shadow: -0.32em 0 0 0 #5f737b, 0.32em 0 0 0 #5f737b, 0 -0.32em 0 0 #5f737b, 0 0.32em 0 0 #5f737b;
+}
+
+.login-background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url("/querykicks/assets/background/store-bg.webp") center/cover no-repeat;
+}
+
+.auth-background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url("/querykicks/assets/background/login-bg.gif") center/cover no-repeat;
+}
+
+.auth-container {
+  background-color: rgba(230, 230, 230, 0.9);
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(95, 115, 123, 0.6);
+  width: 300px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-toggle-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+.auth-toggle {
+  flex: 1;
+  padding: 0.5em;
+  border: none;
+  background-color: #5f737b;
+  color: #e6e6e6;
+  cursor: pointer;
+  font-family: "Press Start 2P", cursive;
+  transition: background-color 0.3s;
+}
+.auth-toggle.active, .auth-toggle:hover {
+  background-color: #a2b3b2;
+}
+
+.auth-form {
+  display: none;
+}
+.auth-form.active {
+  display: block;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 1em;
+  text-align: center;
+}
+
+input[type=text],
+input[type=email],
+input[type=password] {
+  width: 100%;
+  padding: 0.75em;
+  margin: 0.5em 0;
+  border: none;
+  border-radius: 4px;
+  background-color: #a2b3b2;
+  color: #1f232e;
+  font-family: "Press Start 2P", cursive;
+}
+
+button[type=submit] {
+  width: 100%;
+  padding: 0.75em;
+  border: none;
+  border-radius: 4px;
+  background-color: #5f737b;
+  color: #e6e6e6;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button[type=submit]:hover {
+  background-color: #a2b3b2;
+}
+
+input::-moz-placeholder {
+  color: #1f232e;
+  opacity: 0.7;
+}
+
+input::placeholder {
+  color: #1f232e;
+  opacity: 0.7;
+}/*# sourceMappingURL=styles.css.map */

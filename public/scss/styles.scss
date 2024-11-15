@@ -1,0 +1,27 @@
+// Base styles
+@import 'base/variables';
+@import 'base/reset';
+@import 'base/typography';
+
+// Layout styles
+@import 'layout/container';
+@import 'layout/grid';
+@import 'layout/mediaqueries';
+
+// Utility styles
+@import 'utilities/mixins';
+@import 'utilities/animations';
+
+// Component styles
+@import 'components/navbar';
+@import 'components/header';
+@import 'components/footer';
+@import 'components/product';
+@import 'components/modal';
+@import 'components/clerk';
+@import 'components/tabs';
+
+// Page-specific styles
+@import 'pages/home';
+@import 'pages/auth';
+

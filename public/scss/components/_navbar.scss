@@ -1,0 +1,22 @@
+// navbar.scss
+
+// Wrapper to align navbar and tab-content side by side
+.main-content {
+    display: flex;
+    align-items: flex-start; // Align the navbar and tab-content to the top
+    gap: 2em; // Optional: add space between navbar and tab-content
+    padding: 1em;
+}
+.navbar {
+    width: 15%;
+    max-width: 200px;
+    padding: 0.5em;
+    position: relative;
+    max-width: 10%;  // Slightly wider for improved readability
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; // Align buttons to the start within the navbar
+    background-color: rgba($color-darker, 0.8); // Optional background for visibility
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
