@@ -208,31 +208,13 @@ footer {
   filter: drop-shadow(0 -6mm 4mm #e6e6e6);
 }
 
-.tab-content {
-  flex: 1;
-  background-color: rgba(162, 179, 178, 0.5);
-  display: none;
-  max-width: 85%;
-  width: 85%;
-  height: auto;
-  max-height: 45vh;
-  padding: 1em;
-  margin: 0;
-  overflow-y: auto;
-  box-shadow: -0.3em 0 0 0 #5f737b, 0.3em 0 0 0 #5f737b, 0 -0.3em 0 0 #5f737b, 0 0.3em 0 0 #5f737b;
-  border-radius: 5px;
-}
-
-.tab-content.active {
-  display: block;
-}
-
 .tab-button,
 .logout-button {
   font-family: "Press Start 2P", sans-serif;
   position: relative; /* Required for pseudo-elements */
   display: flex; /* Flexbox for alignment */
   align-items: center; /* Vertically align icon and text */
+  justify-content: flex-start; /* Ensure the text is aligned to the left */
   background: #a2b3b2;
   color: #1f232e;
   width: 100%; /* Button spans the entire navbar width */
@@ -257,11 +239,7 @@ footer {
 .tab-button::before,
 .logout-button::before {
   content: "";
-  position: absolute;
-  left: -3em; /* Icon distance from text */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Ensure exact alignment */
-  width: 2em;
+  width: 2em; /* Adjust size as needed */
   height: 2em;
   background-size: contain;
   background-repeat: no-repeat;
@@ -280,17 +258,12 @@ footer {
   animation: rotateX-anim 2s linear infinite;
 }
 
+/* Responsive adjustments for buttons */
 @media screen and (max-width: 768px) {
   .tab-button,
   .logout-button {
     font-size: 0.8em; /* Slightly smaller font for smaller screens */
     padding: 0.4em 0.8em;
-  }
-  .tab-button::before,
-  .logout-button::before {
-    left: 0.8em; /* Adjust for smaller screens */
-    width: 1em;
-    height: 1em;
   }
 }
 .login-background {
