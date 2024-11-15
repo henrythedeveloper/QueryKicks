@@ -6,6 +6,10 @@ require_once 'config/config.php';
 require_once 'config/database.php';
 
 $db = Database::connect();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 
 // Redirect to login page if the user is not logged in and not accessing UserController
 if (!isset($_SESSION['user_id']) && (!isset($_GET['controller']) || $_GET['controller'] !== 'UserController')) {

@@ -4,7 +4,7 @@
             <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
             <h3><?= htmlspecialchars($product['name']) ?></h3>
             <p>$<?= htmlspecialchars($product['price']) ?></p>
-            <button>Add to Cart</button>
+            <button class="add-to-cart-button" data-product-id="<?= htmlspecialchars($product['id']) ?>">Add to Cart</button>
         </div>
     <?php endforeach; ?>
 </div>
