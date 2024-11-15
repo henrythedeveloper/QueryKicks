@@ -8,6 +8,9 @@ if (!isset($_SESSION['user_id']) && (!isset($_GET['controller']) || $_GET['contr
 }
 
 require_once 'config/config.php';
+require_once 'config/database.php';
+
+$db = Database::connect();
 
 // Determine which controller and action to use
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'StoreController';
