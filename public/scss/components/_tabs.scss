@@ -1,3 +1,27 @@
+/ tabs.scss
+
+.tab-content {
+    flex: 1;
+    background-color: rgba($color-light, 0.5);
+    display: none;
+    max-width: 85%;
+    width: 85%;
+    height: auto;
+    max-height: 45vh;
+    padding: 1em;
+    margin: 0;
+    overflow-y: auto;
+    box-shadow: -.32em 0 0 0 #5f737b,
+                .32em 0 0 0 #5f737b,
+                0 -.32em 0 0 #5f737b,
+                0 .32em 0 0 #5f737b;
+    border-radius: 5px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 .tab-button,
 .logout-button { // Combined styles for tab and logout buttons
     font-family: $font-family;
