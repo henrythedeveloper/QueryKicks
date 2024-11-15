@@ -6,13 +6,13 @@
     align-items: flex-start; // Align the navbar and tab-content to the top
     gap: 2em; // Optional: add space between navbar and tab-content
     padding: 1em;
+    font-family: $font-family;
 }
 .navbar {
-    width: 15%;
-    max-width: 200px;
+    width: auto;
+    max-width: none;
     padding: 0.5em;
-    position: relative;
-    max-width: 10%;  // Slightly wider for improved readability
+    position: relative;// Slightly wider for improved readability
     display: flex;
     flex-direction: column;
     align-items: flex-start; // Align buttons to the start within the navbar

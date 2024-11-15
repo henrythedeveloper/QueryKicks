@@ -23,15 +23,16 @@
 }
 
 .tab-button {
+    font-family: $font-family;
     position: relative;
     background: $color-light;
     color: $color-darker;
+    width: 100%;
     margin: 0.5em 0;
-    padding: 0.5em 1em;
+    padding: 0.2em 0.5em;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%;
     text-align: left;
     box-shadow: -0.3em 0 0 0 $color-medium,
                 0.3em 0 0 0 $color-medium,
@@ -72,15 +73,16 @@
 
 // Logout button
 .logout-button {
+    font-family: $font-family;
     position: relative;
     background: $color-light;
     color: $color-darker;
+    width: 100%;
     margin: 0.5em 0;
-    padding: 0.5em 1em;
+    padding: 0.2em 0.5em;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%;
     text-align: left;
     box-shadow: -0.3em 0 0 0 $color-medium,
                 0.3em 0 0 0 $color-medium,

@@ -45,6 +45,6 @@
         </div>
     </div>
     
-    <script src="/querykicks/public/js/main.js" type="module"></script>
+    <script src="/querykicks/public/js/auth.js" type="module"></script>
 </body>
 </html>

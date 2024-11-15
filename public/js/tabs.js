@@ -2,6 +2,9 @@
 
 let activeTab = null;
 
+// Attach `openTab` to `window` to make it globally accessible
+window.openTab = openTab;
+
 export function openTab(event, tabName) {
     // Hide all elements with class="tab-content" by default
     const tabContents = document.getElementsByClassName("tab-content");
@@ -25,3 +28,13 @@ export function openTab(event, tabName) {
     // Update the activeTab variable
     activeTab = tabName;
 }
+
+// Initialize the default tab
+document.addEventListener('DOMContentLoaded', function() {
+    const defaultTab = document.querySelector('.tab-button');
+    if (defaultTab) {
+        openTab({ currentTarget: defaultTab }, 'shoes');
+    } else {
+        console.warn('No default tab button found.');
+    }
+});
