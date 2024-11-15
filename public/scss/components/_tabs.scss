@@ -1,11 +1,11 @@
-/ tabs.scss
+// tabs.scss
 
 .tab-content {
-    flex: 1;
+    flex: 1; /* Take the remaining space next to navbar */
     background-color: rgba($color-light, 0.5);
     display: none;
-    max-width: 85%;
-    width: 85%;
+    max-width: 85%; /* Optional: to limit width if necessary */
+    width: 100%;
     height: auto;
     max-height: 45vh;
     padding: 1em;
@@ -21,6 +21,7 @@
 .tab-content.active {
     display: block;
 }
+
 
 .tab-button,
 .logout-button { // Combined styles for tab and logout buttons
@@ -56,8 +57,9 @@
 .tab-button::before,
 .logout-button::before { // Shared pseudo-element for both buttons
     content: "";
-    width: 2em; /* Adjust size as needed */
-    height: 2em;
+    width: 1.5em; /* Adjust size as needed */
+    height: 1.5em;
+    margin-right: 5px;
     background-size: contain;
     background-repeat: no-repeat;
     background-image: url('/querykicks/assets/arrow3.svg');
@@ -75,12 +77,3 @@
     animation: rotateX-anim 2s linear infinite;
 }
 
-
-/* Responsive adjustments for buttons */
-@media screen and (max-width: 768px) {
-    .tab-button,
-    .logout-button {
-        font-size: 0.8em; /* Slightly smaller font for smaller screens */
-        padding: 0.4em 0.8em;
-    }
-}

@@ -53,7 +53,26 @@ body {
     left: -50%;
     top: 10%;
   }
+  .logout-button {
+    font-size: 0.8em; /* Slightly smaller font for smaller screens */
+    padding: 0.4em 0.8em;
+  }
+  .tab-button,
+  .logout-button {
+    font-size: 0.8em; /* Slightly smaller font for smaller screens */
+    padding: 0.4em 0.8em;
+  }
 }
+html {
+  height: 100%; /* Root takes full height for consistent layout */
+}
+
+body {
+  margin: 0; /* Reset default margin */
+  height: 100%; /* Ensure body takes up full height */
+  overflow: hidden; /* Allow normal scrolling behavior */
+}
+
 @keyframes rotateY-anim {
   0% {
     transform: rotateY(0deg);
@@ -72,20 +91,20 @@ body {
 }
 .main-content {
   display: flex;
-  align-items: flex-start;
-  gap: 2em;
+  align-items: flex-start; /* Align navbar and tab-content at the top */
+  gap: 2em; /* Space between navbar and tab-content */
   padding: 1em;
   font-family: "Press Start 2P", sans-serif;
 }
 
 .navbar {
-  width: auto;
-  max-width: none;
+  width: 15%; /* Set a fixed width or a percentage */
+  max-width: 200px; /* Optional: limit the maximum width */
   padding: 0.5em;
-  position: relative;
+  position: relative; /* Ensure it doesn't overlap with other elements */
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-start; /* Align buttons to the left */
   background-color: rgba(31, 35, 46, 0.8);
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -208,6 +227,25 @@ footer {
   filter: drop-shadow(0 -6mm 4mm #e6e6e6);
 }
 
+.tab-content {
+  flex: 1; /* Take the remaining space next to navbar */
+  background-color: rgba(162, 179, 178, 0.5);
+  display: none;
+  max-width: 85%; /* Optional: to limit width if necessary */
+  width: 100%;
+  height: auto;
+  max-height: 45vh;
+  padding: 1em;
+  margin: 0;
+  overflow-y: auto;
+  box-shadow: -0.32em 0 0 0 #5f737b, 0.32em 0 0 0 #5f737b, 0 -0.32em 0 0 #5f737b, 0 0.32em 0 0 #5f737b;
+  border-radius: 5px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 .tab-button,
 .logout-button {
   font-family: "Press Start 2P", sans-serif;
@@ -239,8 +277,9 @@ footer {
 .tab-button::before,
 .logout-button::before {
   content: "";
-  width: 2em; /* Adjust size as needed */
-  height: 2em;
+  width: 1.5em; /* Adjust size as needed */
+  height: 1.5em;
+  margin-right: 5px;
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/querykicks/assets/arrow3.svg");
@@ -258,20 +297,13 @@ footer {
   animation: rotateX-anim 2s linear infinite;
 }
 
-/* Responsive adjustments for buttons */
-@media screen and (max-width: 768px) {
-  .tab-button,
-  .logout-button {
-    font-size: 0.8em; /* Slightly smaller font for smaller screens */
-    padding: 0.4em 0.8em;
-  }
-}
-.login-background {
+.store-background {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background: url("/querykicks/assets/background/store-bg.webp") center/cover no-repeat;
+  background-attachment: fixed;
 }
 
 .auth-background {

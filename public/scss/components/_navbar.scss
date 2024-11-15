@@ -3,20 +3,21 @@
 // Wrapper to align navbar and tab-content side by side
 .main-content {
     display: flex;
-    align-items: flex-start; // Align the navbar and tab-content to the top
-    gap: 2em; // Optional: add space between navbar and tab-content
+    align-items: flex-start; /* Align navbar and tab-content at the top */
+    gap: 2em; /* Space between navbar and tab-content */
     padding: 1em;
     font-family: $font-family;
 }
+
 .navbar {
-    width: auto;
-    max-width: none;
+    width: 15%; /* Set a fixed width or a percentage */
+    max-width: 200px; /* Optional: limit the maximum width */
     padding: 0.5em;
-    position: relative;// Slightly wider for improved readability
+    position: relative; /* Ensure it doesn't overlap with other elements */
     display: flex;
     flex-direction: column;
-    align-items: flex-start; // Align buttons to the start within the navbar
-    background-color: rgba($color-darker, 0.8); // Optional background for visibility
+    align-items: flex-start; /* Align buttons to the left */
+    background-color: rgba($color-darker, 0.8);
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }

@@ -16,4 +16,14 @@
         left: -50%;  // Adjust based on desired position
         top: 10%;
     }
+     .logout-button {
+        font-size: 0.8em; /* Slightly smaller font for smaller screens */
+        padding: 0.4em 0.8em;
+    }
+    .tab-button,
+    .logout-button {
+        font-size: 0.8em; /* Slightly smaller font for smaller screens */
+        padding: 0.4em 0.8em;
+    }
 }
+

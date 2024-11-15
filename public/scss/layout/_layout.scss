@@ -1,0 +1,9 @@
+html {
+    height: 100%; /* Root takes full height for consistent layout */
+}
+
+body {
+    margin: 0; /* Reset default margin */
+    height: 100%; /* Ensure body takes up full height */
+    overflow: hidden; /* Allow normal scrolling behavior */
+}

@@ -1,6 +1,6 @@
 <?php include './views/layouts/header.php'; ?>
 
-<div class="container login-background">
+<div class="container store-background">
     <header class="header-section">
         <img src="./assets/store-clerk/store-clerk-3-mosaiced.webp" alt="Store Clerk" class="clerk">
         <div class="header-item">
