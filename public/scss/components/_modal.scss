@@ -1,33 +1,38 @@
 .modal {
-    display: none;
+    display: none; /* Hidden by default */
     position: fixed;
-    z-index: 2;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.238);
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    display: flex; /* Align content to the center */
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
     background-color: $color-lighter;
-    margin: 5% 5% 15% 55%;
+    position: relative; /* Enables positioning within modal-content */
     padding: 20px;
-    width: 40%;
-    height: 60%;
-    box-shadow: -.31em 0 0 0 $color-darker,
-                .31em 0 0 0 $color-darker,
-                0 -.31em 0 0 $color-darker,
-                0 .31em 0 0 $color-darker;
-    filter: drop-shadow(0 0 0.75rem $color-medium);
+    border-radius: 8px;
+    width: 40%; /* Adjust to fit your needs */
+    max-width: 500px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
 .close {
-    color: $color-lighter;
-    float: right;
-    font-size: 28px;
+    position: absolute; /* Positions relative to modal-content */
+    top: 10px; /* Adjust vertical spacing */
+    right: 10px; /* Adjust horizontal spacing */
+    color: $color-dark;
+    font-size: 24px;
     font-weight: bold;
     cursor: pointer;
 }
 
 .close:hover {
-    color: $color-dark;
+    color: $color-medium;
 }

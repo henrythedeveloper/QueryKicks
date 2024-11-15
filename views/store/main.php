@@ -20,14 +20,11 @@
                 <button class="logout-button" onclick="logout(event, 'logout')">Leave</button>
             </div>
 
-            <!-- The Modal -->
             <div id="myModal" class="modal">
-
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <p>Some text in the Modal..</p>
-            </div>
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>Some text in the Modal...</p>
+                </div>
             </div>
             
             <div id="shoes" class="tab-content">

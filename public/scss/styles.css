@@ -159,34 +159,42 @@ footer {
 }
 
 .modal {
-  display: none;
+  display: none; /* Hidden by default */
   position: fixed;
-  z-index: 2;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.238);
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  display: flex; /* Align content to the center */
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
   background-color: #e6e6e6;
-  margin: 5% 5% 15% 55%;
+  position: relative; /* Enables positioning within modal-content */
   padding: 20px;
-  width: 40%;
-  height: 60%;
-  box-shadow: -0.31em 0 0 0 #1f232e, 0.31em 0 0 0 #1f232e, 0 -0.31em 0 0 #1f232e, 0 0.31em 0 0 #1f232e;
-  filter: drop-shadow(0 0 0.75rem #5f737b);
+  border-radius: 8px;
+  width: 40%; /* Adjust to fit your needs */
+  max-width: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 .close {
-  color: #e6e6e6;
-  float: right;
-  font-size: 28px;
+  position: absolute; /* Positions relative to modal-content */
+  top: 10px; /* Adjust vertical spacing */
+  right: 10px; /* Adjust horizontal spacing */
+  color: #1a1b1b;
+  font-size: 24px;
   font-weight: bold;
   cursor: pointer;
 }
 
 .close:hover {
-  color: #1a1b1b;
+  color: #5f737b;
 }
 
 .clerk {
@@ -211,7 +219,7 @@ footer {
   padding: 1em;
   margin: 0;
   overflow-y: auto;
-  box-shadow: -0.32em 0 0 0 #5f737b, 0.32em 0 0 0 #5f737b, 0 -0.32em 0 0 #5f737b, 0 0.32em 0 0 #5f737b;
+  box-shadow: -0.3em 0 0 0 #5f737b, 0.3em 0 0 0 #5f737b, 0 -0.3em 0 0 #5f737b, 0 0.3em 0 0 #5f737b;
   border-radius: 5px;
 }
 
@@ -219,99 +227,70 @@ footer {
   display: block;
 }
 
-.tab-button {
+.tab-button,
+.logout-button {
   font-family: "Press Start 2P", sans-serif;
-  position: relative;
+  position: relative; /* Required for pseudo-elements */
+  display: flex; /* Flexbox for alignment */
+  align-items: center; /* Vertically align icon and text */
   background: #a2b3b2;
   color: #1f232e;
-  width: 100%;
+  width: 100%; /* Button spans the entire navbar width */
   margin: 0.5em 0;
-  padding: 0.2em 0.5em;
+  padding: 0.5em 1em;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
   text-align: left;
   box-shadow: -0.3em 0 0 0 #5f737b, 0.3em 0 0 0 #5f737b, 0 -0.3em 0 0 #5f737b, 0 0.3em 0 0 #5f737b;
   border-radius: 4px;
 }
 
 .tab-button.active,
-.tab-button:hover {
-  background-color: #5f737b;
-  color: #e6e6e6;
-}
-
-.tab-button::before {
-  content: "";
-  position: absolute;
-  left: -2em;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1em;
-  height: 1em;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url("/querykicks/assets/arrow3.svg");
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.tab-button:hover::before {
-  opacity: 1;
-}
-
-.tab-button.active::before {
-  opacity: 1;
-  transform: translateY(-50%);
-  animation: rotateX-anim 2s linear infinite;
-}
-
-.logout-button {
-  font-family: "Press Start 2P", sans-serif;
-  position: relative;
-  background: #a2b3b2;
-  color: #1f232e;
-  width: 100%;
-  margin: 0.5em 0;
-  padding: 0.2em 0.5em;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-align: left;
-  box-shadow: -0.3em 0 0 0 #5f737b, 0.3em 0 0 0 #5f737b, 0 -0.3em 0 0 #5f737b, 0 0.3em 0 0 #5f737b;
-  border-radius: 4px;
-}
-
+.tab-button:hover,
 .logout-button:hover {
   background-color: #5f737b;
   color: #e6e6e6;
+  transform: translateY(-2px); /* Subtle lift effect */
 }
 
+.tab-button::before,
 .logout-button::before {
   content: "";
   position: absolute;
-  left: -2em;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1em;
-  height: 1em;
+  left: -3em; /* Icon distance from text */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Ensure exact alignment */
+  width: 2em;
+  height: 2em;
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/querykicks/assets/arrow3.svg");
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.2s ease;
 }
 
+.tab-button:hover::before,
+.tab-button.active::before,
 .logout-button:hover::before {
   opacity: 1;
 }
 
-@keyframes rotateX-anim {
-  0% {
-    transform: rotateX(0deg);
+.tab-button.active::before {
+  animation: rotateX-anim 2s linear infinite;
+}
+
+@media screen and (max-width: 768px) {
+  .tab-button,
+  .logout-button {
+    font-size: 0.8em; /* Slightly smaller font for smaller screens */
+    padding: 0.4em 0.8em;
   }
-  100% {
-    transform: rotateX(360deg);
+  .tab-button::before,
+  .logout-button::before {
+    left: 0.8em; /* Adjust for smaller screens */
+    width: 1em;
+    height: 1em;
   }
 }
 .login-background {
