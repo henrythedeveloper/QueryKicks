@@ -39,28 +39,22 @@ body {
 @media screen and (max-width: 768px) {
   .main-content {
     flex-direction: column;
+    gap: 1em;
   }
   .navbar {
     width: 100%;
-    max-width: none;
+    flex: none;
+    position: relative;
+    top: 0;
+  }
+  .tab-wrapper {
+    width: 100%;
+    flex: none;
   }
   .tab-content {
-    width: 100%;
-    max-width: none;
-  }
-  .clerk {
-    width: 100%;
-    left: -50%;
-    top: 10%;
-  }
-  .logout-button {
-    font-size: 0.8em; /* Slightly smaller font for smaller screens */
-    padding: 0.4em 0.8em;
-  }
-  .tab-button,
-  .logout-button {
-    font-size: 0.8em; /* Slightly smaller font for smaller screens */
-    padding: 0.4em 0.8em;
+    position: relative;
+    height: auto;
+    min-height: 45vh;
   }
 }
 html {
@@ -74,33 +68,52 @@ body {
 }
 
 .cart-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   padding: 1em;
-  background-color: rgba(162, 179, 178, 0.9);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(31, 35, 46, 0.1);
   font-family: "Press Start 2P", sans-serif;
+  background-color: #e6e6e6;
 }
 .cart-wrapper h2 {
+  flex: 0 0 auto;
   margin-bottom: 1em;
   font-size: 1.5em;
   color: #1f232e;
+  padding-bottom: 0.5em;
+  border-bottom: 2px solid rgba(95, 115, 123, 0.2);
 }
 .cart-wrapper .cart-items {
+  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1em;
+  overflow-y: auto;
+  padding-right: 0.5em;
 }
 .cart-wrapper .cart-item {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  min-width: 100%;
   padding: 1em;
-  background-color: #e6e6e6;
+  background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(95, 115, 123, 0.1);
 }
+.cart-wrapper .cart-item .item-top-section {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 1em;
+}
 .cart-wrapper .cart-item img {
-  width: 80px;
-  height: 80px;
+  flex: 0 0 80px;
+  width: 100px;
+  height: 100px;
   -o-object-fit: cover;
      object-fit: cover;
   margin-right: 1em;
@@ -108,21 +121,32 @@ body {
   box-shadow: 0 2px 4px rgba(95, 115, 123, 0.2);
 }
 .cart-wrapper .cart-item .cart-item-details {
+  margin-top: 2em;
   flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 0.5em;
+  min-width: 0;
 }
 .cart-wrapper .cart-item .cart-item-details h3 {
   margin: 0;
   font-size: 1.2em;
   color: #1f232e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .cart-wrapper .cart-item .cart-item-details p {
-  margin: 0.5em 0;
+  margin: 0;
   font-size: 0.9em;
   color: #5f737b;
 }
 .cart-wrapper .cart-item .remove-from-cart {
-  padding: 0.5em 1em;
-  font-size: 0.9em;
+  align-self: center;
+  width: auto;
+  padding: 0.4em 0.8em;
+  font-size: 1.5em;
   background-color: #5f737b;
   color: #e6e6e6;
   border: none;
@@ -133,10 +157,14 @@ body {
 .cart-wrapper .cart-item .remove-from-cart:hover {
   background-color: #1f232e;
 }
-.cart-wrapper p {
+.cart-wrapper > p {
+  flex: 1;
   font-size: 1em;
   color: #5f737b;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes rotateY-anim {
@@ -157,23 +185,28 @@ body {
 }
 .main-content {
   display: flex;
-  align-items: flex-start; /* Align navbar and tab-content at the top */
-  gap: 2em; /* Space between navbar and tab-content */
+  width: 100vw;
+  min-height: 45vh;
   padding: 1em;
   font-family: "Press Start 2P", sans-serif;
+  gap: 1em;
+  position: relative;
 }
 
 .navbar {
-  width: 15%; /* Set a fixed width or a percentage */
-  max-width: 200px; /* Optional: limit the maximum width */
+  width: 15vw;
+  min-width: 150px;
+  height: 100%;
   padding: 0.5em;
-  position: relative; /* Ensure it doesn't overlap with other elements */
+  position: relative;
+  top: 1em;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align buttons to the left */
+  align-items: stretch;
   background-color: rgba(31, 35, 46, 0.8);
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  flex: 0 0 15vw;
 }
 
 .header-section {
@@ -293,21 +326,27 @@ footer {
   filter: drop-shadow(0 -6mm 4mm #e6e6e6);
 }
 
+.tab-wrapper {
+  display: flex;
+  width: 80vw;
+  flex: 0 0 80vw;
+  position: sticky;
+  margin-right: 1em;
+}
+
 .tab-content {
-  flex: 1; /* Take the remaining space next to navbar */
-  background-color: rgba(162, 179, 178, 0.5);
-  display: none;
-  max-width: 85%; /* Optional: to limit width if necessary */
+  position: relative;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-  max-height: 45vh;
+  height: 50vh;
+  background-color: rgba(162, 179, 178, 0.5);
   padding: 1em;
-  margin: 0;
+  display: none;
   overflow-y: auto;
   box-shadow: -0.32em 0 0 0 #5f737b, 0.32em 0 0 0 #5f737b, 0 -0.32em 0 0 #5f737b, 0 0.32em 0 0 #5f737b;
   border-radius: 5px;
 }
-
 .tab-content.active {
   display: block;
 }
@@ -316,13 +355,13 @@ footer {
 .logout-button {
   font-size: 0.6em;
   font-family: "Press Start 2P", sans-serif;
-  position: relative; /* Required for pseudo-elements */
-  display: flex; /* Flexbox for alignment */
-  align-items: center; /* Vertically align icon and text */
-  justify-content: flex-start; /* Ensure the text is aligned to the left */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   background: #a2b3b2;
   color: #1f232e;
-  width: 100%; /* Button spans the entire navbar width */
+  width: 100%;
   margin: 0.5em 0;
   padding: 0.5em 1em;
   border: none;
@@ -332,19 +371,17 @@ footer {
   box-shadow: -0.3em 0 0 0 #5f737b, 0.3em 0 0 0 #5f737b, 0 -0.3em 0 0 #5f737b, 0 0.3em 0 0 #5f737b;
   border-radius: 4px;
 }
-
-.tab-button.active,
-.tab-button:hover,
-.logout-button:hover {
+.tab-button:hover, .tab-button.active,
+.logout-button:hover,
+.logout-button.active {
   background-color: #5f737b;
   color: #e6e6e6;
-  transform: translateY(-2px); /* Subtle lift effect */
+  transform: translateY(-2px);
 }
-
 .tab-button::before,
 .logout-button::before {
   content: "";
-  width: 1.5em; /* Adjust size as needed */
+  width: 1.5em;
   height: 1.5em;
   margin-right: 5px;
   background-size: contain;
@@ -353,17 +390,32 @@ footer {
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.2s ease;
 }
-
-.tab-button:hover::before,
-.tab-button.active::before,
-.logout-button:hover::before {
+.tab-button:hover::before, .tab-button.active::before,
+.logout-button:hover::before,
+.logout-button.active::before {
   opacity: 1;
 }
-
-.tab-button.active::before {
+.tab-button.active::before,
+.logout-button.active::before {
   animation: rotateX-anim 2s linear infinite;
 }
 
+@media screen and (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+    gap: 1em;
+  }
+  .navbar {
+    width: 100%;
+    min-width: auto;
+    position: relative;
+    top: 0;
+  }
+  .tab-content {
+    width: 100%;
+    min-height: auto;
+  }
+}
 .store-background {
   display: flex;
   justify-content: center;

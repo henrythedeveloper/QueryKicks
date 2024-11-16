@@ -1,4 +1,5 @@
 <div class="product-wrapper">
+    <h2>Shoes</h2>
     <?php foreach ($products as $product): ?>
         <div class="product">
             <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">

@@ -1,23 +1,28 @@
 // navbar.scss
 
-// Wrapper to align navbar and tab-content side by side
+// Main content layout
 .main-content {
     display: flex;
-    align-items: flex-start; /* Align navbar and tab-content at the top */
-    gap: 2em; /* Space between navbar and tab-content */
+    width: 100vw; // Full viewport width
+    min-height: 45vh;
     padding: 1em;
     font-family: $font-family;
+    gap: 1em;
+    position: relative; // For proper child positioning
 }
 
 .navbar {
-    width: 15%; /* Set a fixed width or a percentage */
-    max-width: 200px; /* Optional: limit the maximum width */
+    width: 15vw; // 15% of viewport width
+    min-width: 150px;
+    height: 100%;
     padding: 0.5em;
-    position: relative; /* Ensure it doesn't overlap with other elements */
+    position: relative;
+    top: 1em;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align buttons to the left */
+    align-items: stretch;
     background-color: rgba($color-darker, 0.8);
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    flex: 0 0 15vw; // Fixed width based on viewport
 }

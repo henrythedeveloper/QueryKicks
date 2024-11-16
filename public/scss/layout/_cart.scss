@@ -1,33 +1,53 @@
 .cart-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     padding: 1em;
-    background-color: rgba($color-light, 0.9);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba($color-darker, 0.1);
     font-family: $font-family;
+    background-color: $color-lighter;
 
     h2 {
+        flex: 0 0 auto;
         margin-bottom: 1em;
         font-size: 1.5em;
         color: $color-darker;
+        padding-bottom: 0.5em;
+        border-bottom: 2px solid rgba($color-medium, 0.2);
     }
 
     .cart-items {
+        width: 100%;
+        flex: 1;
         display: flex;
         flex-direction: column;
         gap: 1em;
+        overflow-y: auto;
+        padding-right: 0.5em;
     }
 
     .cart-item {
         display: flex;
-        align-items: center;
+        flex-direction: column; // Stack content vertically
+        width: 100%;
+        min-width: 100%;
         padding: 1em;
-        background-color: $color-lighter;
+        background-color: white;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba($color-medium, 0.1);
 
+        .item-top-section {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            margin-bottom: 1em; // Space between top section and remove button
+        }
+
         img {
-            width: 80px;
-            height: 80px;
+            flex: 0 0 80px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
             margin-right: 1em;
             border-radius: 8px;
@@ -35,24 +55,35 @@
         }
 
         .cart-item-details {
+            margin-top: 2em;
             flex: 1;
-
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            gap: 0.5em; // Consistent gap between elements
+            min-width: 0;
+            
             h3 {
                 margin: 0;
                 font-size: 1.2em;
                 color: $color-darker;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             p {
-                margin: 0.5em 0;
+                margin: 0; // Remove default margins
                 font-size: 0.9em;
                 color: $color-medium;
             }
         }
 
         .remove-from-cart {
-            padding: 0.5em 1em;
-            font-size: 0.9em;
+            align-self: center; // Align button to the left
+            width: auto;
+            padding: 0.4em 0.8em;
+            font-size: 1.5em;
             background-color: $color-medium;
             color: $color-lighter;
             border: none;
@@ -66,9 +97,14 @@
         }
     }
 
-    p {
+    // Empty cart message
+    > p {
+        flex: 1;
         font-size: 1em;
         color: $color-medium;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }

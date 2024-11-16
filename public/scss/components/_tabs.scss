@@ -1,39 +1,46 @@
 // tabs.scss
 
+.tab-wrapper {
+    display: flex;
+    width: 80vw; // 85% of viewport width
+    flex: 0 0 80vw; // Fixed width based on viewport
+    position: sticky;
+    margin-right: 1em; // Add some spacing from viewport edge
+}
+// Strict width enforcement for tab content
 .tab-content {
-    flex: 1; /* Take the remaining space next to navbar */
+    position: relative; // Force it to take full wrapper size
+    top: 0;
+    left: 0;
+    width:100%;
+    height: 50vh;
     background-color: rgba($color-light, 0.5);
-    display: none;
-    max-width: 85%; /* Optional: to limit width if necessary */
-    width: 100%;
-    height: auto;
-    max-height: 45vh;
     padding: 1em;
-    margin: 0;
+    display: none;
     overflow-y: auto;
     box-shadow: -.32em 0 0 0 #5f737b,
                 .32em 0 0 0 #5f737b,
                 0 -.32em 0 0 #5f737b,
                 0 .32em 0 0 #5f737b;
     border-radius: 5px;
+
+    &.active {
+        display: block;
+    }
 }
 
-.tab-content.active {
-    display: block;
-}
-
-
+// Button styles remain the same but ensure they fill navbar width
 .tab-button,
-.logout-button { // Combined styles for tab and logout buttons
+.logout-button {
     font-size: .6em;
     font-family: $font-family;
-    position: relative; /* Required for pseudo-elements */
-    display: flex; /* Flexbox for alignment */
-    align-items: center; /* Vertically align icon and text */
-    justify-content: flex-start; /* Ensure the text is aligned to the left */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     background: $color-light;
     color: $color-darker;
-    width: 100%; /* Button spans the entire navbar width */
+    width: 100%;
     margin: 0.5em 0;
     padding: 0.5em 1em;
     border: none;
@@ -45,36 +52,52 @@
                 0 -0.3em 0 0 $color-medium,
                 0 0.3em 0 0 $color-medium;
     border-radius: 4px;
+
+    &:hover,
+    &.active {
+        background-color: $color-medium;
+        color: $color-lighter;
+        transform: translateY(-2px);
+    }
+
+    &::before {
+        content: "";
+        width: 1.5em;
+        height: 1.5em;
+        margin-right: 5px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url('/querykicks/assets/arrow3.svg');
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    &:hover::before,
+    &.active::before {
+        opacity: 1;
+    }
+
+    &.active::before {
+        animation: rotateX-anim 2s linear infinite;
+    }
 }
 
-.tab-button.active,
-.tab-button:hover,
-.logout-button:hover {
-    background-color: $color-medium;
-    color: $color-lighter;
-    transform: translateY(-2px); /* Subtle lift effect */
-}
+// Add responsive behavior
+@media screen and (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+        gap: 1em;
+    }
 
-.tab-button::before,
-.logout-button::before { // Shared pseudo-element for both buttons
-    content: "";
-    width: 1.5em; /* Adjust size as needed */
-    height: 1.5em;
-    margin-right: 5px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('/querykicks/assets/arrow3.svg');
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.2s ease;
-}
+    .navbar {
+        width: 100%;
+        min-width: auto;
+        position: relative;
+        top: 0;
+    }
 
-.tab-button:hover::before,
-.tab-button.active::before,
-.logout-button:hover::before {
-    opacity: 1;
+    .tab-content {
+        width: 100%;
+        min-height: auto;
+    }
 }
-
-.tab-button.active::before {
-    animation: rotateX-anim 2s linear infinite;
-}
-
