@@ -8,13 +8,38 @@
     font-family: $font-family;
     background-color: $color-lighter;
 
-    h2 {
-        flex: 0 0 auto;
+    // Header section with checkout button
+    .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1em;
         margin-bottom: 1em;
-        font-size: 1.5em;
-        color: $color-darker;
         padding-bottom: 0.5em;
         border-bottom: 2px solid rgba($color-medium, 0.2);
+
+        h2 {
+            flex: 0 0 auto;
+            margin: 0;
+            font-size: 1.5em;
+            color: $color-darker;
+        }
+
+        .checkout-btn {
+            padding: 0.5em 1.5em;
+            font-size: 1em;
+            background-color: $color-medium;
+            color: $color-lighter;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: $color-darker;
+                transform: translateY(-2px);
+            }
+        }
     }
 
     .cart-items {
@@ -108,3 +133,4 @@
         justify-content: center;
     }
 }
+

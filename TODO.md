@@ -1,0 +1,2 @@
+- Get Users to have another data type to get money, users start off with $100 
+- there is a something in the header that they can manipulate how much money they have

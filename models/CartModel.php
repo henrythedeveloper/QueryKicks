@@ -95,4 +95,31 @@ class CartModel {
             return false;
         }
     }
+
+    public function clearCart($userId) {
+        try {
+            $this->db->beginTransaction();
+    
+            // Get cart ID
+            $stmt = $this->db->prepare("SELECT id FROM carts WHERE user_id = :user_id");
+            $stmt->execute(['user_id' => $userId]);
+            $cart = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if ($cart) {
+                // Delete cart items
+                $stmt = $this->db->prepare("DELETE FROM cart_items WHERE cart_id = :cart_id");
+                $stmt->execute(['cart_id' => $cart['id']]);
+                
+                $this->db->commit();
+                return true;
+            }
+            
+            return true; // Return true if no cart exists
+            
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            error_log('Error clearing cart: ' . $e->getMessage());
+            return false;
+        }
+    }
 }
