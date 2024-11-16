@@ -1,6 +1,6 @@
 <div class="cart-wrapper">
     <h2>Your Cart</h2>
-    
+
     <?php if (!empty($cartItems)): ?>
         <div class="cart-items">
             <?php foreach ($cartItems as $item): ?>

@@ -1,9 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: /querykicks/views/auth/auth.php");
-    exit();
-}
+var_dump($_SESSION); // Check session contents
 ?>
 <!DOCTYPE html>
 <html lang="en">
