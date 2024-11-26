@@ -14,9 +14,6 @@ error_log("Database.php exists: " . (file_exists($dbPath) ? 'yes' : 'no'));
 require_once $dbPath;
 require_once $productPath;
 
-// require_once __DIR__ . '/../config/database.php';
-// require_once __DIR__ . '/../models/Product.php';
-
 class AdminController {
     private $db;
     private $product;
@@ -285,46 +282,21 @@ class AdminController {
     }
 
     private function uploadImage($file) {
-        try {
-            // Debug the incoming file
-            error_log('Upload file info: ' . print_r($file, true));
-    
-            // Define allowed file types
-            $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            
-            // Validate file type
-            if (!in_array($file['type'], $allowed)) {
-                throw new Exception('Invalid file type. Only JPG, PNG, GIF, and WEBP files are allowed.');
-            }
-    
-            // Define the correct path for shoes directory
-            $targetDir = $_SERVER['DOCUMENT_ROOT'] . '/querykicks/assets/images/shoes/';
-            error_log('Target directory: ' . $targetDir);
-    
-            // Create directory if it doesn't exist
-            if (!file_exists($targetDir)) {
-                if (!mkdir($targetDir, 0777, true)) {
-                    error_log('Failed to create directory: ' . $targetDir);
-                    throw new Exception('Failed to create upload directory');
-                }
-            }
-    
-            // Generate unique filename
-            $filename = uniqid() . '_' . basename($file['name']);
-            $targetPath = $targetDir . $filename;
-            error_log('Target file path: ' . $targetPath);
-    
-            // Move uploaded file
-            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-                // Return the relative path for database storage
-                return 'assets/images/shoes/' . $filename;
-            } else {
-                error_log('Failed to move uploaded file. PHP Error: ' . error_get_last()['message']);
-                throw new Exception('Failed to upload file');
-            }
-        } catch (Exception $e) {
-            error_log('Upload error: ' . $e->getMessage());
-            throw $e;
+        // Get the original file name
+        $fileName = basename($file['name']);
+        
+        // Set target directory and path
+        $targetDir = $_SERVER['DOCUMENT_ROOT'] . '/querykicks/assets/images/shoes/';
+        $targetPath = $targetDir . $fileName;
+        
+        // Debug
+        error_log('Moving file to: ' . $targetPath);
+        
+        // Move the file
+        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+            return 'assets/images/shoes/' . $fileName;
+        } else {
+            throw new Exception('Failed to move uploaded file');
         }
     }
 
@@ -338,9 +310,9 @@ class AdminController {
                 throw new Exception('No image file uploaded or upload error occurred.');
             }
     
-            // Upload image first
+            // Upload image and get the path
             $imageUrl = $this->uploadImage($_FILES['image']);
-            error_log('Image saved at: ' . $imageUrl);
+            error_log('Image URL for database: ' . $imageUrl);
     
             // Insert product data
             $query = "INSERT INTO products (name, description, price, stock, image_url) VALUES (?, ?, ?, ?, ?)";
@@ -350,13 +322,14 @@ class AdminController {
                 $_POST['description'],
                 $_POST['price'],
                 $_POST['stock'],
-                $imageUrl
+                $imageUrl 
             ]);
     
             if ($success) {
                 $this->sendResponse([
                     'success' => true, 
-                    'message' => 'Product added successfully'
+                    'message' => 'Product added successfully',
+                    'imageUrl' => $imageUrl
                 ]);
             } else {
                 throw new Exception('Failed to add product to database.');
