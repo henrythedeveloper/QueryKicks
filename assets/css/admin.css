@@ -1,0 +1,318 @@
+@font-face {
+    font-family: 'PressStart2P';
+    src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'PressStart2P', cursive;
+    background: url('../images/backgrounds/store-bg.webp') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
+
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.logo h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.logo p {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.nav-menu {
+    flex-grow: 1;
+}
+
+.nav-item {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+    transition: background-color 0.3s;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.admin-info {
+    padding-top: 1rem;
+    border-top: 1px solid #333;
+}
+
+#logout-btn {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    background: #ff4444;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.content-view {
+    display: none;
+}
+
+.content-view.active {
+    display: block;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+/* Button Styles */
+.primary-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+}
+
+.secondary-btn {
+    background: #666;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+}
+
+/* Products Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.product-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 0.5rem;
+}
+
+/* Admin Tables */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+    margin-top: 1rem;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-table th {
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.status-select {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.25rem;
+    font-family: 'PressStart2P', cursive;
+    font-size: 0.8rem;
+}
+
+.view-order-btn,
+.add-money-btn {
+    background: #4CAF50;
+    border: none;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+    font-size: 0.7rem;
+}
+
+.view-order-btn:hover,
+.add-money-btn:hover {
+    background: #45a049;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    margin: 10% auto;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    color: white;
+}
+
+.close-modal {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #999;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    background: #333;
+    border: 1px solid #666;
+    color: white;
+    font-family: 'PressStart2P', cursive;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Image Upload Styles */
+.image-upload-container {
+    margin-top: 0.5rem;
+}
+
+#image-preview {
+    margin-top: 1rem;
+    max-width: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+#image-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+input[type="file"] {
+    background: #333;
+    padding: 0.5rem;
+    border: 1px solid #666;
+    border-radius: 4px;
+    color: white;
+    width: 100%;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background: #4CAF50;
+    border: none;
+    padding: 0.5rem 1rem;
+    color: white;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+    margin-right: 1rem;
+}
+
+.current-image {
+    margin-bottom: 1rem;
+}
+
+.current-image img {
+    max-width: 200px;
+    border: 2px solid #666;
+}
