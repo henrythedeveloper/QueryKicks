@@ -3,9 +3,16 @@ error_log("Accessing auth.php");
 error_log("Session user_id in auth.php: " . ($_SESSION['user_id'] ?? 'not set'));
 
 if (isset($_SESSION['user_id'])) {
-    error_log("Redirecting to storecontroller.php from auth.php");
-    header('Location: http://localhost/querykicks/controllers/storecontroller.php');
-    exit();
+    // Check user role and redirect accordingly
+    if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+        error_log("Redirecting admin to admin panel");
+        header('Location: http://localhost/querykicks/views/admin.php');
+        exit();
+    } else {
+        error_log("Redirecting regular user to store");
+        header('Location: http://localhost/querykicks/controllers/storecontroller.php');
+        exit();
+    }
 }
 ?>
 <!DOCTYPE html>

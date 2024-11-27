@@ -24,8 +24,6 @@ class AdminController {
 
     public function handleRequest() {
 
-        // Check if user is admin
-        session_start();
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             $this->sendResponse(['success' => false, 'message' => 'Unauthorized']);
             exit();
@@ -235,7 +233,6 @@ class AdminController {
 
     private function logout() {
         try {
-            session_start();
             session_destroy();
             $this->sendResponse([
                 'success' => true,

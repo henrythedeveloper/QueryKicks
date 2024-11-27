@@ -9,16 +9,28 @@ class Cart {
 
     public function getCartItems($userId) {
         try {
-            $query = "SELECT ci.id as cart_item_id, ci.quantity, 
-                             p.id as product_id, p.name, p.price, p.image_url 
-                      FROM cart_items ci 
-                      JOIN carts c ON ci.cart_id = c.id 
-                      JOIN products p ON ci.product_id = p.id 
-                      WHERE c.user_id = ?";
+            $query = "SELECT 
+                        ci.id as cart_item_id, 
+                        ci.cart_id,
+                        ci.product_id,
+                        ci.quantity,
+                        p.name,
+                        p.price,
+                        p.image_url,
+                        p.id as product_id
+                    FROM cart_items ci 
+                    JOIN carts c ON ci.cart_id = c.id 
+                    JOIN products p ON ci.product_id = p.id 
+                    WHERE c.user_id = ?";
             
             $stmt = $this->db->prepare($query);
             $stmt->execute([$userId]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Debug log
+            error_log('Cart Items Query Result: ' . print_r($items, true));
+            
+            return $items;
         } catch (PDOException $e) {
             error_log('Error getting cart items: ' . $e->getMessage());
             return [];

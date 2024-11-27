@@ -14,7 +14,6 @@ class AuthController {
     public function login($email, $password) {
         $result = $this->user->login($email, $password);
         if($result) {
-            session_start();
             $_SESSION['user_id'] = $result['id'];
             $_SESSION['name'] = $result['name'];
             $_SESSION['role'] = $result['role'];
@@ -84,12 +83,7 @@ class AuthController {
         ];
     }
 
-    public function logout() {
-        // Only start session if one doesn't exist
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
+    public function logout() {    
         // Clear all session variables
         $_SESSION = array();
         

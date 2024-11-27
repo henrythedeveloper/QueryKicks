@@ -34,8 +34,6 @@ class StoreController {
     }
 
     public function handleRequest() {
-        session_start();
-
         error_log("StoreController::handleRequest called."); // Log entry into the method
 
         // Check authentication
@@ -48,6 +46,7 @@ class StoreController {
         // Handle AJAX requests
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $input = json_decode(file_get_contents('php://input'), true);
+            error_log('Received POST data: ' . print_r($input, true)); // Debug log
             $action = $_POST['action'] ?? $input['action'] ?? null;
 
             if ($action) {
@@ -61,6 +60,7 @@ class StoreController {
     }
 
     private function handleAction($action) {
+        error_log('Handling action: ' . $action);
         switch($action) {
             case 'loadProducts':
                 $this->getProducts();
@@ -184,24 +184,30 @@ class StoreController {
 
     private function removeFromCart() {
         try {
-            $itemId = $_POST['cart_item_id'] ?? null;
+            $input = json_decode(file_get_contents('php://input'), true);
+            error_log('Remove cart data: ' . print_r($input, true)); // Debug log
+            
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception('User must be logged in');
+            }
+
+            $itemId = $input['item_id'] ?? null;
             if (!$itemId) {
-                throw new Exception('Cart item ID is required');
+                throw new Exception('Cart Item ID is required');
             }
 
             $success = $this->cart->removeItem($_SESSION['user_id'], $itemId);
-            
+
             if ($success) {
-                $message = $this->getRandomClerkMessage('removeFromCart');
                 $this->sendResponse([
                     'success' => true,
-                    'message' => 'Item removed from cart',
-                    'clerkMessage' => $message
+                    'message' => 'Item removed from cart'
                 ]);
             } else {
-                throw new Exception('Failed to remove item');
+                throw new Exception('Failed to remove item from cart');
             }
         } catch (Exception $e) {
+            error_log('Error in removeFromCart: ' . $e->getMessage()); // Debug log
             $this->sendResponse([
                 'success' => false,
                 'message' => $e->getMessage()
@@ -233,7 +239,7 @@ class StoreController {
             try {
                 // Update user balance
                 $newBalance = $currentBalance - $total;
-                $stmt = $this->db->prepare("UPDATE users SET balance = ? WHERE id = ?");
+                $stmt = $this->db->prepare("UPDATE users SET money = ? WHERE id = ?");
                 $stmt->execute([$newBalance, $_SESSION['user_id']]);
     
                 // Clear the user's cart

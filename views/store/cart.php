@@ -1,3 +1,7 @@
+<?php
+// Add this at the top of cart.php to see the data structure
+error_log('Cart Items: ' . print_r($cartItems, true));
+?>
 <div class="cart-wrapper" id="cart-container">
     <?php if (!empty($cartItems)): ?>
         <!-- Cart Items Section -->
