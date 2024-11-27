@@ -1,4 +1,6 @@
 <?php
+
+session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -81,15 +83,6 @@ class AdminController {
                         $this->sendResponse(['success' => false, 'message' => 'Product ID required']);
                     }
                     break;
-                case 'getOrders':
-                    $this->getOrders();
-                    break;
-                case 'getOrderDetails':
-                    $this->getOrderDetails($_POST['orderId']);
-                    break;
-                case 'updateOrderStatus':
-                    $this->updateOrderStatus();
-                    break;
                 case 'getUsers':
                     $this->getUsers();
                     break;
@@ -118,11 +111,6 @@ class AdminController {
             // Get total products
             $stmt = $this->db->query("SELECT COUNT(*) as total FROM products");
             $totalProducts = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-
-            // Get total orders
-            $stmt = $this->db->query("SELECT COUNT(*) as total FROM orders");
-            $totalOrders = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-
             // Get total users
             $stmt = $this->db->query("SELECT COUNT(*) as total FROM users WHERE role = 'user'");
             $totalUsers = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
@@ -130,7 +118,6 @@ class AdminController {
             $responseData = [
                 'success' => true,
                 'totalProducts' => $totalProducts,
-                'totalOrders' => $totalOrders,
                 'totalUsers' => $totalUsers
             ];
 
@@ -192,48 +179,6 @@ class AdminController {
         }
     }
 
-    private function getOrders() {
-        try {
-            $query = "SELECT o.*, u.name as user_name 
-                     FROM orders o 
-                     JOIN users u ON o.user_id = u.id 
-                     ORDER BY o.created_at DESC";
-            $stmt = $this->db->query($query);
-            $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $this->sendResponse($orders);
-        } catch (PDOException $e) {
-            $this->sendResponse([
-                'success' => false,
-                'message' => 'Database error',
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
-
-    private function getOrderDetails($orderId) {
-        try {
-            // Get order details
-            $query = "SELECT oi.*, p.name as product_name, p.image_url 
-                     FROM order_items oi
-                     JOIN products p ON oi.product_id = p.id
-                     WHERE oi.order_id = ?";
-            $stmt = $this->db->prepare($query);
-            $stmt->execute([$orderId]);
-            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $this->sendResponse([
-                'success' => true,
-                'items' => $items
-            ]);
-        } catch (PDOException $e) {
-            $this->sendResponse([
-                'success' => false,
-                'message' => 'Database error',
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
-
     private function getUsers() {
         try {
             $query = "SELECT id, name, email, money, role, created_at FROM users ORDER BY created_at DESC";
@@ -260,31 +205,6 @@ class AdminController {
             $this->sendResponse([
                 'success' => false,
                 'message' => 'Error logging out: ' . $e->getMessage()
-            ]);
-        }
-    }
-
-    private function updateOrderStatus() {
-        try {
-            $orderId = $_POST['orderId'];
-            $status = $_POST['status'];
-
-            $query = "UPDATE orders SET status = ? WHERE id = ?";
-            $stmt = $this->db->prepare($query);
-            $success = $stmt->execute([$status, $orderId]);
-
-            if ($success) {
-                $this->sendResponse([
-                    'success' => true,
-                    'message' => 'Order status updated successfully'
-                ]);
-            } else {
-                throw new Exception('Failed to update order status');
-            }
-        } catch (Exception $e) {
-            $this->sendResponse([
-                'success' => false,
-                'message' => $e->getMessage()
             ]);
         }
     }

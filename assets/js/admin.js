@@ -53,9 +53,6 @@ class AdminDashboard {
             case 'products':
                 this.loadProducts();
                 break;
-            case 'orders':
-                this.loadOrders();
-                break;
             case 'users':
                 this.loadUsers();
                 break;
@@ -80,7 +77,6 @@ class AdminDashboard {
                 const data = JSON.parse(responseText);
                 if (data.success) {
                     document.getElementById('total-products').textContent = data.totalProducts;
-                    document.getElementById('total-orders').textContent = data.totalOrders;
                     document.getElementById('total-users').textContent = data.totalUsers;
                 } else {
                     console.error('Server error:', data.message);
@@ -134,28 +130,6 @@ class AdminDashboard {
         }
     }
 
-    async loadOrders() {
-        try {
-            const formData = new FormData();
-            formData.append('action', 'getOrders');
-
-            const response = await fetch(`${this.baseUrl}/controllers/AdminController.php`, {
-                method: 'POST',
-                body: formData
-            });
-
-            const orders = await response.json();
-            const ordersList = document.querySelector('.orders-list');
-            
-            if (Array.isArray(orders)) {
-                ordersList.innerHTML = this.createOrdersTable(orders);
-            } else {
-                console.error('Invalid orders data:', orders);
-            }
-        } catch (error) {
-            console.error('Error loading orders:', error);
-        }
-    }
 
     async loadUsers() {
         try {
@@ -183,51 +157,6 @@ class AdminDashboard {
         } catch (error) {
             console.error('Error loading users:', error);
         }
-    }
-
-    createOrdersTable(orders) {
-        return `
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>User</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${orders.map(order => `
-                        <tr>
-                            <td>#${order.id}</td>
-                            <td>${order.user_name}</td>
-                            <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
-                            <td>
-                                <select class="status-select" data-order-id="${order.id}">
-                                    <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
-                                    <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
-                                </select>
-                            </td>
-                            <td>${new Date(order.created_at).toLocaleDateString()}</td>
-                            <td>
-                                <button class="view-order-btn" data-order-id="${order.id}">View Details</button>
-                            </td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-
-            <div id="order-details-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <h2>Order Details</h2>
-                    <div id="order-details-content"></div>
-                </div>
-            </div>
-        `;
     }
 
     createUsersTable(users) {

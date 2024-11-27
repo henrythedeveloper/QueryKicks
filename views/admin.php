@@ -34,9 +34,6 @@ error_log('Admin view loaded. Session data: ' . print_r($_SESSION, true));
                 <button class="nav-item" data-view="products">
                     Products
                 </button>
-                <button class="nav-item" data-view="orders">
-                    Orders
-                </button>
                 <button class="nav-item" data-view="users">
                     Users
                 </button>
@@ -58,10 +55,6 @@ error_log('Admin view loaded. Session data: ' . print_r($_SESSION, true));
                         <p id="total-products">Loading...</p>
                     </div>
                     <div class="card">
-                        <h3>Total Orders</h3>
-                        <p id="total-orders">Loading...</p>
-                    </div>
-                    <div class="card">
                         <h3>Total Users</h3>
                         <p id="total-users">Loading...</p>
                     </div>
@@ -76,14 +69,6 @@ error_log('Admin view loaded. Session data: ' . print_r($_SESSION, true));
                 </div>
                 <div class="products-grid">
                     <!-- Products will be loaded here -->
-                </div>
-            </div>
-
-            <!-- Orders View -->
-            <div id="orders-view" class="content-view">
-                <h2>Order History</h2>
-                <div class="orders-list">
-                    <!-- Orders will be loaded here -->
                 </div>
             </div>
 

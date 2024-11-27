@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Debug file paths
 $productPath = __DIR__ . '/../models/Product.php';
 $dbPath = __DIR__ . '/../config/database.php';

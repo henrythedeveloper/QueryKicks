@@ -194,7 +194,7 @@ body {
     font-size: 0.8rem;
 }
 
-.view-order-btn,
+
 .add-money-btn {
     background: #4CAF50;
     border: none;
@@ -205,7 +205,6 @@ body {
     font-size: 0.7rem;
 }
 
-.view-order-btn:hover,
 .add-money-btn:hover {
     background: #45a049;
 }
