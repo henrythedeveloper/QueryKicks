@@ -1,3 +1,16 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if user is logged in and is admin
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header('Location: /querykicks/controllers/AuthController.php');
+    exit();
+}
+
+error_log('Admin view loaded. Session data: ' . print_r($_SESSION, true));
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

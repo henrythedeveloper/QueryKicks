@@ -18,6 +18,9 @@ class AdminController {
 
     public function __construct() {
 
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $database = new Database();
         $this->db = $database->getConnection();
         $this->product = new Product($this->db);
@@ -25,9 +28,18 @@ class AdminController {
 
     public function handleRequest() {
 
+        // Add debug logs
+        error_log('Session data: ' . print_r($_SESSION, true));
+        error_log('Request method: ' . $_SERVER['REQUEST_METHOD']);
+
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-            $this->sendResponse(['success' => false, 'message' => 'Unauthorized']);
-            exit();
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                header('Location: /querykicks/controllers/AuthController.php');
+                exit();
+            } else {
+                $this->sendResponse(['success' => false, 'message' => 'Unauthorized']);
+                exit();
+            }
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -35,7 +47,7 @@ class AdminController {
             return;
         }
 
-        // Get request data
+        // Handle POST request for AJAX actions
         $input = json_decode(file_get_contents('php://input'), true);
         $action = $_POST['action'] ?? $input['action'] ?? '';
 

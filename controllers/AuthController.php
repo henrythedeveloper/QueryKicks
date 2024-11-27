@@ -18,10 +18,15 @@ class AuthController {
             $_SESSION['name'] = $result['name'];
             $_SESSION['role'] = $result['role'];
             $_SESSION['money'] = $result['money'];
+            
+            // Change redirect path for admin
             return [
                 'success' => true,
                 'role' => $result['role'],
-                'redirectUrl' => $result['role'] === 'admin' ? '/querykicks/views/admin.php' : '/querykicks/controllers/StoreController.php'
+                'redirectUrl' => $result['role'] === 'admin' 
+                    ? '/querykicks/controllers/AdminController.php' 
+                    : '/querykicks/controllers/StoreController.php',
+
             ];
         }
         return [
@@ -102,46 +107,31 @@ class AuthController {
         ];
     }
 
-    // Handle AJAX requests
     public function handleRequest() {
-        // If it's a POST request, handle it as AJAX
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return $this->handleAjaxRequest();
         }
-        // If it's a GET request, show the auth page
-        else {
-            $this->handlePageRequest();
-        }
-    }
-    private function handlePageRequest() {
-        // If user is already logged in, redirect appropriately
+        
         if (isset($_SESSION['user_id'])) {
             if ($_SESSION['role'] === 'admin') {
-                header('Location: /querykicks/views/admin.php');
+                header('Location: /querykicks/controllers/AdminController.php');
             } else {
                 header('Location: /querykicks/controllers/StoreController.php');
             }
             exit();
         }
         
-        // If not logged in, show the auth page
         require_once __DIR__ . '/../views/auth.php';
     }
 
     private function handleAjaxRequest() {
         header('Content-Type: application/json');
         
-        // Get input data from either POST or JSON
         $input = json_decode(file_get_contents('php://input'), true);
         $action = $_POST['action'] ?? $input['action'] ?? '';
         
-        // Debug
-        error_log('POST data: ' . print_r($_POST, true));
-        error_log('JSON data: ' . print_r($input, true));
-        error_log('Action received: ' . $action);
-    
         $response = [];
-    
+        
         switch($action) {
             case 'login':
                 $email = $_POST['email'] ?? $input['email'] ?? '';
@@ -177,7 +167,7 @@ class AuthController {
                     'message' => 'Invalid action'
                 ];
         }
-    
+        
         echo json_encode($response);
         exit();
     }

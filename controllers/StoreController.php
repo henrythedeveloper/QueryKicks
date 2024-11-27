@@ -39,7 +39,7 @@ class StoreController {
         // Check authentication
         if (!isset($_SESSION['user_id'])) {
             error_log("User not authenticated, redirecting to auth."); // Log authentication failure
-            header('Location: /querykicks/views/auth.php');
+            header('Location: /querykicks/controllers/AuthController.php');
             exit();
         }
 
