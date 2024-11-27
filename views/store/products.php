@@ -13,7 +13,7 @@
                     <p class="price">$<?= number_format($product['price'], 2) ?></p>
                     <p class="stock">In Stock: <?= htmlspecialchars($product['stock']) ?></p>
                     <?php if ($product['stock'] > 0): ?>
-                        <input type="number" class="quantity-input" min="1" max="<?= htmlspecialchars($product['stock']) ?>" value="1">
+                        <input type="hidden" class="quantity-input" min="1" max="<?= htmlspecialchars($product['stock']) ?>" value="1">
                         <!-- Add to Cart Button with data attributes -->
                         <button class="add-to-cart-button"
                                 data-product-id="<?= htmlspecialchars($product['id']) ?>"

@@ -89,7 +89,7 @@ error_log('Admin view loaded. Session data: ' . print_r($_SESSION, true));
             <span class="close-modal">&times;</span>
             <h2 id="modal-title">Add New Product</h2>
             <form id="product-form" enctype="multipart/form-data">
-                <input type="hidden" id="product-id">
+                <input type="hidden" id="product-id name="id">
                 <div class="form-group">
                     <label for="product-name">Name</label>
                     <input type="text" id="product-name" name="name" required>

@@ -228,7 +228,16 @@ class StoreController {
                 throw new Exception('User must be logged in');
             }
     
-            $cartItemId = $_POST['cart_item_id'] ?? null;
+            // Read and parse the JSON input
+            $inputRaw = file_get_contents('php://input');
+            $input = json_decode($inputRaw, true);
+    
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                error_log('JSON decode error in removeFromCart: ' . json_last_error_msg());
+                throw new Exception('Invalid JSON input');
+            }
+    
+            $cartItemId = $input['cart_item_id'] ?? null;
     
             if (!$cartItemId) {
                 throw new Exception('Cart Item ID is required');
@@ -245,6 +254,7 @@ class StoreController {
                 throw new Exception('Failed to remove item from cart');
             }
         } catch (Exception $e) {
+            error_log('Error in removeFromCart: ' . $e->getMessage());
             $this->sendResponse([
                 'success' => false,
                 'message' => $e->getMessage()

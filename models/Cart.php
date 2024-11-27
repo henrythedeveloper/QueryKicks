@@ -41,23 +41,24 @@ class Cart {
             $stmt = $this->db->prepare("SELECT id FROM carts WHERE user_id = ?");
             $stmt->execute([$userId]);
             $cartId = $stmt->fetchColumn();
-
+    
             if (!$cartId) {
                 // The user does not have a cart yet
                 return null;
             }
-
+    
             // Fetch the cart item
             $stmt = $this->db->prepare("SELECT * FROM cart_items WHERE cart_id = ? AND product_id = ?");
             $stmt->execute([$cartId, $productId]);
             $cartItem = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
             return $cartItem ?: null;
         } catch (Exception $e) {
             error_log('Error fetching cart item: ' . $e->getMessage());
             return null;
         }
     }
+    
 
     public function addItem($userId, $productId, $quantity) {
         try {
@@ -178,6 +179,8 @@ class Cart {
             return false;
         }
     }
+    
+    
     
     
 }

@@ -230,7 +230,7 @@ class AdminDashboard {
     
         if (product) {
             modalTitle.textContent = 'Edit Product';
-            form.elements['product-id'].value = product.id;
+            form.elements['id'].value = product.id;
             form.elements['name'].value = product.name;
             form.elements['description'].value = product.description;
             form.elements['price'].value = product.price;
@@ -247,7 +247,7 @@ class AdminDashboard {
         } else {
             modalTitle.textContent = 'Add New Product';
             form.reset();
-            form.elements['product-id'].value = '';
+            form.elements['id'].value = '';
             preview.innerHTML = '';
         }
     
@@ -316,7 +316,7 @@ class AdminDashboard {
         const formData = new FormData(form);
         
         // Add action to formData
-        const isEdit = form.elements['product-id'].value;
+        const isEdit = form.elements['id'].value;
         const action = isEdit ? 'updateProduct' : 'addProduct';
         formData.append('action', action);
     
@@ -326,23 +326,20 @@ class AdminDashboard {
                 body: formData
             });
     
-            try {
-                const result = JSON.parse(responseText);
+            const result = await response.json();
     
-                if (result.success) {
-                    alert(result.message);
-                    this.hideProductModal();
-                    this.loadProducts();
-                } else {
-                    alert(result.message || 'Error saving product');
-                }
-            } catch (parseError) {
-                alert('Server returned invalid response');
+            if (result.success) {
+                alert(result.message);
+                this.hideProductModal();
+                this.loadProducts();
+            } else {
+                alert(result.message || 'Error saving product');
             }
         } catch (error) {
             alert('Error saving product: ' + error.message);
         }
     }
+    
 
     async handleEditProduct(productId) {
         try {
@@ -403,8 +400,7 @@ class AdminDashboard {
             });
             
             try {
-                const result = JSON.parse(responseText);
-
+                const result = await response.json();
                 if (result.success) {
                     // Use redirectUrl from response or fallback to default path
                     const redirectPath = result.redirectUrl || `${this.baseUrl}/views/auth.php`;
