@@ -20,11 +20,16 @@ class StoreController {
     }
 
     private function loadClerkResponses() {
-        $jsonPath = __DIR__ . '/../data/clerk_responses.json';
+        $jsonPath = __DIR__ . '/../data/clerk-messages.json';
         if (file_exists($jsonPath)) {
             $json = file_get_contents($jsonPath);
-            $this->clerkResponses = json_decode($json, true) ?? [];
+            $this->clerkResponses = json_decode($json, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                error_log('JSON Decode Error: ' . json_last_error_msg());
+                $this->clerkResponses = [];
+            }
         } else {
+            error_log('Clerk messages file not found at: ' . $jsonPath);
             $this->clerkResponses = [];
         }
     }
@@ -63,6 +68,9 @@ class StoreController {
             case 'removeFromCart':
                 $this->removeFromCart();
                 break;
+            case 'getCart':
+                $this->getCart();
+                break;
             case 'updateQuantity':  
                 $this->updateQuantity();
                 break;
@@ -84,17 +92,13 @@ class StoreController {
         try {
             // Fetch products
             $products = $this->product->getAll();
-            error_log('Products fetched in renderStore: ' . print_r($products, true));
-    
-            // Check if products are populated
-            if (empty($products)) {
-                error_log('No products fetched from the database.');
-            }
     
             // Other data for the view
             $greeting = $this->getRandomClerkMessage('greetings');
             $cartItems = $this->cart->getCartItems($_SESSION['user_id']);
+            error_log('Clerk Responses: ' . print_r($this->clerkResponses, true));
             $clerkMessagesJson = json_encode($this->clerkResponses); // Encode messages as JSON
+            error_log('Clerk Messages JSON: ' . $clerkMessagesJson);
 
     
             // Include the main view and pass the $products variable
@@ -121,6 +125,37 @@ class StoreController {
             ]);
         }
     }
+
+    private function getCart() {
+        try {
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception('User must be logged in');
+            }
+    
+            // Fetch cart items
+            $cartItems = $this->cart->getCartItems($_SESSION['user_id']);
+    
+            // Start output buffering
+            ob_start();
+    
+            // Include the cart view template
+            include __DIR__ . '/../views/partials/cart.php';
+    
+            // Get the buffered content
+            $html = ob_get_clean();
+    
+            $this->sendResponse([
+                'success' => true,
+                'html' => $html
+            ]);
+        } catch (Exception $e) {
+            $this->sendResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+    
 
     private function addToCart() {
         try {

@@ -33,4 +33,3 @@ if (!isset($userData)) {
         </div>
     </div>
 </header>
-<script src="/querykicks/assets/js/notification.js"></script>

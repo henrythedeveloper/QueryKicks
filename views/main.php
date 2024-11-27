@@ -4,7 +4,6 @@ if (!isset($products)) {
     header('Location: /querykicks/controllers/storecontroller.php');
     exit();
 }
-$greeting = "Welcome to QueryKicks!";
 ?>
 
 <!DOCTYPE html>

@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCart();
     initializeMoneyModal();
     setupLogout();
-    initializeFAQ(); 
+    initializeFAQ();
+    initializeIdleTimer(); 
 });
 
 let idleTime = 0;
@@ -22,7 +23,7 @@ function initializeIdleTimer() {
 function timerIncrement() {
     idleTime++;
     if (idleTime >= 1) { // The idle time threshold 
-        displayClerkMessage('idle');
+        updateClerkMessage('idle');
         idleTime = 0; // Reset idle time after displaying the message
     }
 }
@@ -151,16 +152,11 @@ async function handleAddToCart(e) {
         const data = await response.json();
 
         if (data.success) {
-            // Update the cart display
-            const cartTab = document.getElementById('cart');
-            if (cartTab) {
-                location.reload(); // Temporary solution to refresh the cart
-            }
-            /// Update clerk message
+            // Update the cart display without reloading the page
+            updateCartDisplay();
+
+            // Update clerk message
             updateClerkMessage('addToCart');
-            if (clerkMessage && data.clerkMessage) {
-                clerkMessage.textContent = data.clerkMessage;
-            }
         } else {
             alert(data.message || 'Failed to add item to cart');
             updateClerkMessage('error');
@@ -410,16 +406,29 @@ function updateBalance(newBalance) {
 function updateCartDisplay() {
     const cartTab = document.getElementById('cart');
     if (cartTab) {
+        // Fetch updated cart content
         fetch('/querykicks/controllers/StoreController.php?action=getCart')
-            .then(response => response.text())
-            .then(html => {
-                cartTab.innerHTML = html;
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cartTab.innerHTML = data.html;
+
+                    // Reinitialize event listeners for new cart content
+                    initializeCart();
+                } else {
+                    alert(data.message || 'Failed to update cart display.');
+                    updateClerkMessage('error');
+                }
             })
             .catch(error => {
-                alert('Sorry, we could not update your cart at this time. Please try again later. ' + error.message);
+                alert('Sorry, we could not update your cart at this time. Please try again later.');
+                updateClerkMessage('error');
+                console.error('Error updating cart display:', error);
             });
     }
 }
+
+
 
 function updateCartTotal() {
     // Recalculate the total in the cart summary
