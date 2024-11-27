@@ -217,8 +217,8 @@ class AdminDashboard {
                 <p>$${product.price}</p>
                 <p>Stock: ${product.stock}</p>
                 <div class="card-actions">
-                    <button class="edit-product-btn" data-id="${product.id}">Edit</button>
-                    <button class="delete-product-btn" data-id="${product.id}">Delete</button>
+                    <button class="edit-product-btn primary-btn" data-id="${product.id}">Edit</button>
+                    <button class="delete-product-btn secondary-btn" data-id="${product.id}">Delete</button>
                 </div>
             </div>
         `;

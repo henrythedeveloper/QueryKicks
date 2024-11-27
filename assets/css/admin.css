@@ -114,6 +114,25 @@ body {
     border-radius: 4px;
 }
 
+.card-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem; 
+    gap: .3rem;
+}
+
+.card-actions .secondary-btn {
+    background: #a50e0e;
+}
+
+.card-actions .secondary-btn:hover {
+    background: #ff4444;
+}
+.card-actions .primary-btn:hover {
+    background: #62d366;
+}
+
 .view-header {
     display: flex;
     justify-content: space-between;
@@ -152,6 +171,13 @@ body {
     background: rgba(255, 255, 255, 0.1);
     padding: 1rem;
     border-radius: 4px;
+}
+.product-card h3 {
+    margin-bottom: 0.5rem;
+}
+
+.product-card p {
+    margin-bottom: 0.5rem;
 }
 
 .product-card img {

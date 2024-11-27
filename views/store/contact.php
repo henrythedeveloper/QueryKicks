@@ -17,34 +17,6 @@
             </div>
         </div>
 
-        <div class="contact-form">
-            <h2>Send us a Message</h2>
-            <form id="contact-form">
-                <div class="form-group">
-                    <label for="contact-name">Name</label>
-                    <input type="text" id="contact-name" name="name" value="<?= htmlspecialchars($_SESSION['name']) ?>" readonly>
-                </div>
-
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <select id="subject" name="subject" required>
-                        <option value="">Select a subject</option>
-                        <option value="general">General Question</option>
-                        <option value="technical">Technical Support</option>
-                        <option value="feedback">Feedback</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn">Send Message</button>
-            </form>
-        </div>
-
         <div class="support-hours">
             <h2>Support Hours</h2>
             <div class="hours-list">

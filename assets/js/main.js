@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCart();
     initializeMoneyModal();
     setupLogout();
+    initializeFAQ(); 
 });
 
 // Tab Navigation
@@ -358,4 +359,18 @@ function updateCartDisplay() {
             })
             .catch(error => console.error('Error updating cart display:', error));
     }
+}
+
+// FAQ functions
+function initializeFAQ() {
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+            item.classList.toggle('active');
+            const toggleIcon = question.querySelector('.faq-toggle');
+            toggleIcon.textContent = item.classList.contains('active') ? '-' : '+';
+        });
+    });
 }
