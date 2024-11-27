@@ -34,9 +34,6 @@
         <div class="about-clerk">
             <h2>Meet Our AI Clerk</h2>
             <div class="clerk-info">
-                <div class="clerk-image">
-                    <img src="/querykicks/assets/images/clerk/clerk-profile.webp" alt="AI Store Clerk">
-                </div>
                 <div class="clerk-description">
                     <p>Our AI clerk is more than just a virtual assistant - they're your personal guide to the world of QueryKicks. With extensive knowledge of our collection and a friendly personality, they're here to help you find the perfect additions to your virtual collection.</p>
                     

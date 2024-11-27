@@ -311,7 +311,7 @@ body {
 /* Cart Styles */
 .cart-wrapper {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.5fr 1.5fr;
     gap: 20px;
     height: 100%;
     overflow-y: auto;
@@ -333,6 +333,57 @@ body {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     border: 2px solid #666;
+}
+
+.quantity-btn.decrease{
+    padding: 5px 10px;
+    background: #ff4444;
+    color: white;
+    border: 2px solid #666;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+    font-size: 0.7em;
+    transition: transform 0.3s;
+}
+
+.quantity-btn.increase{
+    padding: 5px 10px;
+    background: #4CAF50;
+    color: white;
+    border: 2px solid #666;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+    font-size: 0.7em;
+    transition: transform 0.3s;
+}
+
+.quantity-btn.decrease:hover {
+    transform: translateY(-2px);
+    background: #ff0000;
+}
+
+.quantity-btn.increase:hover {
+    transform: translateY(-2px);
+    background: #5ecc64;
+}
+
+.remove-from-cart {
+    padding: 5px 10px;
+    background: #ff4444;
+    color: white;
+    border: 2px solid #666;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+    font-size: 0.7em;
+    transition: transform 0.3s;
+}
+
+.remove-from-cart:hover {
+    transform: translateY(-2px);
+    background: #ff0000;
 }
 
 .cart-item img {

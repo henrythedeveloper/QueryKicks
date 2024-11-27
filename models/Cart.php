@@ -17,7 +17,8 @@ class Cart {
                         p.name,
                         p.price,
                         p.image_url,
-                        p.id as product_id
+                        p.id as product_id,
+                        p.stock
                     FROM cart_items ci 
                     JOIN carts c ON ci.cart_id = c.id 
                     JOIN products p ON ci.product_id = p.id 
@@ -27,15 +28,13 @@ class Cart {
             $stmt->execute([$userId]);
             $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            // Debug log
-            error_log('Cart Items Query Result: ' . print_r($items, true));
-            
             return $items;
         } catch (PDOException $e) {
             error_log('Error getting cart items: ' . $e->getMessage());
             return [];
         }
     }
+    
 
     public function addItem($userId, $productId, $quantity = 1) {
         try {
@@ -145,7 +144,7 @@ class Cart {
             
             // Verify the item belongs to the user's cart
             $stmt = $this->db->prepare("
-                SELECT ci.id, ci.quantity 
+                SELECT ci.id, ci.quantity, ci.product_id 
                 FROM cart_items ci
                 JOIN carts c ON ci.cart_id = c.id
                 WHERE c.user_id = ? AND ci.id = ?
@@ -163,6 +162,15 @@ class Cart {
             if ($newQuantity < 1) {
                 throw new Exception('Quantity cannot be less than 1');
             }
+    
+            // Get the product's available stock
+            $stmt = $this->db->prepare("SELECT stock FROM products WHERE id = ?");
+            $stmt->execute([$item['product_id']]);
+            $stock = $stmt->fetchColumn();
+    
+            if ($newQuantity > $stock) {
+                throw new Exception('Cannot add more than available stock');
+            }
             
             // Update quantity
             $stmt = $this->db->prepare("
@@ -177,7 +185,8 @@ class Cart {
         } catch (Exception $e) {
             $this->db->rollBack();
             error_log('Error updating quantity: ' . $e->getMessage());
-            return false;
+            throw $e; // Re-throw exception to be caught in controller
         }
     }
+    
 }

@@ -243,6 +243,30 @@ class StoreController {
                 $stmt = $this->db->prepare("UPDATE users SET money = ? WHERE id = ?");
                 $stmt->execute([$newBalance, $_SESSION['user_id']]);
     
+                // Get cart items before clearing the cart
+                $stmt = $this->db->prepare("
+                    SELECT ci.product_id, ci.quantity
+                    FROM cart_items ci
+                    JOIN carts c ON ci.cart_id = c.id
+                    WHERE c.user_id = ?
+                ");
+                $stmt->execute([$_SESSION['user_id']]);
+                $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                // Update product stock
+                foreach ($cartItems as $item) {
+                    $productId = $item['product_id'];
+                    $quantityPurchased = $item['quantity'];
+    
+                    // Update the stock
+                    $stmt = $this->db->prepare("
+                        UPDATE products
+                        SET stock = stock - ?
+                        WHERE id = ?
+                    ");
+                    $stmt->execute([$quantityPurchased, $productId]);
+                }
+    
                 // Clear the user's cart
                 $stmt = $this->db->prepare("
                     DELETE ci FROM cart_items ci
@@ -251,7 +275,11 @@ class StoreController {
                 ");
                 $stmt->execute([$_SESSION['user_id']]);
     
+                // Commit the transaction
                 $this->db->commit();
+    
+                // Update session with new balance
+                $_SESSION['money'] = $newBalance;
     
                 $this->sendResponse([
                     'success' => true,
@@ -269,7 +297,7 @@ class StoreController {
             ]);
         }
     }
-
+    
     private function getClerkMessage() {
         try {
             $type = $_POST['type'] ?? 'greetings';
@@ -319,17 +347,13 @@ class StoreController {
                 throw new Exception('Item ID is required');
             }
     
-            // Add this method to your Cart class if not already present
-            $success = $this->cart->updateQuantity($_SESSION['user_id'], $itemId, $change);
+            $this->cart->updateQuantity($_SESSION['user_id'], $itemId, $change);
     
-            if ($success) {
-                $this->sendResponse([
-                    'success' => true,
-                    'message' => 'Quantity updated successfully'
-                ]);
-            } else {
-                throw new Exception('Failed to update quantity');
-            }
+            $this->sendResponse([
+                'success' => true,
+                'message' => 'Quantity updated successfully'
+            ]);
+    
         } catch (Exception $e) {
             $this->sendResponse([
                 'success' => false,
@@ -337,6 +361,7 @@ class StoreController {
             ]);
         }
     }
+    
 
     private function addMoney() {
         try {

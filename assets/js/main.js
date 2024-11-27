@@ -150,6 +150,10 @@ async function handleRemoveFromCart(e) {
     }
 }
 
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 async function handleQuantityUpdate(e) {
     const itemId = e.target.getAttribute('data-item-id');
     const isIncrease = e.target.classList.contains('increase');
@@ -170,7 +174,33 @@ async function handleQuantityUpdate(e) {
 
         const data = await response.json();
         if (data.success) {
-            location.reload(); // Refresh to show updated cart
+            // Update the quantity displayed
+            const quantitySpan = e.target.closest('.quantity-controls').querySelector('.quantity');
+            let currentQuantity = parseInt(quantitySpan.textContent);
+            currentQuantity += change;
+            quantitySpan.textContent = currentQuantity;
+
+            // Update the subtotal for the item
+            const priceElement = e.target.closest('.cart-item-details').querySelector('.price');
+            const priceText = priceElement.textContent.replace('$', '').replace(/,/g, '');
+            const price = parseFloat(priceText);
+            const subtotalElement = e.target.closest('.cart-item-details').querySelector('.subtotal');
+            const newSubtotal = (price * currentQuantity).toFixed(2);
+            subtotalElement.textContent = `Subtotal: $${numberWithCommas(newSubtotal)}`;
+
+            // Update the total in the order summary
+            updateCartTotal();
+
+            // Disable decrease button if quantity is 1
+            const quantityControls = e.target.closest('.quantity-controls');
+            const decreaseButton = quantityControls.querySelector('.quantity-btn.decrease');
+            decreaseButton.disabled = currentQuantity <= 1;
+
+            // Disable increase button if quantity reaches stock limit
+            const stockLimit = parseInt(quantityControls.getAttribute('data-stock-limit'));
+            const increaseButton = quantityControls.querySelector('.quantity-btn.increase');
+            increaseButton.disabled = currentQuantity >= stockLimit;
+
         } else {
             alert(data.message || 'Failed to update quantity');
         }
@@ -179,6 +209,7 @@ async function handleQuantityUpdate(e) {
         alert('Error updating quantity. Please try again.');
     }
 }
+
 
 async function handleCheckout(e) {
     const total = e.target.getAttribute('data-total');
@@ -197,6 +228,9 @@ async function handleCheckout(e) {
 
         const data = await response.json();
         if (data.success) {
+            // Update the balance display
+            updateBalance(data.newBalance);
+
             alert('Checkout successful!');
             location.reload(); // Refresh the page to show empty cart
         } else {
@@ -207,6 +241,7 @@ async function handleCheckout(e) {
         alert('Error during checkout. Please try again.');
     }
 }
+
 
 
 // Money Modal Functions
@@ -344,8 +379,10 @@ function updateBalance(newBalance) {
     const balanceElement = document.querySelector('.balance');
     if (balanceElement) {
         balanceElement.textContent = `$${parseFloat(newBalance).toFixed(2)}`;
+        balanceElement.setAttribute('data-balance', newBalance);
     }
 }
+
 
 function updateCartDisplay() {
     const cartTab = document.getElementById('cart');
@@ -360,6 +397,32 @@ function updateCartDisplay() {
             .catch(error => console.error('Error updating cart display:', error));
     }
 }
+
+function updateCartTotal() {
+    // Recalculate the total in the cart summary
+    let total = 0;
+    const cartItems = document.querySelectorAll('.cart-item');
+    cartItems.forEach(item => {
+        const quantity = parseInt(item.querySelector('.quantity').textContent);
+        const priceText = item.querySelector('.price').textContent.replace('$', '').replace(/,/g, '');
+        const price = parseFloat(priceText);
+        total += quantity * price;
+    });
+
+    // Update the total in the receipt preview
+    const totalElement = document.querySelector('.receipt-total span');
+    if (totalElement) {
+        totalElement.textContent = `$${numberWithCommas(total.toFixed(2))}`;
+    }
+
+    // Update the data-total attribute on the checkout button
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.setAttribute('data-total', total.toFixed(2));
+    }
+}
+
+
 
 // FAQ functions
 function initializeFAQ() {

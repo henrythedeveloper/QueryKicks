@@ -23,7 +23,8 @@ error_log('Cart Items: ' . print_r($cartItems, true));
                         </div>
                         <div class="cart-item-details">
                             <h3><?= htmlspecialchars($item['name']) ?></h3>
-                            <div class="price-quantity">
+                            <div class="price-quantity"
+                                data-stock-limit="<?= htmlspecialchars($item['stock']) ?>">
                                 <p class="price">$<?= number_format($item['price'], 2) ?></p>
                                 <div class="quantity-controls">
                                     <button type="button" class="quantity-btn decrease"
@@ -34,6 +35,7 @@ error_log('Cart Items: ' . print_r($cartItems, true));
                                             data-item-id="<?= htmlspecialchars($item['cart_item_id'] ?? $item['id']) ?>">+</button>
                                 </div>
                             </div>
+                            <p class="stock-info">Available stock: <?= htmlspecialchars($item['stock']) ?></p>
                             <p class="subtotal">Subtotal: $<?= number_format($itemTotal, 2) ?></p>
                             <button type="button" class="remove-from-cart"
                                     data-item-id="<?= htmlspecialchars($item['cart_item_id'] ?? $item['id']) ?>">Remove</button>
