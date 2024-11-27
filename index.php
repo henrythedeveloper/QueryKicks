@@ -1,46 +1,49 @@
 <?php
 session_start();
 
+// Base path configuration
+define('BASE_PATH', __DIR__);
 
-// Base configuration
-define('ROOT_PATH', __DIR__);
-define('BASE_URL', '/querykicks');
-
-// Autoload classes
-spl_autoload_register(function ($class) {
-    $paths = [
-        ROOT_PATH . '/controllers/' . $class . '.php',
-        ROOT_PATH . '/models/' . $class . '.php'
-    ];
-    
-    foreach ($paths as $path) {
-        if (file_exists($path)) {
-            require_once $path;
-            return;
-        }
-    }
-});
-
-// Check if user is logged in
-$isLoggedIn = isset($_SESSION['user_id']);
-$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
-
-// Basic routing
+// Route handling
 $request = $_SERVER['REQUEST_URI'];
-$request = str_replace('/querykicks/', '', $request);
 
-// Route to appropriate page
-if (empty($request) || $request === 'index.php') {
-    if (!$isLoggedIn) {
-        header('Location: ' . BASE_URL . '/views/auth.php');
-    } else if ($isAdmin) {
-        header('Location: ' . BASE_URL . '/views/admin.php');
-    } else {
-        header('Location: ' . BASE_URL . '/controllers/StoreController.php');
-    }
-    exit();
+// Basic routing logic
+switch ($request) {
+    case '/':
+    case '/querykicks':
+    case '/querykicks/':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SESSION['role'] === 'admin') {
+                header('Location: /querykicks/controllers/AdminController.php');
+            } else {
+                header('Location: /querykicks/controllers/StoreController.php');
+            }
+        } else {
+            header('Location: /querykicks/controllers/AuthController.php');
+        }
+        exit();
+        break;
+
+    case '/querykicks/logout':
+        // Clear all session variables
+        $_SESSION = array();
+        
+        // Destroy the session cookie
+        if (isset($_COOKIE[session_name()])) {
+            setcookie(session_name(), '', time()-3600, '/');
+        }
+        
+        // Destroy the session
+        session_destroy();
+        
+        // Redirect to auth page
+        header('Location: /querykicks/controllers/AuthController.php');
+        exit();
+        break;
+
+    // Add other routes as needed
+    default:
+        // Handle 404 or redirect to home
+        header('Location: /querykicks/');
+        exit();
 }
-
-// Handle 404
-http_response_code(404);
-include ROOT_PATH . '/views/404.php';

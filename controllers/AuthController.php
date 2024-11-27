@@ -104,16 +104,33 @@ class AuthController {
 
     // Handle AJAX requests
     public function handleRequest() {
+        // If it's a POST request, handle it as AJAX
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            return $this->handleAjaxRequest();
+        }
+        // If it's a GET request, show the auth page
+        else {
+            $this->handlePageRequest();
+        }
+    }
+    private function handlePageRequest() {
+        // If user is already logged in, redirect appropriately
+        if (isset($_SESSION['user_id'])) {
+            if ($_SESSION['role'] === 'admin') {
+                header('Location: /querykicks/views/admin.php');
+            } else {
+                header('Location: /querykicks/controllers/StoreController.php');
+            }
+            exit();
+        }
+        
+        // If not logged in, show the auth page
+        require_once __DIR__ . '/../views/auth.php';
+    }
+
+    private function handleAjaxRequest() {
         header('Content-Type: application/json');
         
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Invalid request method'
-            ]);
-            return;
-        }
-    
         // Get input data from either POST or JSON
         $input = json_decode(file_get_contents('php://input'), true);
         $action = $_POST['action'] ?? $input['action'] ?? '';
@@ -164,6 +181,7 @@ class AuthController {
         echo json_encode($response);
         exit();
     }
+
 }
 
 // Handle AJAX requests if this file is accessed directly

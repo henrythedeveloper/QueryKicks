@@ -17,6 +17,7 @@ class AdminController {
     private $product;
 
     public function __construct() {
+
         $database = new Database();
         $this->db = $database->getConnection();
         $this->product = new Product($this->db);
@@ -27,6 +28,11 @@ class AdminController {
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             $this->sendResponse(['success' => false, 'message' => 'Unauthorized']);
             exit();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            require_once __DIR__ . '/../views/admin.php';
+            return;
         }
 
         // Get request data
