@@ -94,7 +94,8 @@ class StoreController {
             // Other data for the view
             $greeting = $this->getRandomClerkMessage('greetings');
             $cartItems = $this->cart->getCartItems($_SESSION['user_id']);
-            error_log('Cart items: ' . print_r($cartItems, true));
+            $clerkMessagesJson = json_encode($this->clerkResponses); // Encode messages as JSON
+
     
             // Include the main view and pass the $products variable
             require_once __DIR__ . '/../views/main.php';

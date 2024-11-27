@@ -86,6 +86,10 @@ $greeting = "Welcome to QueryKicks!";
     </div>
 
     <?php include __DIR__ . '/layouts/footer.php'; ?>
+    <script>
+        const clerkMessages = <?= $clerkMessagesJson ?>;
+        const username = <?= json_encode($_SESSION['name'] ?? 'Shopper') ?>;
+    </script>
     <script src="/querykicks/assets/js/main.js"></script>
 </body>
 </html>

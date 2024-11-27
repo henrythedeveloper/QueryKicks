@@ -7,6 +7,52 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeFAQ(); 
 });
 
+let idleTime = 0;
+let idleInterval;
+
+function initializeIdleTimer() {
+    // Increment the idle time counter every minute.
+    idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+
+    // Zero the idle timer on mouse movement or key press.
+    document.addEventListener('mousemove', resetIdleTimer);
+    document.addEventListener('keypress', resetIdleTimer);
+}
+
+function timerIncrement() {
+    idleTime++;
+    if (idleTime >= 1) { // The idle time threshold 
+        displayClerkMessage('idle');
+        idleTime = 0; // Reset idle time after displaying the message
+    }
+}
+
+function resetIdleTimer() {
+    idleTime = 0;
+}
+
+function updateClerkMessage(type) {
+    const clerkMessageElement = document.querySelector('.clerk-speech p');
+    if (clerkMessageElement) {
+        const messages = clerkMessages[type];
+        if (messages && messages.length > 0) {
+            const message = getRandomMessage(messages);
+            const personalizedMessage = message.replace('{username}', getUsername());
+            clerkMessageElement.textContent = personalizedMessage;
+        } else {
+            clerkMessageElement.textContent = "How can I help you today?";
+        }
+    }
+}
+
+function getRandomMessage(messagesArray) {
+    return messagesArray[Math.floor(Math.random() * messagesArray.length)];
+}
+
+function getUsername() {
+    return username || 'Shopper';
+}
+
 // Tab Navigation
 function initializeTabs() {
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -199,7 +245,6 @@ async function handleQuantityUpdate(e) {
     }
 }
 
-
 async function handleCheckout(e) {
     const total = e.target.getAttribute('data-total');
     
@@ -229,8 +274,6 @@ async function handleCheckout(e) {
         alert('Error during checkout. Please try again. ' + error.message);
     }
 }
-
-
 
 // Money Modal Functions
 function initializeMoneyModal() {
@@ -310,7 +353,6 @@ async function handleAddMoney(e) {
     }
 }
 
-
 // Logout Function
 function setupLogout() {
     const logoutBtn = document.querySelector('.logout-button');
@@ -338,25 +380,6 @@ function setupLogout() {
 }
 
 // Helper Functions
-function updateClerkMessage(type) {
-    const clerkMessage = document.querySelector('.clerk-speech p');
-    if (clerkMessage) {
-        // You can expand this with more message types
-        const messages = {
-            shoes: "Check out our awesome kicks!",
-            cart: "Ready to check out?",
-            about: "Want to learn more about us?",
-            contact: "Need help? I'm here!",
-            faq: "Got questions? We've got answers!",
-            addToCart: "Great choice! Item added to your cart!",
-            removeFromCart: "Item removed from your cart.",
-            checkout: "Thank you for your purchase!",
-            error: "Oops! Something went wrong."
-        };
-        clerkMessage.textContent = messages[type] || "How can I help you today?";
-    }
-}
-
 function updateBalance(newBalance) {
     const balanceElement = document.querySelector('.balance');
     if (balanceElement) {
@@ -364,7 +387,6 @@ function updateBalance(newBalance) {
         balanceElement.setAttribute('data-balance', newBalance);
     }
 }
-
 
 function updateCartDisplay() {
     const cartTab = document.getElementById('cart');
@@ -379,7 +401,6 @@ function updateCartDisplay() {
             });
     }
 }
-
 
 function updateCartTotal() {
     // Recalculate the total in the cart summary
@@ -404,8 +425,6 @@ function updateCartTotal() {
         checkoutBtn.setAttribute('data-total', total.toFixed(2));
     }
 }
-
-
 
 // FAQ functions
 function initializeFAQ() {
