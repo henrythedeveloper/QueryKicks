@@ -29,7 +29,7 @@ class Product {
         }
     }
 
-    public function getById($id) {
+    public function getProductById($id) {
         $query = "SELECT * FROM " . $this->table . " WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$id]);
