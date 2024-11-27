@@ -89,8 +89,17 @@ function openTab(button, tabName) {
         tabContent.classList.add('active');
     }
 
-    // Update clerk message based on tab
-    updateClerkMessage(tabName);
+    // Map tab names to message types
+    const tabMessageTypes = {
+        'shoes': 'greetings',
+        'cart': 'cart',
+        'about': 'about',
+        'contact': 'contact',
+        'faq': 'faq'
+    };
+
+    const messageType = tabMessageTypes[tabName] || 'greetings';
+    updateClerkMessage(messageType);
 }
 
 // Cart Functions
@@ -147,16 +156,18 @@ async function handleAddToCart(e) {
             if (cartTab) {
                 location.reload(); // Temporary solution to refresh the cart
             }
-            // Update clerk message
-            const clerkMessage = document.querySelector('.clerk-speech p');
+            /// Update clerk message
+            updateClerkMessage('addToCart');
             if (clerkMessage && data.clerkMessage) {
                 clerkMessage.textContent = data.clerkMessage;
             }
         } else {
             alert(data.message || 'Failed to add item to cart');
+            updateClerkMessage('error');
         }
     } catch (error) {
         alert('Error adding item to cart. Please try again.');
+        updateClerkMessage('error');
     }
 }
 
@@ -178,11 +189,14 @@ async function handleRemoveFromCart(e) {
         const data = await response.json();
         if (data.success) {
             location.reload(); // Refresh to show updated cart
+            updateClerkMessage('removeFromCart');
         } else {
             alert(data.message || 'Failed to remove item');
+            updateClerkMessage('error');
         }
     } catch (error) {
         alert('Error removing item. Please try again.');
+        updateClerkMessage('error');
     }
 }
 
@@ -265,13 +279,15 @@ async function handleCheckout(e) {
             // Update the balance display
             updateBalance(data.newBalance);
 
-            alert('Checkout successful!');
+            updateClerkMessage('checkout');
             location.reload(); // Refresh the page to show empty cart
         } else {
             alert(data.message || 'Checkout failed');
+            updateClerkMessage('error');
         }
     } catch (error) {
         alert('Error during checkout. Please try again. ' + error.message);
+        updateClerkMessage('error');
     }
 }
 
@@ -345,11 +361,14 @@ async function handleAddMoney(e) {
             
             // Show success message
             alert('Money added successfully!');
+            updateClerkMessage('addMoney');
         } else {
             alert(data.message || 'Failed to add money');
+            updateClerkMessage('error');
         }
     } catch (error) {
         alert('Error adding money. Please try again. ' + error.message);
+        updateClerkMessage('error');
     }
 }
 
@@ -436,6 +455,11 @@ function initializeFAQ() {
             item.classList.toggle('active');
             const toggleIcon = question.querySelector('.faq-toggle');
             toggleIcon.textContent = item.classList.contains('active') ? '-' : '+';
+
+            // Update clerk message when a FAQ item is expanded
+            if (item.classList.contains('active')) {
+                updateClerkMessage('faq');
+            }
         });
     });
 }

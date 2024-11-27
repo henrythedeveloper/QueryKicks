@@ -37,6 +37,12 @@
         "Need to top up your balance?",
         "Just a heads up - you might need more funds for that!"
     ],
+    "addMoney": [
+        "Fantastic, {username}! Your balance just got a boost!",
+        "Awesome, {username}! You've added more funds to your account!",
+        "Great news, {username}! You're all set to shop with your updated balance!",
+        "Your wallet just got heavier, {username}! Happy shopping!"
+    ],
     "error": [
         "Oops, something went wrong, {username}! Try again later.",
         "Uh-oh, looks like we hit a snag! Let me fix that for you.",
