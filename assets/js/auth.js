@@ -33,9 +33,7 @@ class AuthManager {
         try {
             const response = await this.sendRequest(formData);
             if (response.success) {
-                window.location.href = response.role === 'admin' 
-                    ? `${this.baseUrl}/views/admin.php` 
-                    : `${this.baseUrl}/views/main.php`;
+                window.location.href = response.redirectUrl;
             } else {
                 this.showError(response.message);
             }

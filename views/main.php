@@ -1,9 +1,12 @@
 <?php
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /querykicks/views/auth.php');
+if (!isset($products)) {
+    // Redirect to storecontroller.php if $products is not set
+    header('Location: /querykicks/controllers/storecontroller.php');
     exit();
 }
+$greeting = "Welcome to QueryKicks!";
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

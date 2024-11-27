@@ -8,8 +8,6 @@ $dbPath = __DIR__ . '/../config/database.php';
 
 error_log("Product.php path: " . $productPath);
 error_log("Database.php path: " . $dbPath);
-error_log("Product.php exists: " . (file_exists($productPath) ? 'yes' : 'no'));
-error_log("Database.php exists: " . (file_exists($dbPath) ? 'yes' : 'no'));
 
 require_once $dbPath;
 require_once $productPath;
@@ -25,11 +23,6 @@ class AdminController {
     }
 
     public function handleRequest() {
-
-        // Debug session info
-        error_log('Session data: ' . print_r($_SESSION, true));
-        error_log('POST data: ' . print_r($_POST, true));
-
 
         // Check if user is admin
         session_start();

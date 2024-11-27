@@ -1,7 +1,10 @@
 <?php
-session_start();
-if(isset($_SESSION['user_id'])) {
-    header('Location: /querykicks/main.php');
+error_log("Accessing auth.php");
+error_log("Session user_id in auth.php: " . ($_SESSION['user_id'] ?? 'not set'));
+
+if (isset($_SESSION['user_id'])) {
+    error_log("Redirecting to storecontroller.php from auth.php");
+    header('Location: http://localhost/querykicks/controllers/storecontroller.php');
     exit();
 }
 ?>

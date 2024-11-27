@@ -36,7 +36,7 @@ if (empty($request) || $request === 'index.php') {
     } else if ($isAdmin) {
         header('Location: ' . BASE_URL . '/views/admin.php');
     } else {
-        header('Location: ' . BASE_URL . '/views/main.php');
+        header('Location: ' . BASE_URL . '/controllers/StoreController.php');
     }
     exit();
 }

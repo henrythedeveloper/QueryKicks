@@ -1,8 +1,13 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../models/Product.php';
-require_once __DIR__ . '/../models/Cart.php';
+// Debug file paths
+$productPath = __DIR__ . '/../models/Product.php';
+$dbPath = __DIR__ . '/../config/database.php';
 
+error_log("Product.php path: " . $productPath);
+error_log("Database.php path: " . $dbPath);
+
+require_once $dbPath;
+require_once $productPath;
 class StoreController {
     private $db;
     private $product;
@@ -27,12 +32,13 @@ class StoreController {
     }
 
     public function handleRequest() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        session_start();
+
+        error_log("StoreController::handleRequest called."); // Log entry into the method
 
         // Check authentication
         if (!isset($_SESSION['user_id'])) {
+            error_log("User not authenticated, redirecting to auth."); // Log authentication failure
             header('Location: /querykicks/views/auth.php');
             exit();
         }
@@ -76,32 +82,27 @@ class StoreController {
 
     private function renderStore() {
         try {
-            // Get products
+            // Fetch products
             $products = $this->product->getAll();
-            error_log('Products fetched: ' . print_r($products, true));
-
-            // Get cart items
-            $cartItems = $this->cart->getCartItems($_SESSION['user_id']);
-
-            // Get greeting
+            error_log('Products fetched in renderStore: ' . print_r($products, true));
+    
+            // Check if products are populated
+            if (empty($products)) {
+                error_log('No products fetched from the database.');
+            }
+    
+            // Other data for the view
             $greeting = $this->getRandomClerkMessage('greetings');
-
-            // Get user data
-            $userData = [
-                'id' => $_SESSION['user_id'],
-                'name' => $_SESSION['name'] ?? 'Shopper',
-                'balance' => $_SESSION['money'] ?? 0,
-                'role' => $_SESSION['role'] ?? 'user'
-            ];
-
-            // Include the view
-            require_once __DIR__ . '/../views/store/main.php';
+            $cartItems = $this->cart->getCartItems($_SESSION['user_id']);
+            error_log('Cart items: ' . print_r($cartItems, true));
+    
+            // Include the main view and pass the $products variable
+            require_once __DIR__ . '/../views/main.php';
         } catch (Exception $e) {
-            error_log('Error rendering store: ' . $e->getMessage());
-            echo 'Error loading store';
+            error_log('Error in renderStore: ' . $e->getMessage());
+            echo 'Error loading store.';
         }
     }
-
 
     private function getProducts() {
         try {
