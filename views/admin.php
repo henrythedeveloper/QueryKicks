@@ -122,5 +122,6 @@ error_log('Admin view loaded. Session data: ' . print_r($_SESSION, true));
     </div>
 
     <script src="/querykicks/assets/js/admin.js"></script>
+    <script src="/path/to/notification.js"></script>
 </body>
 </html>

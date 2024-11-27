@@ -33,3 +33,4 @@ if (!isset($userData)) {
         </div>
     </div>
 </header>
+<script src="/path/to/notification.js"></script>

@@ -62,5 +62,6 @@
     </div>
 
     <script src="/querykicks/assets/js/auth.js"></script>
+    <script src="/path/to/notification.js"></script>
 </body>
 </html>
