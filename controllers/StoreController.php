@@ -2,12 +2,14 @@
 // Debug file paths
 $productPath = __DIR__ . '/../models/Product.php';
 $dbPath = __DIR__ . '/../config/database.php';
+$cart = __DIR__ . '/../models/Cart.php';
 
 error_log("Product.php path: " . $productPath);
 error_log("Database.php path: " . $dbPath);
 
 require_once $dbPath;
 require_once $productPath;
+require_once $cart;
 class StoreController {
     private $db;
     private $product;
@@ -75,6 +77,9 @@ class StoreController {
             case 'getClerkMessage':
                 $this->getClerkMessage();
                 break;
+            case 'addMoney':
+                $this->addMoney();
+                break;
             default:
                 $this->sendResponse(['success' => false, 'message' => 'Invalid action']);
         }
@@ -123,37 +128,50 @@ class StoreController {
 
     private function addToCart() {
         try {
-            $productId = $_POST['product_id'] ?? null;
-            $quantity = $_POST['quantity'] ?? 1;
+            // Get JSON input
+            $input = json_decode(file_get_contents('php://input'), true);
+            
+            // Log the received data
+            error_log('Received addToCart request: ' . print_r($input, true));
+            
+            $productId = $input['product_id'] ?? null;
+            $quantity = $input['quantity'] ?? 1;
 
             if (!$productId) {
                 throw new Exception('Product ID is required');
             }
 
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception('User must be logged in');
+            }
+
+            $userId = $_SESSION['user_id'];
+
+            // Check if product exists and has stock
             $product = $this->product->getById($productId);
             if (!$product) {
                 throw new Exception('Product not found');
             }
 
-            // Check stock
             if ($product['stock'] < $quantity) {
                 throw new Exception('Not enough stock available');
             }
 
             // Add to cart
-            $success = $this->cart->addItem($_SESSION['user_id'], $productId, $quantity);
+            $success = $this->cart->addItem($userId, $productId, $quantity);
 
             if ($success) {
                 $message = $this->getRandomClerkMessage('addToCart');
                 $this->sendResponse([
                     'success' => true,
-                    'message' => 'Product added to cart',
+                    'message' => 'Product added to cart successfully',
                     'clerkMessage' => $message
                 ]);
             } else {
-                throw new Exception('Failed to add to cart');
+                throw new Exception('Failed to add item to cart');
             }
         } catch (Exception $e) {
+            error_log('Error in addToCart: ' . $e->getMessage());
             $this->sendResponse([
                 'success' => false,
                 'message' => $e->getMessage()
@@ -190,31 +208,49 @@ class StoreController {
 
     private function processCheckout() {
         try {
-            $userId = $_SESSION['user_id'];
-            $cartItems = $this->cart->getCartItems($userId);
-
-            if (empty($cartItems)) {
-                throw new Exception('Cart is empty');
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception('User must be logged in');
             }
-
-            // Calculate total
-            $total = array_reduce($cartItems, function($sum, $item) {
-                return $sum + ($item['price'] * $item['quantity']);
-            }, 0);
-
-            // Create order
-            $orderId = $this->cart->createOrder($userId, $total);
-
-            if ($orderId) {
-                $message = $this->getRandomClerkMessage('checkout');
+    
+            $input = json_decode(file_get_contents('php://input'), true);
+            $total = $input['total'] ?? 0;
+    
+            // Get user's current balance
+            $stmt = $this->db->prepare("SELECT balance FROM users WHERE id = ?");
+            $stmt->execute([$_SESSION['user_id']]);
+            $currentBalance = $stmt->fetchColumn();
+    
+            if ($currentBalance < $total) {
+                throw new Exception('Insufficient funds');
+            }
+    
+            // Start transaction
+            $this->db->beginTransaction();
+    
+            try {
+                // Update user balance
+                $newBalance = $currentBalance - $total;
+                $stmt = $this->db->prepare("UPDATE users SET balance = ? WHERE id = ?");
+                $stmt->execute([$newBalance, $_SESSION['user_id']]);
+    
+                // Clear the user's cart
+                $stmt = $this->db->prepare("
+                    DELETE ci FROM cart_items ci
+                    JOIN carts c ON ci.cart_id = c.id
+                    WHERE c.user_id = ?
+                ");
+                $stmt->execute([$_SESSION['user_id']]);
+    
+                $this->db->commit();
+    
                 $this->sendResponse([
                     'success' => true,
-                    'message' => 'Order processed successfully',
-                    'clerkMessage' => $message,
-                    'orderId' => $orderId
+                    'message' => 'Checkout successful',
+                    'newBalance' => $newBalance
                 ]);
-            } else {
-                throw new Exception('Failed to process order');
+            } catch (Exception $e) {
+                $this->db->rollBack();
+                throw $e;
             }
         } catch (Exception $e) {
             $this->sendResponse([
@@ -257,6 +293,87 @@ class StoreController {
         header('Content-Type: application/json');
         echo json_encode($data);
         exit();
+    }
+
+    private function updateQuantity() {
+        try {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $itemId = $input['item_id'] ?? null;
+            $change = $input['change'] ?? 0;
+    
+            if (!$itemId) {
+                throw new Exception('Item ID is required');
+            }
+    
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception('User must be logged in');
+            }
+    
+            // Add this method to your Cart class if not already present
+            $success = $this->cart->updateQuantity($_SESSION['user_id'], $itemId, $change);
+    
+            if ($success) {
+                $this->sendResponse([
+                    'success' => true,
+                    'message' => 'Quantity updated successfully'
+                ]);
+            } else {
+                throw new Exception('Failed to update quantity');
+            }
+        } catch (Exception $e) {
+            $this->sendResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    private function addMoney() {
+        try {
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception('User must be logged in');
+            }
+    
+            $input = json_decode(file_get_contents('php://input'), true);
+            $amount = $input['amount'] ?? 0;
+    
+            if (!is_numeric($amount) || $amount <= 0) {
+                throw new Exception('Invalid amount');
+            }
+    
+            // Start transaction
+            $this->db->beginTransaction();
+    
+            try {
+                // Get current money amount
+                $stmt = $this->db->prepare("SELECT money FROM users WHERE id = ?");
+                $stmt->execute([$_SESSION['user_id']]);
+                $currentMoney = $stmt->fetchColumn();
+    
+                // Calculate new money amount
+                $newMoney = $currentMoney + $amount;
+    
+                // Update user money
+                $stmt = $this->db->prepare("UPDATE users SET money = ? WHERE id = ?");
+                $stmt->execute([$newMoney, $_SESSION['user_id']]);
+    
+                $this->db->commit();
+    
+                $this->sendResponse([
+                    'success' => true,
+                    'message' => 'Money added successfully',
+                    'newBalance' => $newMoney // keep this as newBalance for frontend compatibility
+                ]);
+            } catch (Exception $e) {
+                $this->db->rollBack();
+                throw $e;
+            }
+        } catch (Exception $e) {
+            $this->sendResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }
 

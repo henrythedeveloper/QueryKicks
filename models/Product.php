@@ -16,10 +16,17 @@ class Product {
     }
 
     public function getAll() {
-        $query = "SELECT * FROM " . $this->table . " ORDER BY created_at DESC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $query = "SELECT * FROM " . $this->table . " ORDER BY created_at DESC";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log('Products in Product::getAll(): ' . print_r($products, true));
+            return $products;
+        } catch (PDOException $e) {
+            error_log('Database Error in Product::getAll(): ' . $e->getMessage());
+            return [];
+        }
     }
 
     public function getById($id) {

@@ -22,7 +22,7 @@ class AuthController {
             return [
                 'success' => true,
                 'role' => $result['role'],
-                'redirectUrl' => $result['role'] === 'admin' ? '/querykicks/views/admin.php' : '/querykicks/controllers/storecontroller.php'
+                'redirectUrl' => $result['role'] === 'admin' ? '/querykicks/views/admin.php' : '/querykicks/controllers/StoreController.php'
             ];
         }
         return [

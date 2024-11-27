@@ -4,7 +4,7 @@ session_start();
 
 // Base configuration
 define('ROOT_PATH', __DIR__);
-define('BASE_URL', 'http://localhost/querykicks');
+define('BASE_URL', '/querykicks');
 
 // Autoload classes
 spl_autoload_register(function ($class) {

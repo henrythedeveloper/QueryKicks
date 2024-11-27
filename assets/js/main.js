@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all functionality
+    console.log('DOM loaded');
     initializeTabs();
     initializeCart();
     initializeMoneyModal();
@@ -48,26 +49,39 @@ function openTab(button, tabName) {
 
 // Cart Functions
 function initializeCart() {
+    console.log('Initializing cart');
+    
+    // Add to cart buttons
     const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
-    const removeFromCartButtons = document.querySelectorAll('.remove-from-cart');
-    const checkoutBtn = document.querySelector('.checkout-btn');
-
     addToCartButtons.forEach(button => {
         button.addEventListener('click', handleAddToCart);
     });
-
-    removeFromCartButtons.forEach(button => {
+    
+    // Quantity buttons
+    const quantityButtons = document.querySelectorAll('.quantity-btn');
+    quantityButtons.forEach(button => {
+        button.addEventListener('click', handleQuantityUpdate);
+    });
+    
+    // Remove buttons
+    const removeButtons = document.querySelectorAll('.remove-from-cart');
+    removeButtons.forEach(button => {
         button.addEventListener('click', handleRemoveFromCart);
     });
-
+    
+    // Checkout button
+    const checkoutBtn = document.querySelector('.checkout-btn');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', handleCheckout);
     }
 }
 
 async function handleAddToCart(e) {
+    e.preventDefault();
+    console.log('Add to cart clicked');
+    
     const productId = e.target.getAttribute('data-product-id');
-    const price = parseFloat(e.target.getAttribute('data-price'));
+    console.log('Product ID:', productId);
 
     try {
         const response = await fetch('/querykicks/controllers/StoreController.php', {
@@ -77,41 +91,168 @@ async function handleAddToCart(e) {
             },
             body: JSON.stringify({
                 action: 'addToCart',
-                product_id: productId
+                product_id: productId,
+                quantity: 1
+            })
+        });
+
+        console.log('Response received');
+        const data = await response.json();
+        console.log('Response data:', data);
+
+        if (data.success) {
+            console.log('Successfully added to cart');
+            // Update the cart display
+            const cartTab = document.getElementById('cart');
+            if (cartTab) {
+                location.reload(); // Temporary solution to refresh the cart
+            }
+            // Update clerk message
+            const clerkMessage = document.querySelector('.clerk-speech p');
+            if (clerkMessage && data.clerkMessage) {
+                clerkMessage.textContent = data.clerkMessage;
+            }
+        } else {
+            console.log('Failed to add to cart:', data.message);
+            alert(data.message || 'Failed to add item to cart');
+        }
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('Error adding item to cart. Please try again.');
+    }
+}
+
+async function handleRemoveFromCart(e) {
+    const itemId = e.target.getAttribute('data-item-id');
+    
+    try {
+        const response = await fetch('/querykicks/controllers/StoreController.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'removeFromCart',
+                item_id: itemId
             })
         });
 
         const data = await response.json();
         if (data.success) {
-            updateCartDisplay();
-            updateClerkMessage('addToCart');
+            location.reload(); // Refresh to show updated cart
+        } else {
+            alert(data.message || 'Failed to remove item');
         }
     } catch (error) {
-        console.error('Error adding to cart:', error);
+        console.error('Error removing item:', error);
+        alert('Error removing item. Please try again.');
     }
 }
 
+async function handleQuantityUpdate(e) {
+    const itemId = e.target.getAttribute('data-item-id');
+    const isIncrease = e.target.classList.contains('increase');
+    const change = isIncrease ? 1 : -1;
+    
+    try {
+        const response = await fetch('/querykicks/controllers/StoreController.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'updateQuantity',
+                item_id: itemId,
+                change: change
+            })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            location.reload(); // Refresh to show updated cart
+        } else {
+            alert(data.message || 'Failed to update quantity');
+        }
+    } catch (error) {
+        console.error('Error updating quantity:', error);
+        alert('Error updating quantity. Please try again.');
+    }
+}
+
+async function handleCheckout(e) {
+    const total = e.target.getAttribute('data-total');
+    
+    try {
+        const response = await fetch('/querykicks/controllers/StoreController.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'checkout',
+                total: total
+            })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            alert('Checkout successful!');
+            location.reload(); // Refresh the page to show empty cart
+        } else {
+            alert(data.message || 'Checkout failed');
+        }
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        alert('Error during checkout. Please try again.');
+    }
+}
+
+
 // Money Modal Functions
 function initializeMoneyModal() {
+    console.log('Initializing money modal');
+
+    // Get modal elements
     const addMoneyBtn = document.querySelector('.add-money-btn');
     const modal = document.getElementById('add-money-modal');
-    const closeBtn = modal.querySelector('.close-modal');
+    const closeBtn = document.querySelector('.close-modal');
     const form = document.getElementById('add-money-form');
 
-    addMoneyBtn?.addEventListener('click', () => {
-        modal.style.display = 'block';
+    if (addMoneyBtn) {
+        console.log('Add money button found');
+        addMoneyBtn.addEventListener('click', () => {
+            console.log('Add money button clicked');
+            modal.style.display = 'block';
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
     });
 
-    closeBtn?.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    form?.addEventListener('submit', handleAddMoney);
+    if (form) {
+        form.addEventListener('submit', handleAddMoney);
+    }
 }
 
 async function handleAddMoney(e) {
     e.preventDefault();
+    console.log('Handling add money submission');
+
     const amount = document.getElementById('amount').value;
+    if (!amount || amount <= 0) {
+        alert('Please enter a valid amount');
+        return;
+    }
 
     try {
         const response = await fetch('/querykicks/controllers/StoreController.php', {
@@ -121,19 +262,37 @@ async function handleAddMoney(e) {
             },
             body: JSON.stringify({
                 action: 'addMoney',
-                amount: amount
+                amount: parseFloat(amount)
             })
         });
 
         const data = await response.json();
+        console.log('Add money response:', data);
+
         if (data.success) {
-            updateBalance(data.newBalance);
+            // Update the balance display
+            const balanceElement = document.querySelector('.balance');
+            if (balanceElement) {
+                balanceElement.textContent = `$${parseFloat(data.newBalance).toFixed(2)}`;
+            }
+
+            // Close the modal
             document.getElementById('add-money-modal').style.display = 'none';
+            
+            // Reset the form
+            document.getElementById('add-money-form').reset();
+
+            // Show success message
+            alert('Money added successfully!');
+        } else {
+            alert(data.message || 'Failed to add money');
         }
     } catch (error) {
         console.error('Error adding money:', error);
+        alert('Error adding money. Please try again.');
     }
 }
+
 
 // Logout Function
 function setupLogout() {
@@ -171,7 +330,11 @@ function updateClerkMessage(type) {
             cart: "Ready to check out?",
             about: "Want to learn more about us?",
             contact: "Need help? I'm here!",
-            faq: "Got questions? We've got answers!"
+            faq: "Got questions? We've got answers!",
+            addToCart: "Great choice! Item added to your cart!",
+            removeFromCart: "Item removed from your cart.",
+            checkout: "Thank you for your purchase!",
+            error: "Oops! Something went wrong."
         };
         clerkMessage.textContent = messages[type] || "How can I help you today?";
     }
@@ -185,9 +348,15 @@ function updateBalance(newBalance) {
 }
 
 function updateCartDisplay() {
-    // Refresh cart contents
-    const cartContent = document.getElementById('cart');
-    if (cartContent) {
-        location.reload(); // Simple refresh for now
+    const cartTab = document.getElementById('cart');
+    if (cartTab) {
+        // Fetch updated cart content
+        fetch('/querykicks/controllers/StoreController.php?action=getCart')
+            .then(response => response.text())
+            .then(html => {
+                cartTab.innerHTML = html;
+                console.log('Cart display updated');
+            })
+            .catch(error => console.error('Error updating cart display:', error));
     }
 }
