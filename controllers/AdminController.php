@@ -1,15 +1,8 @@
 <?php
-
 session_start(); 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
-// Debug file paths
 $productPath = __DIR__ . '/../models/Product.php';
 $dbPath = __DIR__ . '/../config/database.php';
-
-error_log("Product.php path: " . $productPath);
-error_log("Database.php path: " . $dbPath);
 
 require_once $dbPath;
 require_once $productPath;
@@ -29,10 +22,6 @@ class AdminController {
     }
 
     public function handleRequest() {
-
-        // Add debug logs
-        error_log('Session data: ' . print_r($_SESSION, true));
-        error_log('Request method: ' . $_SERVER['REQUEST_METHOD']);
 
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -217,9 +206,6 @@ class AdminController {
         $targetDir = $_SERVER['DOCUMENT_ROOT'] . '/querykicks/assets/images/shoes/';
         $targetPath = $targetDir . $fileName;
         
-        // Debug
-        error_log('Moving file to: ' . $targetPath);
-        
         // Move the file
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {
             return 'assets/images/shoes/' . $fileName;
@@ -230,10 +216,6 @@ class AdminController {
 
     private function addProduct() {
         try {
-            // Debug incoming data
-            error_log('POST data: ' . print_r($_POST, true));
-            error_log('FILES data: ' . print_r($_FILES, true));
-    
             if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
                 throw new Exception('No image file uploaded or upload error occurred.');
             }
@@ -370,9 +352,6 @@ class AdminController {
         // Set headers
         header('Content-Type: application/json');
         header('Cache-Control: no-cache, must-revalidate');
-        
-        // Debug response
-        error_log('Sending JSON response: ' . print_r($data, true));
         
         // Encode and send without escaping slashes
         echo json_encode($data, JSON_UNESCAPED_SLASHES);

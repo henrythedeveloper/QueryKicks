@@ -1,13 +1,8 @@
 <?php
 session_start();
-// Debug file paths
 $productPath = __DIR__ . '/../models/Product.php';
 $dbPath = __DIR__ . '/../config/database.php';
 $cart = __DIR__ . '/../models/Cart.php';
-
-error_log("Product.php path: " . $productPath);
-error_log("Database.php path: " . $dbPath);
-
 require_once $dbPath;
 require_once $productPath;
 require_once $cart;
@@ -35,11 +30,8 @@ class StoreController {
     }
 
     public function handleRequest() {
-        error_log("StoreController::handleRequest called."); // Log entry into the method
-
         // Check authentication
         if (!isset($_SESSION['user_id'])) {
-            error_log("User not authenticated, redirecting to auth."); // Log authentication failure
             header('Location: /querykicks/controllers/AuthController.php');
             exit();
         }
@@ -47,7 +39,6 @@ class StoreController {
         // Handle AJAX requests
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $input = json_decode(file_get_contents('php://input'), true);
-            error_log('Received POST data: ' . print_r($input, true)); // Debug log
             $action = $_POST['action'] ?? $input['action'] ?? null;
 
             if ($action) {
@@ -185,9 +176,7 @@ class StoreController {
 
     private function removeFromCart() {
         try {
-            $input = json_decode(file_get_contents('php://input'), true);
-            error_log('Remove cart data: ' . print_r($input, true)); // Debug log
-            
+            $input = json_decode(file_get_contents('php://input'), true);            
             if (!isset($_SESSION['user_id'])) {
                 throw new Exception('User must be logged in');
             }
@@ -208,7 +197,6 @@ class StoreController {
                 throw new Exception('Failed to remove item from cart');
             }
         } catch (Exception $e) {
-            error_log('Error in removeFromCart: ' . $e->getMessage()); // Debug log
             $this->sendResponse([
                 'success' => false,
                 'message' => $e->getMessage()

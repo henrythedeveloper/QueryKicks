@@ -55,6 +55,63 @@ body {
     border-right-color: rgba(255, 255, 255, 0.7);
 }
 
+/* Notification Container */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+/* Individual Notification */
+.notification {
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 1rem;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 2px solid #666;
+    min-width: 300px;
+    font-family: 'PressStart2P', cursive;
+    font-size: 0.8rem;
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+/* Notification Types */
+.notification.success {
+    border-color: #4CAF50;
+}
+
+.notification.error {
+    border-color: #ff4444;
+}
+
+.notification.warning {
+    border-color: #ffd700;
+}
+
+/* Close Button */
+.notification .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'PressStart2P', cursive;
+    padding: 0 5px;
+}
+
+.notification .close-btn:hover {
+    color: #999;
+}
+
 /* Main Content Area */
 .main-content {
     position: fixed;

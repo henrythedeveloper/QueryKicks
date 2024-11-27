@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all functionality
-    console.log('DOM loaded');
     initializeTabs();
     initializeCart();
     initializeMoneyModal();
@@ -50,7 +49,6 @@ function openTab(button, tabName) {
 
 // Cart Functions
 function initializeCart() {
-    console.log('Initializing cart');
     
     // Add to cart buttons
     const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
@@ -79,10 +77,8 @@ function initializeCart() {
 
 async function handleAddToCart(e) {
     e.preventDefault();
-    console.log('Add to cart clicked');
     
     const productId = e.target.getAttribute('data-product-id');
-    console.log('Product ID:', productId);
 
     try {
         const response = await fetch('/querykicks/controllers/StoreController.php', {
@@ -97,12 +93,9 @@ async function handleAddToCart(e) {
             })
         });
 
-        console.log('Response received');
         const data = await response.json();
-        console.log('Response data:', data);
 
         if (data.success) {
-            console.log('Successfully added to cart');
             // Update the cart display
             const cartTab = document.getElementById('cart');
             if (cartTab) {
@@ -114,11 +107,9 @@ async function handleAddToCart(e) {
                 clerkMessage.textContent = data.clerkMessage;
             }
         } else {
-            console.log('Failed to add to cart:', data.message);
             alert(data.message || 'Failed to add item to cart');
         }
     } catch (error) {
-        console.error('Error adding to cart:', error);
         alert('Error adding item to cart. Please try again.');
     }
 }
@@ -145,7 +136,6 @@ async function handleRemoveFromCart(e) {
             alert(data.message || 'Failed to remove item');
         }
     } catch (error) {
-        console.error('Error removing item:', error);
         alert('Error removing item. Please try again.');
     }
 }
@@ -205,8 +195,7 @@ async function handleQuantityUpdate(e) {
             alert(data.message || 'Failed to update quantity');
         }
     } catch (error) {
-        console.error('Error updating quantity:', error);
-        alert('Error updating quantity. Please try again.');
+        alert('Error updating quantity. Please try again. ' + error.message);
     }
 }
 
@@ -237,8 +226,7 @@ async function handleCheckout(e) {
             alert(data.message || 'Checkout failed');
         }
     } catch (error) {
-        console.error('Error during checkout:', error);
-        alert('Error during checkout. Please try again.');
+        alert('Error during checkout. Please try again. ' + error.message);
     }
 }
 
@@ -246,7 +234,6 @@ async function handleCheckout(e) {
 
 // Money Modal Functions
 function initializeMoneyModal() {
-    console.log('Initializing money modal');
 
     // Get modal elements
     const addMoneyBtn = document.querySelector('.add-money-btn');
@@ -255,9 +242,7 @@ function initializeMoneyModal() {
     const form = document.getElementById('add-money-form');
 
     if (addMoneyBtn) {
-        console.log('Add money button found');
         addMoneyBtn.addEventListener('click', () => {
-            console.log('Add money button clicked');
             modal.style.display = 'block';
         });
     }
@@ -282,7 +267,6 @@ function initializeMoneyModal() {
 
 async function handleAddMoney(e) {
     e.preventDefault();
-    console.log('Handling add money submission');
 
     const amount = document.getElementById('amount').value;
     if (!amount || amount <= 0) {
@@ -303,7 +287,6 @@ async function handleAddMoney(e) {
         });
 
         const data = await response.json();
-        console.log('Add money response:', data);
 
         if (data.success) {
             // Update the balance display immediately
@@ -323,8 +306,7 @@ async function handleAddMoney(e) {
             alert(data.message || 'Failed to add money');
         }
     } catch (error) {
-        console.error('Error adding money:', error);
-        alert('Error adding money. Please try again.');
+        alert('Error adding money. Please try again. ' + error.message);
     }
 }
 
@@ -350,7 +332,7 @@ function setupLogout() {
                 window.location.href = '/querykicks/views/auth.php';
             }
         } catch (error) {
-            console.error('Logout error:', error);
+            alert('Error logging out. Please try again. ' + error.message);
         }
     });
 }
@@ -387,16 +369,17 @@ function updateBalance(newBalance) {
 function updateCartDisplay() {
     const cartTab = document.getElementById('cart');
     if (cartTab) {
-        // Fetch updated cart content
         fetch('/querykicks/controllers/StoreController.php?action=getCart')
             .then(response => response.text())
             .then(html => {
                 cartTab.innerHTML = html;
-                console.log('Cart display updated');
             })
-            .catch(error => console.error('Error updating cart display:', error));
+            .catch(error => {
+                alert('Sorry, we could not update your cart at this time. Please try again later. ' + error.message);
+            });
     }
 }
+
 
 function updateCartTotal() {
     // Recalculate the total in the cart summary

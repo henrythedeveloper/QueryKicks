@@ -35,11 +35,10 @@ class AuthManager {
             if (response.success) {
                 window.location.href = response.redirectUrl;
             } else {
-                this.showError(response.message);
+                alert(response.message);
             }
         } catch (error) {
-            console.error('Error:', error);
-            this.showError('An error occurred');
+            alert('An error occurred: ' + error.message);
         }
     }
 
@@ -55,13 +54,12 @@ class AuthManager {
             const response = await this.sendRequest(formData);
             if (response.success) {
                 this.showForm('login');
-                this.showError(response.message);
+                alert(response.message);
             } else {
-                this.showError(response.message);
+                alert(response.message);
             }
         } catch (error) {
-            console.error('Error:', error);
-            this.showError('An error occurred');
+            alert('An error occurred: ' + error.message);
         }
     }
 
@@ -81,11 +79,10 @@ class AuthManager {
                 if (response.success) {
                     newPasswordGroup.style.display = 'block';
                 } else {
-                    this.showError(response.message);
+                    alert(response.message);
                 }
             } catch (error) {
-                console.error('Error:', error);
-                this.showError('An error occurred');
+                alert('An error occurred: ' + error.message);
             }
         } else {
             const formData = new FormData();
@@ -97,13 +94,12 @@ class AuthManager {
                 const response = await this.sendRequest(formData);
                 if (response.success) {
                     this.showForm('login');
-                    this.showError(response.message);
+                    alert(response.message);
                 } else {
-                    this.showError(response.message);
+                    alert(response.message);
                 }
             } catch (error) {
-                console.error('Error:', error);
-                this.showError('An error occurred');
+                alert('An error occurred: ' + error.message);
             }
         }
     }
@@ -116,7 +112,7 @@ class AuthManager {
             });
             return await response.json();
         } catch (error) {
-            console.error('Fetch Error:', error);
+            alert('An error occurred: ' + error.message);
             throw error;
         }
     }

@@ -71,7 +71,6 @@ class AdminDashboard {
 
             // Log the raw response text
             const responseText = await response.text();
-            console.log('Raw dashboard response:', responseText);
 
             try {
                 const data = JSON.parse(responseText);
@@ -79,14 +78,15 @@ class AdminDashboard {
                     document.getElementById('total-products').textContent = data.totalProducts;
                     document.getElementById('total-users').textContent = data.totalUsers;
                 } else {
-                    console.error('Server error:', data.message);
+                    alert(data.message || 'Error loading dashboard data');
                 }
             } catch (parseError) {
-                console.error('JSON Parse Error:', parseError);
-                console.error('Raw Response:', responseText);
+                alert(parseError.message || 'Server returned invalid response');
+                alert('Raw Response: ' + responseText);
             }
+            
         } catch (error) {
-            console.error('Network Error:', error);
+            alert('Error loading dashboard data: ' + error.message);
         }
     }
 
@@ -102,7 +102,6 @@ class AdminDashboard {
 
             // Log the raw response text
             const responseText = await response.text();
-            console.log('Raw products response:', responseText);
 
             try {
                 const products = JSON.parse(responseText);
@@ -119,14 +118,13 @@ class AdminDashboard {
                         btn.addEventListener('click', (e) => this.handleDeleteProduct(e.target.dataset.id));
                     });
                 } else {
-                    console.error('Invalid products data:', products);
+                    alert('Error loading products: ' + responseText);
                 }
             } catch (parseError) {
-                console.error('JSON Parse Error:', parseError);
-                console.error('Raw Response:', responseText);
+                alert('Server returned invalid response: ' + parseError.message);
             }
         } catch (error) {
-            console.error('Network Error:', error);
+            alert('Error loading products: ' + error.message);
         }
     }
 
@@ -152,10 +150,10 @@ class AdminDashboard {
                     btn.addEventListener('click', (e) => this.handleAddMoney(e.target.dataset.userId));
                 });
             } else {
-                console.error('Invalid users data:', users);
+                alert('Error loading users: ' + users.message);
             }
         } catch (error) {
-            console.error('Error loading users:', error);
+            alert('Error loading users: ' + error.message);
         }
     }
 
@@ -307,8 +305,7 @@ class AdminDashboard {
                     alert(result.message || 'Error adding money');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('Error adding money');
+                alert('Error adding money: ' + error.message);
             }
         };
     }
@@ -317,12 +314,6 @@ class AdminDashboard {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
-        
-        // Debug form data before submission
-        console.log('Submitting form data:');
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
         
         // Add action to formData
         const isEdit = form.elements['product-id'].value;
@@ -335,13 +326,8 @@ class AdminDashboard {
                 body: formData
             });
     
-            // Debug raw response
-            const responseText = await response.text();
-            console.log('Raw server response:', responseText);
-    
             try {
                 const result = JSON.parse(responseText);
-                console.log('Parsed response:', result);
     
                 if (result.success) {
                     alert(result.message);
@@ -351,12 +337,9 @@ class AdminDashboard {
                     alert(result.message || 'Error saving product');
                 }
             } catch (parseError) {
-                console.error('Error parsing response:', parseError);
-                console.error('Raw response:', responseText);
                 alert('Server returned invalid response');
             }
         } catch (error) {
-            console.error('Network error:', error);
             alert('Error saving product: ' + error.message);
         }
     }
@@ -379,8 +362,7 @@ class AdminDashboard {
                 alert(result.message || 'Error loading product');
             }
         } catch (error) {
-            console.error('Error loading product:', error);
-            alert('Error loading product');
+            alert('Error loading product: ' + error.message);
         }
     }
 
@@ -403,8 +385,7 @@ class AdminDashboard {
                     alert(result.message);
                 }
             } catch (error) {
-                console.error('Error deleting product:', error);
-                alert('Error deleting product');
+                alert('Error deleting product: ' + error.message);
             }
         }
     }
@@ -421,30 +402,22 @@ class AdminDashboard {
                 })
             });
             
-            // Debug: Log raw response
-            const responseText = await response.text();
-            console.log('Raw logout response:', responseText);
-            
             try {
                 const result = JSON.parse(responseText);
-                console.log('Parsed logout response:', result);
-                
+
                 if (result.success) {
                     // Use redirectUrl from response or fallback to default path
                     const redirectPath = result.redirectUrl || `${this.baseUrl}/views/auth.php`;
-                    console.log('Redirecting to:', redirectPath);
                     window.location.href = redirectPath;
                 } else {
-                    console.error('Logout failed:', result.message);
+                    alert(result.message || 'Error logging out');
                 }
             } catch (parseError) {
-                console.error('Error parsing logout response:', parseError);
-                // Fallback redirect on error
+                alert('Server returned invalid response');
                 window.location.href = `${this.baseUrl}/views/auth.php`;
             }
         } catch (error) {
-            console.error('Network error during logout:', error);
-            // Fallback redirect on error
+            alert('Error logging out');
             window.location.href = `${this.baseUrl}/views/auth.php`;
         }
     }
