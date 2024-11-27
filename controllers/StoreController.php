@@ -40,21 +40,29 @@ class StoreController {
             header('Location: /querykicks/controllers/AuthController.php');
             exit();
         }
-
-        // Handle AJAX requests
+    
+        // Handle AJAX requests from POST data
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $input = json_decode(file_get_contents('php://input'), true);
             $action = $_POST['action'] ?? $input['action'] ?? null;
-
+    
             if ($action) {
                 $this->handleAction($action);
                 return;
             }
         }
-
+    
+        // Handle AJAX requests from GET data
+        if (isset($_GET['action'])) {
+            $action = $_GET['action'];
+            $this->handleAction($action);
+            return;
+        }
+    
         // Default: render main store view
         $this->renderStore();
     }
+    
 
     private function handleAction($action) {
         error_log('Handling action: ' . $action);
@@ -139,7 +147,7 @@ class StoreController {
             ob_start();
     
             // Include the cart view template
-            include __DIR__ . '/../views/partials/cart.php';
+            include __DIR__ . '/../views/store/cart.php';
     
             // Get the buffered content
             $html = ob_get_clean();
@@ -159,71 +167,75 @@ class StoreController {
 
     private function addToCart() {
         try {
-            // Get JSON input
-            $input = json_decode(file_get_contents('php://input'), true);
-            
-            // Log the received data
-            error_log('Received addToCart request: ' . print_r($input, true));
-            
-            $productId = $input['product_id'] ?? null;
-            $quantity = $input['quantity'] ?? 1;
-
-            if (!$productId) {
-                throw new Exception('Product ID is required');
-            }
-
             if (!isset($_SESSION['user_id'])) {
                 throw new Exception('User must be logged in');
             }
-
-            $userId = $_SESSION['user_id'];
-
-            // Check if product exists and has stock
-            $product = $this->product->getById($productId);
+    
+            $input = json_decode(file_get_contents('php://input'), true);
+            $productId = $input['product_id'] ?? null;
+            $quantity = $input['quantity'] ?? 1;
+    
+            if (!$productId || $quantity <= 0) {
+                throw new Exception('Invalid product or quantity.');
+            }
+    
+            // Fetch the product to get the current stock
+            $product = $this->product->getProductById($productId);
             if (!$product) {
-                throw new Exception('Product not found');
+                throw new Exception('Product not found.');
             }
-
-            if ($product['stock'] < $quantity) {
-                throw new Exception('Not enough stock available');
+    
+            // Check if the requested quantity exceeds the stock
+            if ($quantity > $product['stock']) {
+                throw new Exception('Requested quantity exceeds available stock.');
             }
-
-            // Add to cart
-            $success = $this->cart->addItem($userId, $productId, $quantity);
-
-            if ($success) {
-                $message = $this->getRandomClerkMessage('addToCart');
-                $this->sendResponse([
-                    'success' => true,
-                    'message' => 'Product added to cart successfully',
-                    'clerkMessage' => $message
-                ]);
+    
+            // Check if the cart already contains this product
+            $existingCartItem = $this->cart->getCartItemByProductId($_SESSION['user_id'], $productId);
+            $newQuantity = $quantity;
+    
+            if ($existingCartItem) {
+                // Calculate the new quantity
+                $newQuantity += $existingCartItem['quantity'];
+    
+                // Check if the new quantity exceeds the stock
+                if ($newQuantity > $product['stock']) {
+                    throw new Exception('Total quantity in cart exceeds available stock.');
+                }
+    
+                // Update the quantity in the cart
+                $this->cart->updateQuantity($_SESSION['user_id'], $existingCartItem['id'], $newQuantity);
             } else {
-                throw new Exception('Failed to add item to cart');
+                // Add the product to the cart
+                $this->cart->addItem($_SESSION['user_id'], $productId, $quantity);
             }
+    
+            $this->sendResponse([
+                'success' => true,
+                'message' => 'Item added to cart.'
+            ]);
         } catch (Exception $e) {
-            error_log('Error in addToCart: ' . $e->getMessage());
             $this->sendResponse([
                 'success' => false,
                 'message' => $e->getMessage()
             ]);
         }
     }
-
+    
     private function removeFromCart() {
         try {
-            $input = json_decode(file_get_contents('php://input'), true);            
             if (!isset($_SESSION['user_id'])) {
                 throw new Exception('User must be logged in');
             }
-
-            $itemId = $input['item_id'] ?? null;
-            if (!$itemId) {
+    
+            $cartItemId = $_POST['cart_item_id'] ?? null;
+    
+            if (!$cartItemId) {
                 throw new Exception('Cart Item ID is required');
             }
-
-            $success = $this->cart->removeItem($_SESSION['user_id'], $itemId);
-
+    
+            $success = $this->cart->removeItem($_SESSION['user_id'], $cartItemId);
+    
             if ($success) {
                 $this->sendResponse([
                     'success' => true,
@@ -239,7 +251,7 @@ class StoreController {
             ]);
         }
     }
-
+    
     private function processCheckout() {
         try {
             if (!isset($_SESSION['user_id'])) {
@@ -439,8 +451,6 @@ class StoreController {
     }
 }
 
-// Handle request if accessed directly
-if (basename($_SERVER['PHP_SELF']) == 'StoreController.php') {
-    $controller = new StoreController();
-    $controller->handleRequest();
-}
+// Handle request
+$controller = new StoreController();
+$controller->handleRequest();

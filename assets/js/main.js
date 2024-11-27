@@ -133,8 +133,27 @@ function initializeCart() {
 
 async function handleAddToCart(e) {
     e.preventDefault();
-    
-    const productId = e.target.getAttribute('data-product-id');
+
+    const button = e.target;
+    const productId = button.getAttribute('data-product-id');
+    const stock = parseInt(button.getAttribute('data-stock'), 10);
+
+    // Get the quantity input associated with this product
+    const productCard = button.closest('.product-card');
+    const quantityInput = productCard.querySelector('.quantity-input');
+    const quantity = parseInt(quantityInput.value, 10);
+
+    // Validate quantity
+    if (isNaN(quantity) || quantity < 1) {
+        alert('Please enter a valid quantity.');
+        return;
+    }
+
+    // Check if the quantity exceeds the stock
+    if (quantity > stock) {
+        alert('Cannot add more items than are in stock.');
+        return;
+    }
 
     try {
         const response = await fetch('/querykicks/controllers/StoreController.php', {
@@ -145,14 +164,14 @@ async function handleAddToCart(e) {
             body: JSON.stringify({
                 action: 'addToCart',
                 product_id: productId,
-                quantity: 1
+                quantity: quantity
             })
         });
 
         const data = await response.json();
 
         if (data.success) {
-            // Update the cart display without reloading the page
+            // Update the cart display
             updateCartDisplay();
 
             // Update clerk message
@@ -167,9 +186,17 @@ async function handleAddToCart(e) {
     }
 }
 
+
 async function handleRemoveFromCart(e) {
-    const itemId = e.target.getAttribute('data-item-id');
-    
+    e.preventDefault();
+
+    const cartItemId = e.target.getAttribute('data-item-id');
+
+    if (!cartItemId) {
+        alert('Invalid cart item.');
+        return;
+    }
+
     try {
         const response = await fetch('/querykicks/controllers/StoreController.php', {
             method: 'POST',
@@ -178,23 +205,28 @@ async function handleRemoveFromCart(e) {
             },
             body: JSON.stringify({
                 action: 'removeFromCart',
-                item_id: itemId
+                cart_item_id: cartItemId
             })
         });
 
         const data = await response.json();
+
         if (data.success) {
-            location.reload(); // Refresh to show updated cart
+            // Update the cart display
+            updateCartDisplay();
+
+            // Update clerk message
             updateClerkMessage('removeFromCart');
         } else {
-            alert(data.message || 'Failed to remove item');
+            alert(data.message || 'Failed to remove item from cart');
             updateClerkMessage('error');
         }
     } catch (error) {
-        alert('Error removing item. Please try again.');
+        alert('Error removing item from cart. Please try again.');
         updateClerkMessage('error');
     }
 }
+
 
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

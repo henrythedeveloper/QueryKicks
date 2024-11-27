@@ -13,7 +13,11 @@
                     <p class="price">$<?= number_format($product['price'], 2) ?></p>
                     <p class="stock">In Stock: <?= htmlspecialchars($product['stock']) ?></p>
                     <?php if ($product['stock'] > 0): ?>
-                        <button class="add-to-cart-button" data-product-id="<?= htmlspecialchars($product['id']) ?>" data-price="<?= htmlspecialchars($product['price']) ?>">
+                        <!-- Add to Cart Button with data attributes -->
+                        <button class="add-to-cart-button"
+                                data-product-id="<?= htmlspecialchars($product['id']) ?>"
+                                data-price="<?= htmlspecialchars($product['price']) ?>"
+                                data-stock="<?= htmlspecialchars($product['stock']) ?>">
                             Add to Cart
                         </button>
                     <?php else: ?>

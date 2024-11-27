@@ -1,74 +1,74 @@
 {
-    "greetings": [
-        "Welcome to QueryKicks, {username}! Ready to find your perfect pair?",
-        "Hey {username}! Great to see you in the store!",
-        "Welcome back {username}! Let's find some awesome kicks!",
-        "What's up {username}! Check out our latest arrivals!"
-    ],
-    "idle": [
-        "Looking for something specific, {username}?",
-        "Need help finding your size?",
-        "We've got some fresh styles you might like!",
-        "Don't forget to check our special offers!",
-        "Take your time browsing, {username}!",
-        "Need any recommendations?"
-    ],
-    "addToCart": [
-        "Great choice, {username}! Those will look awesome!",
-        "Nice pick! Want to see some matching styles?",
-        "Those are flying off the shelves!",
-        "Excellent choice! Those are super popular!"
-    ],
-    "removeFromCart": [
-        "No worries, {username}! Let's find something perfect for you!",
-        "Take your time, we've got plenty of options!",
-        "Maybe try a different style? We've got lots to choose from!",
-        "Let me know if you need help finding something else!"
-    ],
-    "checkout": [
-        "Thanks for shopping with us, {username}!",
-        "Great picks! You've got style!",
-        "You're going to love these! Come back soon!",
-        "Awesome choices! Thanks for shopping at QueryKicks!"
-    ],
-    "lowBalance": [
-        "Looks like you might need to add some funds, {username}!",
-        "Quick tip: you can add money anytime using the 'Add Money' button!",
-        "Need to top up your balance?",
-        "Just a heads up - you might need more funds for that!"
-    ],
-    "addMoney": [
-        "Fantastic, {username}! Your balance just got a boost!",
-        "Awesome, {username}! You've added more funds to your account!",
-        "Great news, {username}! You're all set to shop with your updated balance!",
-        "Your wallet just got heavier, {username}! Happy shopping!"
-    ],
-    "error": [
-        "Oops, something went wrong, {username}! Try again later.",
-        "Uh-oh, looks like we hit a snag! Let me fix that for you.",
-        "Sorry, {username}, we encountered an error. Please refresh and try again.",
-        "Yikes, something's not right! Hang tight while we sort it out.",
-        "Error detected! Please let us know if it keeps happening, {username}."
-    ],
-    "faq": [
-        "Hope that answered your question, {username}! Need more help?",
-        "Did you find what you were looking for, {username}? Let us know!",
-        "Got what you needed from the FAQ? We're here if you need more help!",
-        "Glad you checked out the FAQ, {username}! Let us know if there's anything else.",
-        "Still have questions after the FAQ, {username}? We’re just a message away!"
-    ],
-    "contact": [
-        "Thanks for reaching out, {username}! We’ll get back to you soon!",
-        "Your message is on its way, {username}! We’ll respond shortly.",
-        "Glad you contacted us, {username}! Expect a reply soon.",
-        "We’ve received your message, {username}. Hang tight while we respond!",
-        "Thanks for getting in touch, {username}! We’ll be with you shortly."
-    ],
-    "about": [
-        "Hope you enjoyed learning about us, {username}! Let us know what you think!",
-        "Thanks for checking out our story, {username}! Let us know if you have questions.",
-        "Glad you took a moment to learn about QueryKicks, {username}!",
-        "What did you think of our story, {username}? We’d love to hear your thoughts!",
-        "Thanks for exploring our About page, {username}! Let us know if there’s more you want to know."
-    ]
+"greetings": [
+    "Welcome to QueryKicks, {username}! Ready to find your perfect pair?",
+    "Hey {username}! Great to see you in the store!",
+    "Welcome back {username}! Let's find some awesome kicks!",
+    "What's up {username}! Check out our latest arrivals!"
+],
+"idle": [
+    "Looking for something specific, {username}?",
+    "Need help finding your size?",
+    "We've got some fresh styles you might like!",
+    "Don't forget to check our special offers!",
+    "Take your time browsing, {username}!",
+    "Need any recommendations?"
+],
+"addToCart": [
+    "Great choice, {username}! Those will look awesome!",
+    "Nice pick! Want to see some matching styles?",
+    "Those are flying off the shelves!",
+    "Excellent choice! Those are super popular!"
+],
+"removeFromCart": [
+    "No worries, {username}! Let's find something perfect for you!",
+    "Take your time, we've got plenty of options!",
+    "Maybe try a different style? We've got lots to choose from!",
+    "Let me know if you need help finding something else!"
+],
+"checkout": [
+    "Thanks for shopping with us, {username}!",
+    "Great picks! You've got style!",
+    "You're going to love these! Come back soon!",
+    "Awesome choices! Thanks for shopping at QueryKicks!"
+],
+"lowBalance": [
+    "Looks like you might need to add some funds, {username}!",
+    "Quick tip: you can add money anytime using the 'Add Money' button!",
+    "Need to top up your balance?",
+    "Just a heads up - you might need more funds for that!"
+],
+"addMoney": [
+    "Fantastic, {username}! Your balance just got a boost!",
+    "Awesome, {username}! You've added more funds to your account!",
+    "Great news, {username}! You're all set to shop with your updated balance!",
+    "Your wallet just got heavier, {username}! Happy shopping!"
+],
+"error": [
+    "Oops, something went wrong, {username}! Try again later.",
+    "Uh-oh, looks like we hit a snag! Let me fix that for you.",
+    "Sorry, {username}, we encountered an error. Please refresh and try again.",
+    "Yikes, something's not right! Hang tight while we sort it out.",
+    "Error detected! Please let us know if it keeps happening, {username}."
+],
+"faq": [
+    "Hope that answered your question, {username}! Need more help?",
+    "Did you find what you were looking for, {username}? Let us know!",
+    "Got what you needed from the FAQ? We're here if you need more help!",
+    "Glad you checked out the FAQ, {username}! Let us know if there's anything else.",
+    "Still have questions after the FAQ, {username}? We’re just a message away!"
+],
+"contact": [
+    "Thanks for reaching out, {username}! We’ll get back to you soon!",
+    "Your message is on its way, {username}! We’ll respond shortly.",
+    "Glad you contacted us, {username}! Expect a reply soon.",
+    "We’ve received your message, {username}. Hang tight while we respond!",
+    "Thanks for getting in touch, {username}! We’ll be with you shortly."
+],
+"about": [
+    "Hope you enjoyed learning about us, {username}! Let us know what you think!",
+    "Thanks for checking out our story, {username}! Let us know if you have questions.",
+    "Glad you took a moment to learn about QueryKicks, {username}!",
+    "What did you think of our story, {username}? We’d love to hear your thoughts!",
+    "Thanks for exploring our About page, {username}! Let us know if there’s more you want to know."
+]
 }
