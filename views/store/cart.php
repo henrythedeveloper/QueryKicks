@@ -4,35 +4,35 @@
         <div class="cart-content">
             <h2>Shopping Cart</h2>
             <div class="cart-items">
-                <?php 
+                <?php
                 $total = 0;
                 foreach ($cartItems as $item):
                     $itemTotal = $item['price'] * $item['quantity'];
                     $total += $itemTotal;
+                    $imagePath = '/querykicks/' . ltrim($item['image_url'], '/');
                 ?>
-                    <div class="cart-item" data-item-id="<?= htmlspecialchars($item['cart_item_id']) ?>">
+                    <div class="cart-item">
                         <div class="cart-item-image">
-                            <img src="<?= htmlspecialchars($item['image_url']) ?>" 
+                            <img src="<?= htmlspecialchars($imagePath) ?>"
                                  alt="<?= htmlspecialchars($item['name']) ?>"
                                  loading="lazy">
                         </div>
-                        
                         <div class="cart-item-details">
                             <h3><?= htmlspecialchars($item['name']) ?></h3>
                             <div class="price-quantity">
                                 <p class="price">$<?= number_format($item['price'], 2) ?></p>
                                 <div class="quantity-controls">
-                                    <button type="button" class="quantity-btn decrease" 
-                                            data-item-id="<?= htmlspecialchars($item['cart_item_id']) ?>"
+                                    <button type="button" class="quantity-btn decrease"
+                                            data-item-id="<?= htmlspecialchars($item['cart_item_id'] ?? $item['id']) ?>"
                                             <?= $item['quantity'] <= 1 ? 'disabled' : '' ?>>-</button>
                                     <span class="quantity"><?= htmlspecialchars($item['quantity']) ?></span>
                                     <button type="button" class="quantity-btn increase"
-                                            data-item-id="<?= htmlspecialchars($item['cart_item_id']) ?>">+</button>
+                                            data-item-id="<?= htmlspecialchars($item['cart_item_id'] ?? $item['id']) ?>">+</button>
                                 </div>
                             </div>
                             <p class="subtotal">Subtotal: $<?= number_format($itemTotal, 2) ?></p>
                             <button type="button" class="remove-from-cart"
-                                    data-item-id="<?= htmlspecialchars($item['cart_item_id']) ?>">Remove</button>
+                                    data-item-id="<?= htmlspecialchars($item['cart_item_id'] ?? $item['id']) ?>">Remove</button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -65,7 +65,8 @@
         <div class="empty-cart">
             <h2>Your cart is empty</h2>
             <p>Looks like you haven't added any items yet!</p>
-            <button class="continue-shopping" onclick="openTab(event, 'shoes')">Continue Shopping</button>
+            <button class="continue-shopping" 
+                    onclick="document.querySelector('[data-view=\'shoes\']').click()">Continue Shopping</button>
         </div>
     <?php endif; ?>
 </div>

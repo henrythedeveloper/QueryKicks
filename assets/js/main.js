@@ -270,18 +270,17 @@ async function handleAddMoney(e) {
         console.log('Add money response:', data);
 
         if (data.success) {
-            // Update the balance display
+            // Update the balance display immediately
             const balanceElement = document.querySelector('.balance');
             if (balanceElement) {
                 balanceElement.textContent = `$${parseFloat(data.newBalance).toFixed(2)}`;
+                balanceElement.setAttribute('data-balance', data.newBalance);
             }
 
-            // Close the modal
+            // Close the modal and reset form
             document.getElementById('add-money-modal').style.display = 'none';
-            
-            // Reset the form
             document.getElementById('add-money-form').reset();
-
+            
             // Show success message
             alert('Money added successfully!');
         } else {

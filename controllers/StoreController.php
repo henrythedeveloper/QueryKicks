@@ -71,6 +71,9 @@ class StoreController {
             case 'removeFromCart':
                 $this->removeFromCart();
                 break;
+            case 'updateQuantity':  
+                $this->updateQuantity();
+                break;
             case 'checkout':
                 $this->processCheckout();
                 break;
@@ -216,7 +219,7 @@ class StoreController {
             $total = $input['total'] ?? 0;
     
             // Get user's current balance
-            $stmt = $this->db->prepare("SELECT balance FROM users WHERE id = ?");
+            $stmt = $this->db->prepare("SELECT money FROM users WHERE id = ?");
             $stmt->execute([$_SESSION['user_id']]);
             $currentBalance = $stmt->fetchColumn();
     
@@ -297,16 +300,16 @@ class StoreController {
 
     private function updateQuantity() {
         try {
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception('User must be logged in');
+            }
+    
             $input = json_decode(file_get_contents('php://input'), true);
             $itemId = $input['item_id'] ?? null;
             $change = $input['change'] ?? 0;
     
             if (!$itemId) {
                 throw new Exception('Item ID is required');
-            }
-    
-            if (!isset($_SESSION['user_id'])) {
-                throw new Exception('User must be logged in');
             }
     
             // Add this method to your Cart class if not already present
@@ -358,6 +361,9 @@ class StoreController {
                 $stmt->execute([$newMoney, $_SESSION['user_id']]);
     
                 $this->db->commit();
+    
+                // Update session with new money amount
+                $_SESSION['money'] = $newMoney;
     
                 $this->sendResponse([
                     'success' => true,

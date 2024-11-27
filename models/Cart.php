@@ -9,11 +9,12 @@ class Cart {
 
     public function getCartItems($userId) {
         try {
-            $query = "SELECT ci.*, p.name, p.price, p.image_url 
-                    FROM cart_items ci 
-                    JOIN carts c ON ci.cart_id = c.id 
-                    JOIN products p ON ci.product_id = p.id 
-                    WHERE c.user_id = ?";
+            $query = "SELECT ci.id as cart_item_id, ci.quantity, 
+                             p.id as product_id, p.name, p.price, p.image_url 
+                      FROM cart_items ci 
+                      JOIN carts c ON ci.cart_id = c.id 
+                      JOIN products p ON ci.product_id = p.id 
+                      WHERE c.user_id = ?";
             
             $stmt = $this->db->prepare($query);
             $stmt->execute([$userId]);
@@ -73,12 +74,14 @@ class Cart {
 
     public function removeItem($userId, $itemId) {
         try {
-            $stmt = $this->db->prepare(
-                "DELETE ci FROM cart_items ci 
-                JOIN carts c ON ci.cart_id = c.id 
-                WHERE c.user_id = ? AND ci.id = ?"
-            );
-            return $stmt->execute([$userId, $itemId]);
+            // Verify item belongs to user's cart
+            $stmt = $this->db->prepare("
+                DELETE ci FROM cart_items ci
+                INNER JOIN carts c ON ci.cart_id = c.id
+                WHERE c.user_id = ? AND ci.id = ?
+            ");
+            $result = $stmt->execute([$userId, $itemId]);
+            return $result;
         } catch (PDOException $e) {
             error_log('Error removing item from cart: ' . $e->getMessage());
             return false;
