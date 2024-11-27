@@ -35,69 +35,83 @@ class Cart {
         }
     }
     
-
-    public function addItem($userId, $productId, $quantity = 1) {
+    public function getCartItemByProductId($userId, $productId) {
         try {
-            error_log("Adding item to cart - User ID: $userId, Product ID: $productId, Quantity: $quantity");
-            
-            $this->db->beginTransaction();
-            
-            // Get or create cart
-            $cartId = $this->getOrCreateCart($userId);
-            error_log("Cart ID: $cartId");
-    
-            // Check if item exists in cart
-            $stmt = $this->db->prepare(
-                "SELECT id, quantity FROM cart_items 
-                WHERE cart_id = ? AND product_id = ?"
-            );
+            // Get the cart ID for the user
+            $stmt = $this->db->prepare("SELECT id FROM carts WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            $cartId = $stmt->fetchColumn();
+
+            if (!$cartId) {
+                // The user does not have a cart yet
+                return null;
+            }
+
+            // Fetch the cart item
+            $stmt = $this->db->prepare("SELECT * FROM cart_items WHERE cart_id = ? AND product_id = ?");
             $stmt->execute([$cartId, $productId]);
-            $existingItem = $stmt->fetch(PDO::FETCH_ASSOC);
+            $cartItem = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $cartItem ?: null;
+        } catch (Exception $e) {
+            error_log('Error fetching cart item: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function addItem($userId, $productId, $quantity) {
+        try {
+            // Get or create the user's cart
+            $stmt = $this->db->prepare("SELECT id FROM carts WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            $cartId = $stmt->fetchColumn();
     
-            if ($existingItem) {
-                error_log("Updating existing item quantity");
-                // Update quantity
-                $stmt = $this->db->prepare(
-                    "UPDATE cart_items 
-                    SET quantity = quantity + ? 
-                    WHERE id = ?"
-                );
-                $stmt->execute([$quantity, $existingItem['id']]);
-            } else {
-                error_log("Adding new item to cart");
-                // Add new item
-                $stmt = $this->db->prepare(
-                    "INSERT INTO cart_items (cart_id, product_id, quantity) 
-                    VALUES (?, ?, ?)"
-                );
-                $stmt->execute([$cartId, $productId, $quantity]);
+            if (!$cartId) {
+                // Create a new cart for the user
+                $stmt = $this->db->prepare("INSERT INTO carts (user_id) VALUES (?)");
+                $stmt->execute([$userId]);
+                $cartId = $this->db->lastInsertId();
             }
     
-            $this->db->commit();
-            error_log("Successfully added/updated cart item");
+            // Add the item to the cart
+            $stmt = $this->db->prepare("INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)");
+            $stmt->execute([$cartId, $productId, $quantity]);
+    
             return true;
-        } catch (PDOException $e) {
-            $this->db->rollBack();
+        } catch (Exception $e) {
             error_log('Error adding item to cart: ' . $e->getMessage());
             return false;
         }
     }
+    
 
-    public function removeItem($userId, $itemId) {
+    public function removeItem($userId, $cartItemId) {
         try {
-            // Verify item belongs to user's cart
+            // Verify that the cart item belongs to the user's cart
             $stmt = $this->db->prepare("
-                DELETE ci FROM cart_items ci
-                INNER JOIN carts c ON ci.cart_id = c.id
-                WHERE c.user_id = ? AND ci.id = ?
+                SELECT ci.id
+                FROM cart_items ci
+                JOIN carts c ON ci.cart_id = c.id
+                WHERE ci.id = ? AND c.user_id = ?
             ");
-            $result = $stmt->execute([$userId, $itemId]);
-            return $result;
-        } catch (PDOException $e) {
-            error_log('Error removing item from cart: ' . $e->getMessage());
+            $stmt->execute([$cartItemId, $userId]);
+            $itemExists = $stmt->fetchColumn();
+    
+            if (!$itemExists) {
+                throw new Exception('Cart item not found.');
+            }
+    
+            // Delete the cart item
+            $stmt = $this->db->prepare("DELETE FROM cart_items WHERE id = ?");
+            $stmt->execute([$cartItemId]);
+    
+            return true;
+        } catch (Exception $e) {
+            error_log('Error removing cart item: ' . $e->getMessage());
             return false;
         }
     }
+    
 
     private function getOrCreateCart($userId) {
         try {
@@ -138,55 +152,32 @@ class Cart {
         }
     }
 
-    public function updateQuantity($userId, $itemId, $change) {
+    public function updateQuantity($userId, $cartItemId, $newQuantity) {
         try {
-            $this->db->beginTransaction();
-            
-            // Verify the item belongs to the user's cart
+            // Verify that the cart item belongs to the user's cart
             $stmt = $this->db->prepare("
-                SELECT ci.id, ci.quantity, ci.product_id 
+                SELECT ci.id
                 FROM cart_items ci
                 JOIN carts c ON ci.cart_id = c.id
-                WHERE c.user_id = ? AND ci.id = ?
+                WHERE ci.id = ? AND c.user_id = ?
             ");
-            $stmt->execute([$userId, $itemId]);
-            $item = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$item) {
-                throw new Exception('Cart item not found');
-            }
-            
-            $newQuantity = $item['quantity'] + $change;
-            
-            // Ensure quantity doesn't go below 1
-            if ($newQuantity < 1) {
-                throw new Exception('Quantity cannot be less than 1');
+            $stmt->execute([$cartItemId, $userId]);
+            $itemExists = $stmt->fetchColumn();
+    
+            if (!$itemExists) {
+                throw new Exception('Cart item not found.');
             }
     
-            // Get the product's available stock
-            $stmt = $this->db->prepare("SELECT stock FROM products WHERE id = ?");
-            $stmt->execute([$item['product_id']]);
-            $stock = $stmt->fetchColumn();
+            // Update the quantity
+            $stmt = $this->db->prepare("UPDATE cart_items SET quantity = ? WHERE id = ?");
+            $stmt->execute([$newQuantity, $cartItemId]);
     
-            if ($newQuantity > $stock) {
-                throw new Exception('Cannot add more than available stock');
-            }
-            
-            // Update quantity
-            $stmt = $this->db->prepare("
-                UPDATE cart_items 
-                SET quantity = ? 
-                WHERE id = ?
-            ");
-            $stmt->execute([$newQuantity, $itemId]);
-            
-            $this->db->commit();
             return true;
         } catch (Exception $e) {
-            $this->db->rollBack();
-            error_log('Error updating quantity: ' . $e->getMessage());
-            throw $e; // Re-throw exception to be caught in controller
+            error_log('Error updating cart item quantity: ' . $e->getMessage());
+            return false;
         }
     }
+    
     
 }
