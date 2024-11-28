@@ -59,11 +59,14 @@ body {
     background: url('../images/backgrounds/store-bg-no-clerk.png') no-repeat center center fixed;
     background-size: cover;
     color: white;
+    overflow: hidden;
+    height: 100vh;
 }
 
 .admin-container {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .currency-icon-small {
@@ -215,6 +218,7 @@ body {
     flex-grow: 1;
     padding: 2rem;
     background: rgba(0, 0, 0, 0.8);
+    overflow-y: auto;
 }
 
 .content-view {
