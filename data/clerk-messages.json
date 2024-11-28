@@ -3,7 +3,10 @@
     "Welcome to QueryKicks, {username}! Ready to find your perfect pair?",
     "Hey {username}! Great to see you in the store!",
     "Welcome back {username}! Let's find some awesome kicks!",
-    "What's up {username}! Check out our latest arrivals!"
+    "What's up {username}! Check out our latest arrivals!",
+    "Take a look at our latest shoes!",
+    "Hey {username}! Ready to upgrade your style?",
+    "Looking for something special? We've got you covered!"
 ],
 "idle": [
     "Looking for something specific, {username}?",
@@ -12,6 +15,12 @@
     "Don't forget to check our special offers!",
     "Take your time browsing, {username}!",
     "Need any recommendations?"
+],
+"cartMessages": [
+    "Almost there, {username}! Ready to complete your purchase?",
+    "Great choice, {username}! Let’s get your items checked out.",
+    "Your cart is looking good, {username}! Proceed to secure checkout.",
+    "Ready to finalize your order, {username}? Let’s go!"
 ],
 "addToCart": [
     "Great choice, {username}! Those will look awesome!",

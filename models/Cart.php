@@ -1,4 +1,27 @@
 <?php
+/**
+ * Cart.php: This file defines the Cart model, which encapsulates the logic for managing 
+ * shopping cart operations in the Query Kicks application.
+ *
+ * The Cart class:
+ *  - Provides methods to add, update, retrieve, and remove items from a user's shopping cart.
+ *  - Handles cart creation for users who do not yet have a cart.
+ *  - Calculates the total cost of items in the cart.
+ *  - Utilizes prepared statements with PDO for secure database interactions.
+ *
+ * Features:
+ *  - `getCartItems($userId)`: Retrieves all items in the user's cart with product details.
+ *  - `getCartItemByProductId($userId, $productId)`: Fetches a specific cart item by product ID.
+ *  - `addItem($userId, $productId, $quantity)`: Adds a product to the user's cart.
+ *  - `removeItem($userId, $cartItemId)`: Removes an item from the user's cart.
+ *  - `getCartTotal($userId)`: Calculates the total cost of items in the user's cart.
+ *  - `updateQuantity($userId, $cartItemId, $newQuantity)`: Updates the quantity of a cart item.
+ *  - `getOrCreateCart($userId)`: Internal method to retrieve or create a cart for the user.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 class Cart {
     private $db;
     private $table = 'cart_items';

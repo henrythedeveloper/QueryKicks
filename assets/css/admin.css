@@ -10,8 +10,8 @@
 }
 
 body {
-    font-family: 'PressStart2P', cursive;
-    background: url('../images/backgrounds/store-bg.webp') no-repeat center center fixed;
+    font-family: 'PressStart2P', sans-serif;
+    background: url('../images/backgrounds/store-bg-no-clerk.png') no-repeat center center fixed;
     background-size: cover;
     color: white;
 }

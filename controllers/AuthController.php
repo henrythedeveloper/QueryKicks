@@ -1,4 +1,27 @@
 <?php
+/**
+ * AuthController.php: This file defines the AuthController, which handles user 
+ * authentication and account management for the Query Kicks application.
+ *
+ * The AuthController class:
+ *  - Manages user authentication, including login, logout, registration, password reset, 
+ *    and email verification.
+ *  - Handles AJAX requests for authentication-related actions.
+ *  - Integrates with the User model for secure database interactions.
+ *
+ * Features:
+ *  - `login($email, $password)`: Authenticates a user and initializes session variables.
+ *  - `register($name, $email, $password)`: Registers a new user after validating their email.
+ *  - `checkEmail($email)`: Checks if an email is already registered in the system.
+ *  - `resetPassword($email, $newPassword)`: Updates the user's password.
+ *  - `logout()`: Logs out the user and destroys their session.
+ *  - `handleRequest()`: Routes incoming HTTP requests to the appropriate action.
+ *  - `handleAjaxRequest()`: Processes AJAX requests for authentication actions.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/User.php';

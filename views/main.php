@@ -1,4 +1,35 @@
 <?php
+/**
+ * main.php: This file serves as the main store view for the Query Kicks application. 
+ * It displays products, the shopping cart, and other store-related content dynamically 
+ * based on user interaction.
+ *
+ * Features:
+ *  - **Dynamic Tabs**: Includes tabs for Products, Cart, About, Contact, and FAQ, 
+ *    allowing users to navigate between different views.
+ *  - **Products View**: Displays the list of available products.
+ *  - **Cart View**: Shows the items in the user's cart with options to modify or checkout.
+ *  - **About, Contact, and FAQ Views**: Provide additional information about the store.
+ *  - **Clerk Messages**: Dynamically displays greeting messages and other prompts 
+ *    personalized with the user's name.
+ *  - **Add Money Modal**: Allows users to add funds to their account balance.
+ *  - **Header and Footer**: Includes reusable header and footer layouts.
+ *
+ * Linked Assets:
+ *  - `/querykicks/assets/css/main.css`: Stylesheet for the main store page layout.
+ *  - `/querykicks/assets/js/main.js`: Handles tab switching, modal functionality, 
+ *    and interactions with clerk messages.
+ *
+ * Data Dependencies:
+ *  - `$products`: An array of product data fetched by the controller.
+ *  - `$greeting`: A personalized greeting message for the user.
+ *  - `$clerkMessagesJson`: JSON-encoded data for dynamic clerk messages.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
+
 if (!isset($products)) {
     // Redirect to storecontroller.php if $products is not set
     header('Location: /querykicks/controllers/storecontroller.php');
@@ -76,7 +107,7 @@ if (!isset($products)) {
             <h2>Add Money to Balance</h2>
             <form id="add-money-form">
                 <div class="form-group">
-                    <label for="amount">Amount ($)</label>
+                    <label for="amount">Amount (<i class="currency-icon-modal"></i>)</label>
                     <input type="number" id="amount" name="amount" step="0.01" required>
                 </div>
                 <button type="submit" class="primary-btn">Add Money</button>

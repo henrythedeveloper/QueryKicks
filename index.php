@@ -1,4 +1,23 @@
 <?php
+/** 
+ * index.php: This file serves as the entry point and routing logic for the Query Kicks application. 
+ * It checks the user's session status and redirects to the appropriate controller based on their role 
+ * or authentication status.
+ *
+ * The routing logic handles:
+ *  - Root paths ('/', '/querykicks', '/querykicks/') to redirect users to specific controllers 
+ *    based on session and role information.
+ *  - Logout functionality that clears the session and redirects to the authentication page.
+ *  - A default route that redirects to the home page or handles 404 errors.
+ *
+ * Features:
+ *  - Starts a user session and determines the appropriate controller for the request.
+ *  - Handles user logout by clearing session variables, destroying cookies, and redirecting.
+ *  - Serves as a centralized router for managing user flow in the application.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
 session_start();
 
 // Base path configuration

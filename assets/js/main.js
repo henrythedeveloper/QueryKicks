@@ -41,7 +41,7 @@ function updateClerkMessage(type) {
             const personalizedMessage = message.replace('{username}', getUsername());
             clerkMessageElement.textContent = personalizedMessage;
         } else {
-            clerkMessageElement.textContent = "How can I help you today?";
+            clerkMessageElement.textContent = "How can I help you today";
         }
     }
 }
@@ -93,13 +93,13 @@ function openTab(button, tabName) {
     // Map tab names to message types
     const tabMessageTypes = {
         'shoes': 'greetings',
-        'cart': 'cart',
+        'cart': 'cartMessages',
         'about': 'about',
         'contact': 'contact',
         'faq': 'faq'
     };
 
-    const messageType = tabMessageTypes[tabName] || 'greetings';
+    const messageType = tabMessageTypes[tabName] || 'idle';
     updateClerkMessage(messageType);
 }
 
@@ -249,7 +249,7 @@ async function handleQuantityUpdate(e) {
                 change: change
             })
         });
-
+        
         const data = await response.json();
         if (data.success) {
             // Update the quantity displayed
@@ -257,28 +257,30 @@ async function handleQuantityUpdate(e) {
             let currentQuantity = parseInt(quantitySpan.textContent);
             currentQuantity += change;
             quantitySpan.textContent = currentQuantity;
-
+            
             // Update the subtotal for the item
             const priceElement = e.target.closest('.cart-item-details').querySelector('.price');
-            const priceText = priceElement.textContent.replace('$', '').replace(/,/g, '');
+            const priceText = priceElement.textContent.replace(/[^\d.-]/g, ''); // Remove any non-numeric characters except decimal
             const price = parseFloat(priceText);
             const subtotalElement = e.target.closest('.cart-item-details').querySelector('.subtotal');
-            const newSubtotal = (price * currentQuantity).toFixed(2);
-            subtotalElement.textContent = `Subtotal: $${numberWithCommas(newSubtotal)}`;
-
+            const newSubtotal = numberWithCommas((price * currentQuantity).toFixed(2));
+            
+            // Create the currency icon element
+            const currencyIcon = '<i class="currency-icon-modal"></i>';
+            subtotalElement.innerHTML = `Subtotal: ${currencyIcon}${newSubtotal}`;
+            
             // Update the total in the order summary
             updateCartTotal();
-
+            
             // Disable decrease button if quantity is 1
             const quantityControls = e.target.closest('.quantity-controls');
             const decreaseButton = quantityControls.querySelector('.quantity-btn.decrease');
             decreaseButton.disabled = currentQuantity <= 1;
-
+            
             // Disable increase button if quantity reaches stock limit
             const stockLimit = parseInt(quantityControls.getAttribute('data-stock-limit'));
             const increaseButton = quantityControls.querySelector('.quantity-btn.increase');
             increaseButton.disabled = currentQuantity >= stockLimit;
-
         } else {
             alert(data.message || 'Failed to update quantity');
         }
@@ -468,17 +470,18 @@ function updateCartTotal() {
     const cartItems = document.querySelectorAll('.cart-item');
     cartItems.forEach(item => {
         const quantity = parseInt(item.querySelector('.quantity').textContent);
-        const priceText = item.querySelector('.price').textContent.replace('$', '').replace(/,/g, '');
+        const priceText = item.querySelector('.price').textContent.replace(/[^\d.-]/g, '');
         const price = parseFloat(priceText);
         total += quantity * price;
     });
-
+    
     // Update the total in the receipt preview
     const totalElement = document.querySelector('.receipt-total span');
     if (totalElement) {
-        totalElement.textContent = `$${numberWithCommas(total.toFixed(2))}`;
+        const currencyIcon = '<i class="currency-icon-modal"></i>';
+        totalElement.innerHTML = `${currencyIcon}${numberWithCommas(total.toFixed(2))}`;
     }
-
+    
     // Update the data-total attribute on the checkout button
     const checkoutBtn = document.querySelector('.checkout-btn');
     if (checkoutBtn) {

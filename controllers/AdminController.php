@@ -1,4 +1,32 @@
 <?php
+/**
+ * AdminController.php: This file defines the AdminController, which handles 
+ * administrative tasks for the Query Kicks application, such as managing products, 
+ * users, and dashboard data.
+ *
+ * The AdminController class:
+ *  - Provides functionality for administrators to perform CRUD operations on products.
+ *  - Allows administrators to manage users, including updating user balances.
+ *  - Retrieves dashboard statistics for administrative insights.
+ *  - Handles AJAX requests for administrative actions.
+ *
+ * Features:
+ *  - `handleRequest()`: Routes incoming HTTP requests to the appropriate action.
+ *  - `getDashboardData()`: Retrieves total product and user counts for the dashboard.
+ *  - `getProducts()`: Retrieves all products.
+ *  - `getProduct($id)`: Fetches a single product by ID.
+ *  - `addProduct()`: Adds a new product to the database, including image upload.
+ *  - `updateProduct()`: Updates an existing product, with optional image upload.
+ *  - `deleteProduct($id)`: Deletes a product by ID.
+ *  - `getUsers()`: Retrieves a list of all users.
+ *  - `addUserMoney()`: Adds money to a user's balance.
+ *  - `sendResponse($data)`: Sends a JSON response for AJAX requests.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
+
 session_start(); 
 
 $productPath = __DIR__ . '/../models/Product.php';

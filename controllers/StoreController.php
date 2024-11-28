@@ -1,4 +1,34 @@
 <?php
+/**
+ * StoreController.php: This file defines the StoreController, which handles the main logic 
+ * for managing the store's operations in the Query Kicks application.
+ *
+ * The StoreController class:
+ *  - Manages user interactions such as viewing products, adding/removing items from the cart,
+ *    updating cart quantities, checking out, and interacting with the virtual store clerk.
+ *  - Integrates models (Product, Cart) and other resources (e.g., clerk messages) to handle 
+ *    dynamic user requests.
+ *  - Handles both synchronous page rendering and AJAX requests for better user experience.
+ *
+ * Features:
+ *  - `handleRequest()`: Routes incoming HTTP requests to appropriate actions.
+ *  - `renderStore()`: Renders the main store page with product and cart data.
+ *  - `handleAction($action)`: Dispatches AJAX requests to specific action handlers.
+ *  - AJAX Actions:
+ *      - `loadProducts`: Fetches all available products.
+ *      - `addToCart`: Adds an item to the cart.
+ *      - `removeFromCart`: Removes an item from the cart.
+ *      - `getCart`: Retrieves cart details with rendered HTML.
+ *      - `updateQuantity`: Updates the quantity of an item in the cart.
+ *      - `checkout`: Processes cart checkout, updates stock, and clears the cart.
+ *      - `addMoney`: Adds virtual funds to the user's account.
+ *      - `getClerkMessage`: Retrieves a random message from the store clerk.
+ *  - Utility methods for JSON responses, error handling, and clerk message retrieval.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 session_start();
 $productPath = __DIR__ . '/../models/Product.php';
 $dbPath = __DIR__ . '/../config/database.php';

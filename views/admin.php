@@ -1,4 +1,29 @@
 <?php
+/**
+ * admin.php: This file serves as the admin dashboard view for the Query Kicks application. 
+ * It provides an interface for administrators to manage products, users, and view application statistics.
+ *
+ * Features:
+ *  - **Sidebar Navigation**: Allows navigation between Dashboard, Products, and Users views.
+ *  - **Dashboard View**: Displays statistics such as total products and users.
+ *  - **Products View**: Enables administrators to manage the product inventory with options to add, edit, or delete products.
+ *  - **Users View**: Provides tools to manage user accounts and view user information.
+ *  - **Add/Edit Product Modal**: A modal form for creating or updating product information, including image upload functionality.
+ *  - **Logout**: Allows administrators to securely log out of the admin panel.
+ *
+ * Linked Assets:
+ *  - `/querykicks/assets/css/admin.css`: Stylesheet for the admin dashboard layout and components.
+ *  - `/querykicks/assets/js/admin.js`: JavaScript for handling admin interactions like loading data, tab switching, and form submission.
+ *  - `/querykicks/assets/js/notification.js`: Manages notifications or feedback for admin actions.
+ *
+ * Data Dependencies:
+ *  - Relies on session data to validate the admin's role and display personalized information.
+ *  - Dynamic content is loaded into views using AJAX calls from `admin.js`.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -89,7 +114,7 @@ error_log('Admin view loaded. Session data: ' . print_r($_SESSION, true));
             <span class="close-modal">&times;</span>
             <h2 id="modal-title">Add New Product</h2>
             <form id="product-form" enctype="multipart/form-data">
-                <input type="hidden" id="product-id name="id">
+                <input type="hidden" id="product-id" name="id">
                 <div class="form-group">
                     <label for="product-name">Name</label>
                     <input type="text" id="product-name" name="name" required>

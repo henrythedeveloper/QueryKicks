@@ -1,4 +1,23 @@
 <?php
+/**
+ * User.php: This file defines the User model, which encapsulates the logic for 
+ * managing user data and authentication in the Query Kicks application.
+ *
+ * The User class:
+ *  - Handles user login, registration, and password updates.
+ *  - Provides methods to check if an email already exists in the database.
+ *  - Utilizes prepared statements with PDO for secure database operations.
+ *
+ * Features:
+ *  - `login($email, $password)`: Authenticates a user using email and password.
+ *  - `register($name, $email, $password)`: Registers a new user with hashed passwords.
+ *  - `updatePassword($email, $newPassword)`: Updates the user's password securely.
+ *  - `emailExists($email)`: Checks if a given email is already registered.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 class User {
     private $conn;
     private $table = "users";
