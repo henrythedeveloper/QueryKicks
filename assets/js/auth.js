@@ -1,3 +1,47 @@
+/**
+ * auth.js: This file defines the `AuthManager` class, which manages user authentication 
+ * operations such as login, registration, and password reset for the Query Kicks application. 
+ * It provides a seamless user experience by handling form submissions, interacting with the 
+ * server via AJAX, and dynamically updating the UI based on server responses.
+ *
+ * The following functionalities are included:
+ * 
+ * 1. **Initialization**:
+ *    - Sets up event listeners for authentication forms.
+ *    - Manages dynamic form switching between login, registration, and password reset.
+ * 
+ * 2. **Authentication Operations**:
+ *    - `handleLogin(e)`: Submits login credentials and redirects on success.
+ *    - `handleRegister(e)`: Submits registration details and transitions to the login form on success.
+ *    - `handleForgotPassword(e)`: Handles password reset operations in two stages:
+ *        - Step 1: Checks if the provided email exists in the system.
+ *        - Step 2: Resets the password if the email is valid and a new password is provided.
+ * 
+ * 3. **UI Management**:
+ *    - `showForm(formType)`: Toggles between login, registration, and forgot password forms.
+ *    - `showError(message)`: Displays error messages for the user.
+ * 
+ * 4. **Server Communication**:
+ *    - `sendRequest(formData)`: Sends asynchronous requests to the server's authentication controller 
+ *      using `fetch` and processes JSON responses.
+ * 
+ * 5. **Global Integration**:
+ *    - Initializes an `AuthManager` instance when the DOM is fully loaded.
+ *    - Exposes a global `showForm(formType)` function for seamless form toggling.
+ * 
+ * Features:
+ *  - Modular structure for maintainability and scalability.
+ *  - Encapsulation of authentication logic and UI updates.
+ *  - Error handling for network or server issues during authentication.
+ * 
+ * Dependencies:
+ *  - Server-side authentication endpoint: `/querykicks/controllers/AuthController.php`
+ *  - HTML form elements: `login-form`, `register-form`, and `forgot-form`.
+ * 
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 class AuthManager {
     constructor() {
         this.setupEventListeners();

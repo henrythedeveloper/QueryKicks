@@ -1,3 +1,44 @@
+/**
+ * main.css: This file defines the styles for the Query Kicks application. 
+ * It includes both base styles and specific styles for various components of the app, 
+ * ensuring a cohesive and immersive retro theme.
+ * 
+ * Key Features:
+ * 
+ * 1. **Font and Base Styles**:
+ *    - Custom font 'PressStart2P' for a retro aesthetic.
+ *    - Background image and responsive layout.
+ * 
+ * 2. **Header and Footer**:
+ *    - Fixed header with a speech bubble for the clerk.
+ *    - Sticky footer with site-wide status and branding.
+ * 
+ * 3. **Notification System**:
+ *    - Dynamic notification styles with animation for success, error, and warning types.
+ * 
+ * 4. **Main Content Area**:
+ *    - Styles for navigation, tabbed content, and layout consistency.
+ * 
+ * 5. **Interactive Components**:
+ *    - Cart, product grid, and modal styles for seamless user interactions.
+ * 
+ * 6. **Custom Animations**:
+ *    - Floating effect for the clerk speech bubble.
+ *    - Neon flicker for logos and spinning animations for icons.
+ * 
+ * 7. **Accessibility and Usability**:
+ *    - Custom scrollbars for better user experience.
+ *    - Hover effects and transitions for buttons and cards.
+ * 
+ * Dependencies:
+ * - Font: 'PressStart2P', hosted locally in the `fonts` directory.
+ * - Assets: Icons and images in the `assets` directory.
+ * 
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
+
 @font-face {
     font-family: 'PressStart2P';
     src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');

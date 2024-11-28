@@ -79,5 +79,17 @@
     "Glad you took a moment to learn about QueryKicks, {username}!",
     "What did you think of our story, {username}? We’d love to hear your thoughts!",
     "Thanks for exploring our About page, {username}! Let us know if there’s more you want to know."
+],
+"increaseQuantity": [
+    "Adding more to your cart? These are flying off the shelves, {username}!",
+    "Great choice! These kicks are definitely worth stocking up on.",
+    "The more the merrier! Your shoe game is getting stronger, {username}.",
+    "Can't get enough? I don't blame you - these are some sweet kicks!"
+],
+"decreaseQuantity": [
+    "No problem {username}, we'll adjust that quantity for you.",
+    "Sometimes less is more! Let me update that for you.",
+    "Taking it down a notch? Got you covered, {username}.",
+    "Adjusting your cart? We'll make sure it's just right."
 ]
 }

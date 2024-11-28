@@ -1,3 +1,44 @@
+/**
+ * auth.css: This file defines the styles for the authentication pages in the Query Kicks application.
+ * It includes the layout and design for login, registration, and forgot password forms, 
+ * with a consistent retro aesthetic and animations to enhance the user experience.
+ *
+ * Key Features:
+ * 
+ * 1. **Font and Background**:
+ *    - Uses 'PressStart2P' for a pixelated retro theme.
+ *    - Animated background image for immersive styling.
+ * 
+ * 2. **Auth Container**:
+ *    - Centrally aligned container for authentication forms.
+ *    - Semi-transparent background for better focus on form elements.
+ * 
+ * 3. **Logo Animation**:
+ *    - Neon flicker animation for the logo to align with the retro vibe.
+ * 
+ * 4. **Form and Buttons**:
+ *    - Styled input fields with responsive focus and hover effects.
+ *    - Consistent button styles with hover transitions.
+ * 
+ * 5. **Error Handling**:
+ *    - Clear and visible error messages with vibrant red styling.
+ * 
+ * 6. **Notification System**:
+ *    - Dynamic notification styles for success, error, and warning messages.
+ *    - Smooth animations for notification entry and exit.
+ * 
+ * 7. **Accessibility and Usability**:
+ *    - Simple and clear structure for effortless navigation.
+ *    - Animations for smoother form transitions.
+ *
+ * Dependencies:
+ * - Font: 'PressStart2P', hosted locally in the `fonts` directory.
+ * - Assets: Background image and icons in the `images` directory.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 @font-face {
     font-family: 'PressStart2P';
     src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');

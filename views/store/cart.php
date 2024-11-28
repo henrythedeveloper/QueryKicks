@@ -20,10 +20,6 @@
  *      - `stock`: Available stock for the product.
  *      - `image_url`: Path to the product image.
  *
- * Linked Assets:
- *  - Expected to use CSS for styling cart items and the receipt preview.
- *  - JavaScript should handle quantity adjustments, item removal, and checkout actions.
- *
  * Authors: Henry Le and Brody Sprouse
  * Version: 20241203
  */
@@ -50,16 +46,16 @@
                         </div>
                         <div class="cart-item-details">
                             <h3><?= htmlspecialchars($item['name']) ?></h3>
-                            <div class="price-quantity"
-                                data-stock-limit="<?= htmlspecialchars($item['stock']) ?>">
+                            <div class="price-quantity">
                                 <p class="price"><i class="currency-icon-modal"></i><?= number_format($item['price'], 2) ?></p>
-                                <div class="quantity-controls">
+                                <div class="quantity-controls" data-stock-limit="<?= htmlspecialchars($item['stock']) ?>">
                                     <button type="button" class="quantity-btn decrease"
                                             data-item-id="<?= htmlspecialchars($item['cart_item_id'] ?? $item['id']) ?>"
                                             <?= $item['quantity'] <= 1 ? 'disabled' : '' ?>>-</button>
                                     <span class="quantity"><?= htmlspecialchars($item['quantity']) ?></span>
                                     <button type="button" class="quantity-btn increase"
-                                            data-item-id="<?= htmlspecialchars($item['cart_item_id'] ?? $item['id']) ?>">+</button>
+                                            data-item-id="<?= htmlspecialchars($item['cart_item_id'] ?? $item['id']) ?>"
+                                            <?= $item['quantity'] >= $item['stock'] ? 'disabled' : '' ?>>+</button>
                                 </div>
                             </div>
                             <p class="stock-info">Available stock: <?= htmlspecialchars($item['stock']) ?></p>

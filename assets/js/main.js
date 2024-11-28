@@ -1,511 +1,537 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all functionality
-    initializeTabs();
-    initializeCart();
-    initializeMoneyModal();
-    setupLogout();
-    initializeFAQ();
-    initializeIdleTimer(); 
-});
+/**
+ * main.js: This file serves as the central initialization and orchestration
+ * of the Query Kicks application, connecting various modular classes and utilities
+ * to create a seamless user experience. The main functionalities include tab navigation,
+ * cart management, money handling, idle timer, and logout handling.
+ * 
+ * The following components are included:
+ * 
+ * 1. **Constants**:
+ *    - `API_ENDPOINTS`: Defines reusable API endpoints for the application.
+ * 
+ * 2. **Utilities**:
+ *    - `Utilities` class: Provides helper methods like currency formatting and
+ *      creating currency icons for consistent rendering.
+ * 
+ * 3. **Services**:
+ *    - `ApiService` class: A reusable service for making API requests with
+ *      support for GET and POST methods.
+ * 
+ * 4. **Features**:
+ *    - `IdleTimer`: Tracks user inactivity and updates the virtual store clerk's messages.
+ *    - `TabManager`: Handles tab navigation and displays relevant content for each tab.
+ *    - `CartManager`: Manages cart functionality, including adding/removing items,
+ *      updating quantities, and handling checkout processes.
+ *    - `MoneyManager`: Manages the modal for adding virtual currency and updates
+ *      the user's balance in real time.
+ *    - `MessageManager`: Updates the virtual store clerk's messages dynamically
+ *      based on user actions or application state.
+ * 
+ * 5. **Application**:
+ *    - `StoreApp` class: Initializes and orchestrates all features, ensuring a cohesive
+ *      user experience. Handles logout functionality and the FAQ section.
+ * 
+ * Key Features:
+ *  - Modular structure with reusable classes and services.
+ *  - Encapsulated functionality for better readability and maintainability.
+ *  - Support for AJAX-based updates to enhance user interactivity.
+ *  - Dynamic message handling for the virtual store clerk.
+ * 
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
 
-let idleTime = 0;
-let idleInterval;
 
-function initializeIdleTimer() {
-    // Increment the idle time counter every minute.
-    idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+// constants.js
+const API_ENDPOINTS = {
+    STORE: '/querykicks/controllers/StoreController.php',
+    AUTH: '/querykicks/controllers/AuthController.php'
+};
 
-    // Zero the idle timer on mouse movement or key press.
-    document.addEventListener('mousemove', resetIdleTimer);
-    document.addEventListener('keypress', resetIdleTimer);
-}
+// utils.js
+class Utilities {
+    static formatCurrency(amount) {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-function timerIncrement() {
-    idleTime++;
-    if (idleTime >= 1) { // The idle time threshold 
-        updateClerkMessage('idle');
-        idleTime = 0; // Reset idle time after displaying the message
+    static createCurrencyIcon(size = 'small') {
+        return `<i class="currency-icon-${size}"></i>`;
     }
 }
 
-function resetIdleTimer() {
-    idleTime = 0;
-}
-
-function updateClerkMessage(type) {
-    const clerkMessageElement = document.querySelector('.clerk-speech p');
-    if (clerkMessageElement) {
-        const messages = clerkMessages[type];
-        if (messages && messages.length > 0) {
-            const message = getRandomMessage(messages);
-            const personalizedMessage = message.replace('{username}', getUsername());
-            clerkMessageElement.textContent = personalizedMessage;
-        } else {
-            clerkMessageElement.textContent = "How can I help you today";
-        }
-    }
-}
-
-function getRandomMessage(messagesArray) {
-    return messagesArray[Math.floor(Math.random() * messagesArray.length)];
-}
-
-function getUsername() {
-    return username || 'Shopper';
-}
-
-// Tab Navigation
-function initializeTabs() {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const view = button.getAttribute('data-view');
-            openTab(button, view);
-        });
-    });
-
-    // Set default tab
-    const defaultTab = document.querySelector('.tab-button.active');
-    if (defaultTab) {
-        const view = defaultTab.getAttribute('data-view');
-        openTab(defaultTab, view);
-    }
-}
-
-function openTab(button, tabName) {
-    // Remove active class from all buttons and content
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-
-    // Add active class to clicked button and corresponding content
-    button.classList.add('active');
-    const tabContent = document.getElementById(`${tabName}`);
-    if (tabContent) {
-        tabContent.classList.add('active');
-    }
-
-    // Map tab names to message types
-    const tabMessageTypes = {
-        'shoes': 'greetings',
-        'cart': 'cartMessages',
-        'about': 'about',
-        'contact': 'contact',
-        'faq': 'faq'
-    };
-
-    const messageType = tabMessageTypes[tabName] || 'idle';
-    updateClerkMessage(messageType);
-}
-
-// Cart Functions
-function initializeCart() {
-    
-    // Add to cart buttons
-    const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', handleAddToCart);
-    });
-    
-    // Quantity buttons
-    const quantityButtons = document.querySelectorAll('.quantity-btn');
-    quantityButtons.forEach(button => {
-        button.addEventListener('click', handleQuantityUpdate);
-    });
-    
-    // Remove buttons
-    const removeButtons = document.querySelectorAll('.remove-from-cart');
-    removeButtons.forEach(button => {
-        button.addEventListener('click', handleRemoveFromCart);
-    });
-    
-    // Checkout button
-    const checkoutBtn = document.querySelector('.checkout-btn');
-    if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', handleCheckout);
-    }
-}
-
-async function handleAddToCart(e) {
-    e.preventDefault();
-
-    const button = e.target;
-    const productId = button.getAttribute('data-product-id');
-    const stock = parseInt(button.getAttribute('data-stock'), 10);
-
-    // Get the quantity input associated with this product
-    const productCard = button.closest('.product-card');
-    const quantityInput = productCard.querySelector('.quantity-input');
-    const quantity = parseInt(quantityInput.value, 10);
-
-    // Validate quantity
-    if (isNaN(quantity) || quantity < 1) {
-        alert('Please enter a valid quantity.');
-        return;
-    }
-
-    // Check if the quantity exceeds the stock
-    if (quantity > stock) {
-        alert('Cannot add more items than are in stock.');
-        return;
-    }
-
-    try {
-        const response = await fetch('/querykicks/controllers/StoreController.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'addToCart',
-                product_id: productId,
-                quantity: quantity
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            // Update the cart display
-            updateCartDisplay();
-
-            // Update clerk message
-            updateClerkMessage('addToCart');
-        } else {
-            alert(data.message || 'Failed to add item to cart');
-            updateClerkMessage('error');
-        }
-    } catch (error) {
-        alert('Error adding item to cart. Please try again.');
-        updateClerkMessage('error');
-    }
-}
-
-
-async function handleRemoveFromCart(e) {
-    e.preventDefault();
-
-    const cartItemId = e.target.getAttribute('data-item-id');
-
-    if (!cartItemId) {
-        alert('Invalid cart item.');
-        return;
-    }
-
-    try {
-        const response = await fetch('/querykicks/controllers/StoreController.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'removeFromCart',
-                cart_item_id: cartItemId
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            // Update the cart display
-            updateCartDisplay();
-
-            // Update clerk message
-            updateClerkMessage('removeFromCart');
-        } else {
-            alert(data.message || 'Failed to remove item from cart');
-            updateClerkMessage('error');
-        }
-    } catch (error) {
-        alert('Error removing item from cart. Please try again.');
-        updateClerkMessage('error');
-    }
-}
-
-
-function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-async function handleQuantityUpdate(e) {
-    const itemId = e.target.getAttribute('data-item-id');
-    const isIncrease = e.target.classList.contains('increase');
-    const change = isIncrease ? 1 : -1;
-    
-    try {
-        const response = await fetch('/querykicks/controllers/StoreController.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'updateQuantity',
-                item_id: itemId,
-                change: change
-            })
-        });
-        
-        const data = await response.json();
-        if (data.success) {
-            // Update the quantity displayed
-            const quantitySpan = e.target.closest('.quantity-controls').querySelector('.quantity');
-            let currentQuantity = parseInt(quantitySpan.textContent);
-            currentQuantity += change;
-            quantitySpan.textContent = currentQuantity;
-            
-            // Update the subtotal for the item
-            const priceElement = e.target.closest('.cart-item-details').querySelector('.price');
-            const priceText = priceElement.textContent.replace(/[^\d.-]/g, ''); // Remove any non-numeric characters except decimal
-            const price = parseFloat(priceText);
-            const subtotalElement = e.target.closest('.cart-item-details').querySelector('.subtotal');
-            const newSubtotal = numberWithCommas((price * currentQuantity).toFixed(2));
-            
-            // Create the currency icon element
-            const currencyIcon = '<i class="currency-icon-modal"></i>';
-            subtotalElement.innerHTML = `Subtotal: ${currencyIcon}${newSubtotal}`;
-            
-            // Update the total in the order summary
-            updateCartTotal();
-            
-            // Disable decrease button if quantity is 1
-            const quantityControls = e.target.closest('.quantity-controls');
-            const decreaseButton = quantityControls.querySelector('.quantity-btn.decrease');
-            decreaseButton.disabled = currentQuantity <= 1;
-            
-            // Disable increase button if quantity reaches stock limit
-            const stockLimit = parseInt(quantityControls.getAttribute('data-stock-limit'));
-            const increaseButton = quantityControls.querySelector('.quantity-btn.increase');
-            increaseButton.disabled = currentQuantity >= stockLimit;
-        } else {
-            alert(data.message || 'Failed to update quantity');
-        }
-    } catch (error) {
-        alert('Error updating quantity. Please try again. ' + error.message);
-    }
-}
-
-async function handleCheckout(e) {
-    const total = e.target.getAttribute('data-total');
-    
-    try {
-        const response = await fetch('/querykicks/controllers/StoreController.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'checkout',
-                total: total
-            })
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            // Update the balance display
-            updateBalance(data.newBalance);
-
-            updateClerkMessage('checkout');
-            location.reload(); // Refresh the page to show empty cart
-        } else {
-            alert(data.message || 'Checkout failed');
-            updateClerkMessage('error');
-        }
-    } catch (error) {
-        alert('Error during checkout. Please try again. ' + error.message);
-        updateClerkMessage('error');
-    }
-}
-
-// Money Modal Functions
-function initializeMoneyModal() {
-
-    // Get modal elements
-    const addMoneyBtn = document.querySelector('.add-money-btn');
-    const modal = document.getElementById('add-money-modal');
-    const closeBtn = document.querySelector('.close-modal');
-    const form = document.getElementById('add-money-form');
-
-    if (addMoneyBtn) {
-        addMoneyBtn.addEventListener('click', () => {
-            modal.style.display = 'block';
-        });
-    }
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-    }
-
-    // Close modal when clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    if (form) {
-        form.addEventListener('submit', handleAddMoney);
-    }
-}
-
-async function handleAddMoney(e) {
-    e.preventDefault();
-
-    const amount = document.getElementById('amount').value;
-    if (!amount || amount <= 0) {
-        alert('Please enter a valid amount');
-        return;
-    }
-
-    try {
-        const response = await fetch('/querykicks/controllers/StoreController.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'addMoney',
-                amount: parseFloat(amount)
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            // Update the balance display immediately
-            const balanceElement = document.querySelector('.balance');
-            const currencyIcon = '<i class="currency-icon-small"></i>';
-            if (balanceElement) {
-                balanceElement.innerHTML = `${currencyIcon}${parseFloat(data.newBalance).toFixed(2)}`;
-                balanceElement.setAttribute('data-balance', data.newBalance);
-            }
-
-            // Close the modal and reset form
-            document.getElementById('add-money-modal').style.display = 'none';
-            document.getElementById('add-money-form').reset();
-            
-            // Show success message
-            alert('Money added successfully!');
-            updateClerkMessage('addMoney');
-        } else {
-            alert(data.message || 'Failed to add money');
-            updateClerkMessage('error');
-        }
-    } catch (error) {
-        alert('Error adding money. Please try again. ' + error.message);
-        updateClerkMessage('error');
-    }
-}
-
-// Logout Function
-function setupLogout() {
-    const logoutBtn = document.querySelector('.logout-button');
-    
-    logoutBtn?.addEventListener('click', async () => {
+// services/ApiService.js
+class ApiService {
+    static async request(endpoint, method = 'GET', data = null) {
         try {
-            const response = await fetch('/querykicks/controllers/AuthController.php', {
-                method: 'POST',
+            const options = {
+                method,
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    action: 'logout'
-                })
+                }
+            };
+            
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+
+            const response = await fetch(endpoint, options);
+            return await response.json();
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
+    }
+}
+
+// features/IdleTimer.js
+class IdleTimer {
+    constructor(timeout = 60000) {
+        this.idleTime = 0;
+        this.timeout = timeout;
+        this.interval = null;
+    }
+
+    initialize() {
+        this.interval = setInterval(() => this.increment(), this.timeout);
+        document.addEventListener('mousemove', () => this.reset());
+        document.addEventListener('keypress', () => this.reset());
+    }
+
+    increment() {
+        this.idleTime++;
+        if (this.idleTime >= 1) {
+            MessageManager.updateClerkMessage('idle');
+            this.reset();
+        }
+    }
+
+    reset() {
+        this.idleTime = 0;
+    }
+}
+
+// features/TabManager.js
+class TabManager {
+    constructor() {
+        this.tabMessageTypes = {
+            'shoes': 'greetings',
+            'cart': 'cartMessages',
+            'about': 'about',
+            'contact': 'contact',
+            'faq': 'faq'
+        };
+    }
+
+    initialize() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const view = button.getAttribute('data-view');
+                this.openTab(button, view);
+            });
+        });
+
+        const defaultTab = document.querySelector('.tab-button.active');
+        if (defaultTab) {
+            const view = defaultTab.getAttribute('data-view');
+            this.openTab(defaultTab, view);
+        }
+    }
+
+    openTab(button, tabName) {
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        button.classList.add('active');
+        const tabContent = document.getElementById(tabName);
+        if (tabContent) {
+            tabContent.classList.add('active');
+        }
+
+        MessageManager.updateClerkMessage(this.tabMessageTypes[tabName] || 'idle');
+    }
+}
+
+// features/CartManager.js
+class CartManager {
+    constructor() {
+        this.isProcessing = false;
+        this.pendingRequest = null;
+    }
+
+    initialize() {
+        this.initializeButtons();
+    }
+
+    initializeButtons() {
+        document.querySelectorAll('.add-to-cart-button').forEach(button => {
+            button.addEventListener('click', this.handleAddToCart.bind(this));
+        });
+
+        document.querySelectorAll('.quantity-btn').forEach(button => {
+            button.addEventListener('click', this.handleQuantityUpdate.bind(this));
+        });
+
+        document.querySelectorAll('.remove-from-cart').forEach(button => {
+            button.addEventListener('click', this.handleRemoveFromCart.bind(this));
+        });
+
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener('click', this.handleCheckout.bind(this));
+        }
+    }
+
+    async handleAddToCart(e) {
+        e.preventDefault();
+        if (this.isProcessing) return;
+
+        const button = e.target;
+        if (button.disabled) return;
+
+        this.isProcessing = true;
+        button.disabled = true;
+
+        try {
+            const productId = button.getAttribute('data-product-id');
+            const stock = parseInt(button.getAttribute('data-stock'), 10);
+            const quantityInput = button.parentElement.querySelector('.quantity-input');
+            const requestedQuantity = parseInt(quantityInput.value, 10) || 1;
+
+            if (requestedQuantity > stock) {
+                throw new Error('Cannot add more items than are in stock.');
+            }
+
+            const response = await ApiService.request(API_ENDPOINTS.STORE, 'POST', {
+                action: 'addToCart',
+                product_id: productId,
+                quantity: requestedQuantity
             });
 
-            const data = await response.json();
-            if (data.success) {
-                window.location.href = '/querykicks/views/auth.php';
+            if (response.success) {
+                quantityInput.value = 1;
+                await this.updateCartDisplay();
+                MessageManager.updateClerkMessage('addToCart');
+            } else {
+                throw new Error(response.message || 'Failed to add item to cart');
             }
         } catch (error) {
-            alert('Error logging out. Please try again. ' + error.message);
+            alert(error.message);
+            MessageManager.updateClerkMessage('error');
+        } finally {
+            this.isProcessing = false;
+            button.disabled = false;
         }
-    });
-}
-
-// Helper Functions
-function updateBalance(newBalance) {
-    const balanceElement = document.querySelector('.balance');
-    const currencyIcon = '<i class="currency-icon-small"></i>';
-    if (balanceElement) {
-        balanceElement.innerHTML = `${currencyIcon}${parseFloat(newBalance).toFixed(2)}`;
-        balanceElement.setAttribute('data-balance', newBalance);
     }
-}
 
-function updateCartDisplay() {
-    const cartTab = document.getElementById('cart');
-    if (cartTab) {
-        // Fetch updated cart content
-        fetch('/querykicks/controllers/StoreController.php?action=getCart')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    cartTab.innerHTML = data.html;
+    async handleRemoveFromCart(e) {
+        e.preventDefault();
+        if (this.isProcessing) return;
 
-                    // Reinitialize event listeners for new cart content
-                    initializeCart();
-                } else {
-                    alert(data.message || 'Failed to update cart display.');
-                    updateClerkMessage('error');
-                }
-            })
-            .catch(error => {
-                alert('Sorry, we could not update your cart at this time. Please try again later.');
-                updateClerkMessage('error');
-                console.error('Error updating cart display:', error);
+        const button = e.target;
+        if (button.disabled) return;
+
+        this.isProcessing = true;
+        button.disabled = true;
+
+        try {
+            const cartItemId = button.getAttribute('data-item-id');
+            if (!cartItemId) throw new Error('Invalid cart item');
+
+            const response = await ApiService.request(API_ENDPOINTS.STORE, 'POST', {
+                action: 'removeFromCart',
+                cart_item_id: cartItemId
             });
+
+            if (response.success) {
+                await this.updateCartDisplay();
+                MessageManager.updateClerkMessage('removeFromCart');
+            } else {
+                throw new Error(response.message || 'Failed to remove item');
+            }
+        } catch (error) {
+            alert(error.message);
+            MessageManager.updateClerkMessage('error');
+        } finally {
+            this.isProcessing = false;
+            button.disabled = false;
+        }
     }
-}
 
+    async handleQuantityUpdate(e) {
+        e.preventDefault();
+        if (this.isProcessing) return;
 
+        const button = e.target;
+        if (button.disabled) return;
 
-function updateCartTotal() {
-    // Recalculate the total in the cart summary
-    let total = 0;
-    const cartItems = document.querySelectorAll('.cart-item');
-    cartItems.forEach(item => {
-        const quantity = parseInt(item.querySelector('.quantity').textContent);
-        const priceText = item.querySelector('.price').textContent.replace(/[^\d.-]/g, '');
+        this.isProcessing = true;
+
+        try {
+            const itemId = button.getAttribute('data-item-id');
+            const isIncrease = button.classList.contains('increase');
+            const quantitySpan = button.parentElement.querySelector('.quantity');
+            const currentQuantity = parseInt(quantitySpan.textContent, 10);
+            const newQuantity = isIncrease ? currentQuantity + 1 : currentQuantity - 1;
+
+            const response = await ApiService.request(API_ENDPOINTS.STORE, 'POST', {
+                action: 'updateQuantity',
+                item_id: itemId,
+                change: newQuantity
+            });
+
+            if (response.success) {
+                quantitySpan.textContent = newQuantity;
+                this.updateItemSubtotal(button, newQuantity);
+                this.updateQuantityButtons(button.closest('.quantity-controls'), newQuantity);
+                this.updateCartTotal();
+                MessageManager.updateClerkMessage(isIncrease ? 'increaseQuantity' : 'decreaseQuantity');
+            } else {
+                throw new Error(response.message || 'Failed to update quantity');
+            }
+        } catch (error) {
+            alert(error.message);
+            MessageManager.updateClerkMessage('error');
+        } finally {
+            this.isProcessing = false;
+        }
+    }
+
+    async handleCheckout(e) {
+        e.preventDefault();
+        if (this.isProcessing) return;
+
+        const button = e.target;
+        if (button.disabled) return;
+
+        this.isProcessing = true;
+        button.disabled = true;
+
+        try {
+            const total = button.getAttribute('data-total');
+            const response = await ApiService.request(API_ENDPOINTS.STORE, 'POST', {
+                action: 'checkout',
+                total: total
+            });
+
+            if (response.success) {
+                this.updateBalance(response.newBalance);
+                MessageManager.updateClerkMessage('checkout');
+                location.reload();
+            } else {
+                throw new Error(response.message || 'Checkout failed');
+            }
+        } catch (error) {
+            alert(error.message);
+            MessageManager.updateClerkMessage('error');
+        } finally {
+            this.isProcessing = false;
+            button.disabled = false;
+        }
+    }
+
+    async updateCartDisplay() {
+        try {
+            const response = await ApiService.request(`${API_ENDPOINTS.STORE}?action=getCart`);
+            const cartTab = document.getElementById('cart');
+            
+            if (response.success && cartTab) {
+                cartTab.innerHTML = response.html;
+                this.initializeButtons();
+            } else {
+                throw new Error(response.message || 'Failed to update cart display');
+            }
+        } catch (error) {
+            console.error('Error updating cart display:', error);
+            MessageManager.updateClerkMessage('error');
+        }
+    }
+
+    updateItemSubtotal(button, quantity) {
+        const itemDetails = button.closest('.cart-item-details');
+        const priceElement = itemDetails.querySelector('.price');
+        const priceText = priceElement.textContent.replace(/[^\d.-]/g, '');
         const price = parseFloat(priceText);
-        total += quantity * price;
-    });
-    
-    // Update the total in the receipt preview
-    const totalElement = document.querySelector('.receipt-total span');
-    if (totalElement) {
-        const currencyIcon = '<i class="currency-icon-modal"></i>';
-        totalElement.innerHTML = `${currencyIcon}${numberWithCommas(total.toFixed(2))}`;
+        const subtotalElement = itemDetails.querySelector('.subtotal');
+        const newSubtotal = Utilities.formatCurrency((price * quantity).toFixed(2));
+        subtotalElement.innerHTML = `Subtotal: ${Utilities.createCurrencyIcon('modal')}${newSubtotal}`;
     }
-    
-    // Update the data-total attribute on the checkout button
-    const checkoutBtn = document.querySelector('.checkout-btn');
-    if (checkoutBtn) {
-        checkoutBtn.setAttribute('data-total', total.toFixed(2));
+
+    updateQuantityButtons(controls, currentQuantity) {
+        const decreaseButton = controls.querySelector('.quantity-btn.decrease');
+        const increaseButton = controls.querySelector('.quantity-btn.increase');
+        const stockLimit = parseInt(controls.getAttribute('data-stock-limit'));
+
+        decreaseButton.disabled = currentQuantity <= 1;
+        increaseButton.disabled = currentQuantity >= stockLimit;
+    }
+
+    updateCartTotal() {
+        let total = 0;
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const quantity = parseInt(item.querySelector('.quantity').textContent);
+            const priceText = item.querySelector('.price').textContent.replace(/[^\d.-]/g, '');
+            const price = parseFloat(priceText);
+            total += quantity * price;
+        });
+
+        const totalElement = document.querySelector('.receipt-total span');
+        if (totalElement) {
+            totalElement.innerHTML = `${Utilities.createCurrencyIcon('modal')}${Utilities.formatCurrency(total.toFixed(2))}`;
+        }
+
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.setAttribute('data-total', total.toFixed(2));
+        }
+    }
+
+    updateBalance(newBalance) {
+        const balanceElement = document.querySelector('.balance');
+        if (balanceElement) {
+            balanceElement.innerHTML = `${Utilities.createCurrencyIcon('small')}${parseFloat(newBalance).toFixed(2)}`;
+            balanceElement.setAttribute('data-balance', newBalance);
+        }
     }
 }
 
-// FAQ functions
-function initializeFAQ() {
-    const faqItems = document.querySelectorAll('.faq-item');
+// features/MoneyManager.js
+class MoneyManager {
+    initialize() {
+        this.initializeModal();
+        this.initializeForm();
+    }
 
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        question.addEventListener('click', () => {
-            item.classList.toggle('active');
-            const toggleIcon = question.querySelector('.faq-toggle');
-            toggleIcon.textContent = item.classList.contains('active') ? '-' : '+';
+    initializeModal() {
+        const addMoneyBtn = document.querySelector('.add-money-btn');
+        const modal = document.getElementById('add-money-modal');
+        const closeBtn = document.querySelector('.close-modal');
 
-            // Update clerk message when a FAQ item is expanded
-            if (item.classList.contains('active')) {
-                updateClerkMessage('faq');
+        if (addMoneyBtn) {
+            addMoneyBtn.addEventListener('click', () => modal.style.display = 'block');
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => modal.style.display = 'none');
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
             }
         });
-    });
+    }
+
+    initializeForm() {
+        const form = document.getElementById('add-money-form');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const amount = document.getElementById('amount').value;
+                if (!amount || amount <= 0) {
+                    alert('Please enter a valid amount');
+                    return;
+                }
+
+                try {
+                    const response = await ApiService.request(API_ENDPOINTS.STORE, 'POST', {
+                        action: 'addMoney',
+                        amount: parseFloat(amount)
+                    });
+
+                    if (response.success) {
+                        const balanceElement = document.querySelector('.balance');
+                        if (balanceElement) {
+                            balanceElement.innerHTML = `${Utilities.createCurrencyIcon('small')}${parseFloat(response.newBalance).toFixed(2)}`;
+                            balanceElement.setAttribute('data-balance', response.newBalance);
+                        }
+
+                        modal.style.display = 'none';
+                        form.reset();
+                        alert('Money added successfully!');
+                        MessageManager.updateClerkMessage('addMoney');
+                    } else {
+                        throw new Error(response.message || 'Failed to add money');
+                    }
+                } catch (error) {
+                    alert(error.message);
+                    MessageManager.updateClerkMessage('error');
+                }
+            });
+        }
+    }
 }
+// features/MessageManager.js
+class MessageManager {
+    static updateClerkMessage(type) {
+        const clerkMessageElement = document.querySelector('.clerk-speech p');
+        if (clerkMessageElement) {
+            const messages = clerkMessages[type];
+            if (messages?.length) {
+                const message = messages[Math.floor(Math.random() * messages.length)];
+                clerkMessageElement.textContent = message.replace('{username}', this.getUsername());
+            } else {
+                clerkMessageElement.textContent = "How can I help you today";
+            }
+        }
+    }
+
+    static getUsername() {
+        return username || 'Shopper';
+    }
+}
+
+// app.js
+class StoreApp {
+    constructor() {
+        this.idleTimer = new IdleTimer();
+        this.tabManager = new TabManager();
+        this.cartManager = new CartManager();
+        this.moneyManager = new MoneyManager();
+    }
+
+    initialize() {
+        document.addEventListener('DOMContentLoaded', () => {
+            this.idleTimer.initialize();
+            this.tabManager.initialize();
+            this.cartManager.initialize();
+            this.moneyManager.initialize();
+            this.setupLogout();
+            this.initializeFAQ();
+        });
+    }
+
+    setupLogout() {
+        const logoutBtn = document.querySelector('.logout-button');
+        logoutBtn?.addEventListener('click', async () => {
+            try {
+                const response = await ApiService.request(API_ENDPOINTS.AUTH, 'POST', { action: 'logout' });
+                if (response.success) {
+                    window.location.href = '/querykicks/views/auth.php';
+                }
+            } catch (error) {
+                alert('Error logging out. Please try again. ' + error.message);
+            }
+        });
+    }
+
+    initializeFAQ() {
+        document.querySelectorAll('.faq-item').forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+                const toggleIcon = question.querySelector('.faq-toggle');
+                toggleIcon.textContent = item.classList.contains('active') ? '-' : '+';
+                
+                if (item.classList.contains('active')) {
+                    MessageManager.updateClerkMessage('faq');
+                }
+            });
+        });
+    }
+}
+
+// Initialize the application
+const app = new StoreApp();
+app.initialize();

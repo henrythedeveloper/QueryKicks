@@ -1,3 +1,48 @@
+/**
+ * admin.css: This file defines the styles for the Admin Dashboard in the Query Kicks application.
+ *
+ * Overview:
+ * The styles are designed to ensure a clean, retro-themed UI that aligns with the application's overall aesthetics. 
+ * Features include sidebar navigation, product and user management grids, modal interactions, and notification 
+ * handling for a seamless admin experience.
+ *
+ * Key Features:
+ *
+ * 1. **Global Styles**:
+ *    - Uses 'PressStart2P' font for consistency with the retro theme.
+ *    - Background image sets a professional yet thematic backdrop.
+ *
+ * 2. **Sidebar**:
+ *    - Fixed navigation with hover and active state transitions.
+ *    - Includes a logout button styled for visibility.
+ *
+ * 3. **Main Content Area**:
+ *    - Grid-based layouts for dashboard cards and product grids.
+ *    - Clean, structured table design for user management.
+ *
+ * 4. **Notification System**:
+ *    - Styled for quick visibility of success, error, and warning notifications.
+ *    - Smooth animations for notification entry and exit.
+ *
+ * 5. **Modals**:
+ *    - Centralized, dark-themed modals for adding/editing products and managing user data.
+ *    - Interactive image preview for product images.
+ *
+ * 6. **Buttons**:
+ *    - Differentiated primary and secondary buttons for actions.
+ *    - Hover effects for an engaging UI.
+ *
+ * 7. **Responsive Design**:
+ *    - Utilizes flexible grids and responsive modals for various screen sizes.
+ *
+ * Dependencies:
+ * - Font: 'PressStart2P', hosted locally in the `fonts` directory.
+ * - Images: Backgrounds, icons, and product images in the `images` directory.
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 @font-face {
     font-family: 'PressStart2P';
     src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');

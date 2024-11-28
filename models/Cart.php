@@ -85,22 +85,24 @@ class Cart {
 
     public function addItem($userId, $productId, $quantity) {
         try {
-            // Get or create the user's cart
-            $stmt = $this->db->prepare("SELECT id FROM carts WHERE user_id = ?");
-            $stmt->execute([$userId]);
-            $cartId = $stmt->fetchColumn();
-    
-            if (!$cartId) {
-                // Create a new cart for the user
-                $stmt = $this->db->prepare("INSERT INTO carts (user_id) VALUES (?)");
-                $stmt->execute([$userId]);
-                $cartId = $this->db->lastInsertId();
+            // Get or create cart
+            $cartId = $this->getOrCreateCart($userId);
+            
+            // Check if item already exists
+            $stmt = $this->db->prepare("SELECT id, quantity FROM cart_items WHERE cart_id = ? AND product_id = ?");
+            $stmt->execute([$cartId, $productId]);
+            $existingItem = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($existingItem) {
+                // Update existing item
+                $stmt = $this->db->prepare("UPDATE cart_items SET quantity = quantity + ? WHERE id = ?");
+                $stmt->execute([$quantity, $existingItem['id']]);
+            } else {
+                // Add new item
+                $stmt = $this->db->prepare("INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)");
+                $stmt->execute([$cartId, $productId, $quantity]);
             }
-    
-            // Add the item to the cart
-            $stmt = $this->db->prepare("INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)");
-            $stmt->execute([$cartId, $productId, $quantity]);
-    
+            
             return true;
         } catch (Exception $e) {
             error_log('Error adding item to cart: ' . $e->getMessage());
@@ -111,26 +113,24 @@ class Cart {
 
     public function removeItem($userId, $cartItemId) {
         try {
-            // Verify that the cart item belongs to the user's cart
+            $this->db->beginTransaction();
+            
             $stmt = $this->db->prepare("
-                SELECT ci.id
-                FROM cart_items ci
-                JOIN carts c ON ci.cart_id = c.id
+                DELETE ci FROM cart_items ci
+                INNER JOIN carts c ON ci.cart_id = c.id
                 WHERE ci.id = ? AND c.user_id = ?
             ");
-            $stmt->execute([$cartItemId, $userId]);
-            $itemExists = $stmt->fetchColumn();
-    
-            if (!$itemExists) {
-                throw new Exception('Cart item not found.');
+            
+            $result = $stmt->execute([$cartItemId, $userId]);
+            
+            if ($stmt->rowCount() === 0) {
+                throw new Exception('Cart item not found or already removed.');
             }
-    
-            // Delete the cart item
-            $stmt = $this->db->prepare("DELETE FROM cart_items WHERE id = ?");
-            $stmt->execute([$cartItemId]);
-    
+            
+            $this->db->commit();
             return true;
         } catch (Exception $e) {
+            $this->db->rollBack();
             error_log('Error removing cart item: ' . $e->getMessage());
             return false;
         }

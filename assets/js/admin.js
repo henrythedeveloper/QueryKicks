@@ -1,3 +1,54 @@
+/**
+ * admin.js: This file defines the `AdminDashboard` class, which manages the functionality for 
+ * the admin panel in the Query Kicks application. It includes features for dashboard data 
+ * visualization, product management, user management, and admin authentication.
+ *
+ * The following functionalities are included:
+ * 
+ * 1. **Initialization**:
+ *    - Sets up event listeners for navigation, logout, and modal interactions.
+ *    - Loads initial dashboard data and product listings.
+ * 
+ * 2. **Dashboard Operations**:
+ *    - `loadDashboardData()`: Fetches and displays summary data such as total products and users.
+ * 
+ * 3. **Product Management**:
+ *    - `loadProducts()`: Fetches and displays the product catalog.
+ *    - `handleProductSubmit(e)`: Handles adding or editing products via the modal form.
+ *    - `handleEditProduct(productId)`: Fetches a specific product for editing.
+ *    - `handleDeleteProduct(productId)`: Deletes a product after confirmation.
+ * 
+ * 4. **User Management**:
+ *    - `loadUsers()`: Fetches and displays the list of users.
+ *    - `handleAddMoney(userId)`: Opens a modal for adding funds to a user’s account and submits the request.
+ * 
+ * 5. **UI Management**:
+ *    - `handleNavigation(e)`: Manages navigation between dashboard views (e.g., products, users).
+ *    - `showProductModal(product)`: Displays the product modal for adding or editing.
+ *    - `hideProductModal()`: Hides the product modal.
+ *    - `handleImagePreview(e)`: Displays a preview of an uploaded product image.
+ * 
+ * 6. **Authentication**:
+ *    - `handleLogout()`: Logs out the admin user and redirects to the login page.
+ * 
+ * 7. **Utility Methods**:
+ *    - `createUsersTable(users)`: Generates the user table HTML dynamically.
+ *    - `createProductCard(product)`: Generates the product card HTML dynamically.
+ * 
+ * Features:
+ *  - Modular structure for easy maintenance and feature extension.
+ *  - Uses modern `fetch` API for asynchronous requests.
+ *  - Includes error handling for network issues and invalid server responses.
+ * 
+ * Dependencies:
+ *  - Admin controller endpoint: `/querykicks/controllers/AdminController.php`
+ *  - Auth controller endpoint: `/querykicks/controllers/AuthController.php`
+ *  - Modal and form elements for user and product management.
+ * 
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 class AdminDashboard {
     constructor() {
         this.baseUrl = '/querykicks';

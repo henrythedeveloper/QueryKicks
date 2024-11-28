@@ -1,4 +1,31 @@
 <?php
+/**
+ * header.php: This file serves as the header component for the Query Kicks application. 
+ * It displays the site logo, user information, and navigation links dynamically based on user data.
+ *
+ * Features:
+ *  - **Site Title and Logo**: Displays the Query Kicks logo as part of the site branding.
+ *  - **User Section**:
+ *      - Shows the user's name and current balance.
+ *      - Includes a dynamic "Add Money" button for topping up the virtual balance.
+ *  - **Dynamic User Data**: Retrieves user information (e.g., name, balance, role) from session data or a fallback array.
+ *
+ * Data Dependencies:
+ *  - `$userData`: An associative array containing:
+ *      - `id`: User ID from the session.
+ *      - `name`: User's name, defaults to "Guest" if not logged in.
+ *      - `balance`: User's virtual balance, defaults to 0.
+ *      - `role`: User's role, defaults to "user".
+ *
+ * Linked Assets:
+ *  - `/querykicks/assets/images/logo.webp`: Path to the Query Kicks logo.
+ *  - CSS for styling elements like `.main-header`, `.user-section`, and `.sparkle-wrapper`.
+ *  - Optional icons for currency representation (`.currency-icon-small`).
+ *
+ * Authors: Henry Le and Brody Sprouse
+ * Version: 20241203
+ */
+
 if (!isset($userData)) {
     $userData = [
         'id' => $_SESSION['user_id'] ?? null,
@@ -33,9 +60,6 @@ if (!isset($userData)) {
                         <button type="button" class="add-money-btn">Add Money</button>
                     </div>
                 </div>
-                <?php if ($userData['role'] === 'admin'): ?>
-                    <a href="/querykicks/views/admin.php" class="admin-link">Admin Panel</a>
-                <?php endif; ?>
             </div>
         </div>
     </div>
