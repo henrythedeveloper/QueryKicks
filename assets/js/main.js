@@ -380,8 +380,9 @@ async function handleAddMoney(e) {
         if (data.success) {
             // Update the balance display immediately
             const balanceElement = document.querySelector('.balance');
+            const currencyIcon = '<i class="currency-icon-small"></i>';
             if (balanceElement) {
-                balanceElement.textContent = `$${parseFloat(data.newBalance).toFixed(2)}`;
+                balanceElement.innerHTML = `${currencyIcon}${parseFloat(data.newBalance).toFixed(2)}`;
                 balanceElement.setAttribute('data-balance', data.newBalance);
             }
 
@@ -431,8 +432,9 @@ function setupLogout() {
 // Helper Functions
 function updateBalance(newBalance) {
     const balanceElement = document.querySelector('.balance');
+    const currencyIcon = '<i class="currency-icon-small"></i>';
     if (balanceElement) {
-        balanceElement.textContent = `$${parseFloat(newBalance).toFixed(2)}`;
+        balanceElement.innerHTML = `${currencyIcon}${parseFloat(newBalance).toFixed(2)}`;
         balanceElement.setAttribute('data-balance', newBalance);
     }
 }
