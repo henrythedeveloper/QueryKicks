@@ -66,6 +66,28 @@ body {
     min-height: 100vh;
 }
 
+.currency-icon-small {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    margin-right: 5px;
+    margin-bottom: -5px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/querykicks/assets/images/icons/currency-sign.png');
+    filter: brightness(0)
+    saturate(100%)
+    invert(73%)
+    sepia(95%)
+    saturate(675%)
+    hue-rotate(7deg)
+    brightness(102%)
+    contrast(101%)
+    drop-shadow(0 0 0.5rem rgb(231, 244, 56));
+}
+
 /* Notification Container */
 .notification-container {
     position: fixed;

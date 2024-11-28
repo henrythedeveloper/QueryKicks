@@ -200,6 +200,11 @@ class AdminDashboard {
                 document.querySelectorAll('.add-money-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => this.handleAddMoney(e.target.dataset.userId));
                 });
+
+                // Add event listener for closing the Add Money modal
+                document.querySelector('#add-money-modal .close-modal').addEventListener('click', () => {
+                document.getElementById('add-money-modal').style.display = 'none';
+                });
             } else {
                 alert('Error loading users: ' + users.message);
             }
@@ -209,6 +214,7 @@ class AdminDashboard {
     }
 
     createUsersTable(users) {
+        const currencyIcon = '<i class="currency-icon-small"></i>';
         return `
             <table class="admin-table">
                 <thead>
@@ -228,7 +234,7 @@ class AdminDashboard {
                             <td>#${user.id}</td>
                             <td>${user.name}</td>
                             <td>${user.email}</td>
-                            <td>$${parseFloat(user.money).toFixed(2)}</td>
+                            <td>${currencyIcon}${parseFloat(user.money).toFixed(2)}</td>
                             <td>${user.role}</td>
                             <td>${new Date(user.created_at).toLocaleDateString()}</td>
                             <td>
@@ -246,7 +252,7 @@ class AdminDashboard {
                     <form id="add-money-form">
                         <input type="hidden" id="user-id-input">
                         <div class="form-group">
-                            <label for="amount">Amount ($)</label>
+                            <label for="amount">Amount (${currencyIcon})</label>
                             <input type="number" id="amount" name="amount" step="0.01" required>
                         </div>
                         <button type="submit" class="primary-btn">Add Money</button>
@@ -259,11 +265,12 @@ class AdminDashboard {
     createProductCard(product) {
         // Clean up the image URL by removing escaped slashes
         const imageUrl = product.image_url.replace(/\\/g, '');
+        const currencyIcon = '<i class="currency-icon-small"></i>';
         return `
             <div class="product-card">
                 <img src="${this.baseUrl}/${imageUrl}" alt="${product.name}">
                 <h3>${product.name}</h3>
-                <p>$${product.price}</p>
+                <p>${currencyIcon}${product.price}</p>
                 <p>Stock: ${product.stock}</p>
                 <div class="card-actions">
                     <button class="edit-product-btn primary-btn" data-id="${product.id}">Edit</button>

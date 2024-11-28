@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 28, 2024 at 06:20 AM
+-- Generation Time: Nov 28, 2024 at 08:51 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -40,7 +40,10 @@ CREATE TABLE `carts` (
 INSERT INTO `carts` (`id`, `user_id`, `created_at`) VALUES
 (1, 4, '2024-11-27 02:22:31'),
 (2, 5, '2024-11-28 03:11:25'),
-(3, 6, '2024-11-28 04:24:33');
+(3, 6, '2024-11-28 04:24:33'),
+(4, 7, '2024-11-28 18:51:44'),
+(5, 8, '2024-11-28 18:57:07'),
+(6, 9, '2024-11-28 19:02:09');
 
 -- --------------------------------------------------------
 
@@ -80,18 +83,20 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `image_url`, `stoc
 (1, 'Type 1 - Shoe 1', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-1.webp', 0, '2024-11-20 00:54:49'),
 (3, 'Type 1 - Shoe 3', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-3.webp', 0, '2024-11-20 00:54:49'),
 (4, 'Type 1 - Shoe 4', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-4.webp', 0, '2024-11-20 00:54:49'),
-(5, 'Type 1 - Shoe 5', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-5.webp', 11, '2024-11-20 00:54:49'),
+(5, 'Type 1 - Shoe 5', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-5.webp', 10, '2024-11-20 00:54:49'),
 (6, 'Type 1 - Shoe 6', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-6.webp', 0, '2024-11-20 00:54:49'),
 (7, 'Type 1 - Shoe 7', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-7.webp', 11, '2024-11-20 00:54:49'),
 (8, 'Type 1 - Shoe 8', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-8.webp', 2, '2024-11-20 00:54:49'),
-(9, 'Type 1 - Shoe 9', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-9.webp', 11, '2024-11-20 00:54:49'),
-(10, 'Type 1 - Shoe 10', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-10.webp', 10, '2024-11-20 00:54:49'),
-(11, 'Type 1 - Shoe 11', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-11.webp', 11, '2024-11-20 00:54:49'),
-(12, 'test', 'test', 1000.00, 'assets/images/shoes/1.webp', 100, '2024-11-26 16:42:48'),
-(13, 'ELF OG', 'ELF OG', 1000.00, 'assets/images/shoes/5-2.webp', 12, '2024-11-26 16:43:20'),
+(9, 'Type 1 - Shoe 9', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-9.webp', 9, '2024-11-20 00:54:49'),
+(10, 'Type 1 - Shoe 10', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-10.webp', 7, '2024-11-20 00:54:49'),
+(11, 'Type 1 - Shoe 11', 'A comfortable and stylish shoe.', 99.99, 'assets/images/shoes/type1-11.webp', 10, '2024-11-20 00:54:49'),
+(12, 'test', 'test', 1000.00, 'assets/images/shoes/1.webp', 89, '2024-11-26 16:42:48'),
 (14, 'Yolo', 'yolo', 999999.00, 'assets/images/shoes/3.webp', 1, '2024-11-26 16:43:44'),
-(15, 'OG', 'Og shoe', 600.00, 'assets/images/shoes/Pixel-Art-Sneaker-6.webp', 30, '2024-11-27 21:50:38'),
-(16, 'Shoooooo', 'shooooo', 20.00, 'assets/images/shoes/6.webp', 18, '2024-11-28 04:29:23');
+(15, 'OG', 'Og shoe', 600.00, 'assets/images/shoes/Pixel-Art-Sneaker-6.webp', 21, '2024-11-27 21:50:38'),
+(16, 'Shoooooo', 'shooooo', 20.00, 'assets/images/shoes/6.webp', 10, '2024-11-28 04:29:23'),
+(17, 'Dragon', 'Dragon', 30.00, 'assets/images/shoes/2.webp', 20, '2024-11-28 18:59:28'),
+(18, 'Swirls', 'Swirlssss', 80.00, 'assets/images/shoes/4.webp', 20, '2024-11-28 19:00:08'),
+(20, 'Elf', 'Elf', 80.00, 'assets/images/shoes/5.webp', 20, '2024-11-28 19:03:44');
 
 -- --------------------------------------------------------
 
@@ -117,9 +122,12 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `money`, `role`, `create
 (1, 'Admin', 'admin@querykicks.com', '$2y$10$PJaKKEsB6aw883deAyNrSONEnlOy8PBmBeQbQy8GiksUyXT1emulK', 1000.00, 'admin', '2024-11-20 00:54:49'),
 (2, 'test6', 'test6@t.com', '$2y$10$Gz2HsncTkzaRCac3kMt3Uugql2d8HgYOrnJ1K.XcbsQqtyO0UI3A2', 200.00, 'user', '2024-11-20 22:56:25'),
 (3, 'test2', '2@2.com', '$2y$10$Y3LTopiE176TjwTKYldz7OpK6A5LJwPdHg1LhiNVg82ZFE.OwXmMW', 10100.00, 'user', '2024-11-22 22:09:31'),
-(4, 'Henry', 'henry@h.com', '$2y$10$1eGQT0nrne72HfglF2nDE.JEHN5aiWEIRF0ATp7E2jxDBgAPIHljy', 142300.30, 'user', '2024-11-26 17:02:23'),
+(4, 'Henry', 'henry@h.com', '$2y$10$1eGQT0nrne72HfglF2nDE.JEHN5aiWEIRF0ATp7E2jxDBgAPIHljy', 123500.33, 'user', '2024-11-26 17:02:23'),
 (5, 'David Le', 'rikule1234@gmail.com', '$2y$10$m11CmDHDwgFjSQ.POrN/0.ro7r6it9qRC0UBe.P3jS5IEjLsTBnrG', 18972599.30, 'user', '2024-11-28 03:09:53'),
-(6, 'final test', 'final@f.com', '$2y$10$qhG7EQbChRtbV3t3Ktm4BeB1rnj6kceY9Q9wFQ9NKELRXhqrikGf6', 100509.38, 'user', '2024-11-28 04:24:06');
+(6, 'final test', 'final@f.com', '$2y$10$qhG7EQbChRtbV3t3Ktm4BeB1rnj6kceY9Q9wFQ9NKELRXhqrikGf6', 100509.38, 'user', '2024-11-28 04:24:06'),
+(7, 'Michael', 'm@m.com', '$2y$10$Q3ynZ0zYwLMoZHVf2y9nO./RlNU71Y8rJRYeEMIG6rh3u.mcj87Ne', 20400.00, 'user', '2024-11-28 18:51:07'),
+(8, 'ken', 'kenny.n.le@live.com', '$2y$10$jIPy5tZYX.FGOYU4Rz8ueOMuGAEZDaCktX8/RjS0MNpMC30NWPDHO', 12345478.03, 'user', '2024-11-28 18:56:12'),
+(9, 'final final', 'f@f2.com', '$2y$10$SxJmHtMpx/.QuQ9qmOyqDuHDFktYP2Z.f7j1nnIcTw7IWd.G95t3O', 101840.00, 'user', '2024-11-28 19:01:40');
 
 --
 -- Indexes for dumped tables
@@ -161,25 +169,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
