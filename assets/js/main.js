@@ -423,6 +423,7 @@ class MoneyManager {
     }
 
     initializeForm() {
+        const modal = document.getElementById('add-money-modal');
         const form = document.getElementById('add-money-form');
         if (form) {
             form.addEventListener('submit', async (e) => {
